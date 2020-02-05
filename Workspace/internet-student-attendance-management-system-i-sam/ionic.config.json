@@ -1,5 +1,7 @@
 {
   "name": "Internet Student Attendance Management System (iSAM)",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
