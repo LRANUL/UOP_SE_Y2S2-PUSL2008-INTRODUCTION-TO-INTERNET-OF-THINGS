@@ -1,15 +1,15 @@
 <ion-split-pane contentId="content"> <!-- Opens the side menu in large screens -->
 
-  <ion-menu contentId="content" type="overlay" style="width: 100px;"> <!-- (ion-menu section displays the menu part) -->
+  <ion-menu contentId="content" type="overlay" style="width: 10%;"> <!-- (ion-menu section displays the menu part) -->
 
     <ion-header>
       <ion-card style="background-color: white;
                       height: 150px;">
         <ion-card-header>
           <ion-img src="../../../assets/images/NSBM_iSAM_Logo.png" style="width: 70px;
-                                                                        position: relative;
-                                                                        left: 50%;
-                                                                        transform: translateX(-50%);"></ion-img>
+                                                                          position: relative;
+                                                                          left: 50%;
+                                                                          transform: translateX(-50%);"></ion-img>
           <ion-label>
             <h3 style="text-align: center; 
                       color: black;
@@ -41,18 +41,18 @@
         </ion-menu-toggle>
       </ion-list>
 
-    <ion-list style="position: relative;
-                    top: 250px;">
+    <ion-list style="position: absolute;
+                    top: 78%;">
       <ion-menu-toggle auto-hide="false"> 
-        <ion-item [routerLink]="'/side-menu/profile'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/account')">
+        <ion-item [routerLink]="'/side-menu/profile'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/profile')">
           <ion-label>
-            <ion-img src="../../../assets/images/account/side-menu_icons/account.png" style="width: 26px;
+            <ion-img src="../../../assets/images/program-office/main-screen/profile.png" style="width: 26px;
                                                                                             margin-top: -2px;"></ion-img>
           </ion-label>
           <ion-label style="position: absolute;
                             top: 1px;
                             left: 40px;"> 
-            Account
+            Profile
           </ion-label>
         </ion-item>
 
@@ -76,7 +76,7 @@
             <ion-label>
               <ion-icon name="log-out-outline" style="width: 26px;
                                                       font-size: 30px;
-                                                      margin-top: -2px;
+                                                      margin-top: -18px;
                                                       position: absolute;
                                                       left: 5px;"></ion-icon>
             </ion-label>
