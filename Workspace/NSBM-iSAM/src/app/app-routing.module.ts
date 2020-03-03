@@ -12,10 +12,6 @@ const routes: Routes = [
     loadChildren: () => import('./lecturer/lecturer.module').then( m => m.LecturerPageModule)
   },
   {
-    path: 'program-office',
-    loadChildren: () => import('./program-office/program-office.module').then( m => m.ProgramOfficePageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./public/login/login.module').then( m => m.LoginPageModule)
   },
@@ -35,6 +31,12 @@ const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./programOffice/dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
+  {
+    path: 'side-menu',
+    loadChildren: () => import('./programOffice/side-menu/side-menu.module').then( m => m.SideMenuPageModule)
+  }
+
+
 ];
 
 @NgModule({
