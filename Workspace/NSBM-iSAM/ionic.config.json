@@ -1,5 +1,7 @@
 {
   "name": "NSBM-iSAM",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
