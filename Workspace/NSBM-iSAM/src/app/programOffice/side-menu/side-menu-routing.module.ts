@@ -11,14 +11,14 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: '../dashboard/dashboard.module#DashboardPageModule'
-      },
+      }, 
       {
         path: 'notices',
         loadChildren: '../notices/notices.module#NoticesPageModule'
       },
       {
         path: 'student-attendance',
-        loadChildren: '../student-attedance/student-attendance.module#StudentAttendancePageModule'
+        loadChildren: '../student-attendance/student-attendance.module#StudentAttendancePageModule'
       },
       {
         path: 'modules',

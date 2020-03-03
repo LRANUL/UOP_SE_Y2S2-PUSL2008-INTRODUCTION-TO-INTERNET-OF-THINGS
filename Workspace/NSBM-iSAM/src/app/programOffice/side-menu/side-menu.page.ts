@@ -12,27 +12,27 @@ export class SideMenuPage implements OnInit {
     {
       title: 'Dashboard',
       url: '/side-menu/dashboard',
-      icon: ''
+      icon: '../../../assets/images/program-office/main-screen/dashboard.png'
     },
     {
       title: 'Notices',
       url: '/side-menu/notices',
-      icon: ''
+      icon: '../../../assets/images/program-office/main-screen/notices.png'
     },
     {
       title: 'Student Attendance',
       url: '/side-menu/student-attendance',
-      icon: ''
+      icon: '../../../assets/images/program-office/main-screen/student-attendance.png'
     },
     {
       title: 'Modules',
       url: '/side-menu/modules',
-      icon: ''
+      icon: '../../../assets/images/program-office/main-screen/modules.png'
     },
     {
       title: 'Lecturers',
-      url: '/side-menu/modules',
-      icon: ''
+      url: '/side-menu/lecturers',
+      icon: '../../../assets/images/program-office/main-screen/lecturers.png'
     }
   ];
 
