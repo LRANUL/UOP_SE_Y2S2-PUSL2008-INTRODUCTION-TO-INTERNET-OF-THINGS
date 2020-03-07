@@ -68,6 +68,14 @@ export class FirebaseService {
   }
 
 
+  /* NSBM iSAM Management System - Lecturers */
+
+  // Retriving the current date and time from the localhost
+  currentDT = new Date();
+  currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
+
+  
+
   // Implementation of Registering a new lecturer into the system (firebase authentication)
   lecturerRegistrationDetails(value){
     return new Promise<any>((resolve, reject) => {
@@ -82,20 +90,59 @@ export class FirebaseService {
             this.firestore.collection("lecturers").add({
               userID: success.user.uid, // Retrieving UID of newly added user
               name: {
+                nameTitle: value.nameTitle,
                 firstName: value.firstName,
                 middleName: value.middleName,
                 lastName: value.lastName,
               },
-              specialization: value.specialization,
-              faculty: value.faculty
+              faculty: value.faculty,
+                    specialization: value.specialization,
+              createdInfo: {
+                createdBy_PO_uID: "logged in uid",
+                createdDateTime: this.currentDateTime,
+                createdFaculty: "user faculty"
+              }
             })
-          },
+            resolve(success)
+          },      
           error => reject(error)
 
         )
     })
      
   }
+
+  // Retrieving the registered lecturers from the firestore database
+  retrieveRegisteredLecturers(){
+    return this.firestore.collection("lecturers").snapshotChanges();
+  }
+
+  moduleRegistrationDetails(value){
+    return new Promise<any>((resolve, reject) => {
+
+      // Adding module details into firestore
+      this.firestore.collection("lecturers").add({
+        
+        name: {
+          nameTitle: value.nameTitle,
+          firstName: value.firstName,
+          middleName: value.middleName,
+          lastName: value.lastName,
+        },
+        faculty: value.faculty,
+              specialization: value.specialization,
+        createdInfo: {
+          createdBy_PO_uID: "logged in uid",
+          createdDateTime: this.currentDateTime,
+          createdFaculty: "user faculty"
+        }
+      })
+
+    })
+  }
+
+   /* NSBM iSAM Management System - Lecturers */
+
 
 }
 
