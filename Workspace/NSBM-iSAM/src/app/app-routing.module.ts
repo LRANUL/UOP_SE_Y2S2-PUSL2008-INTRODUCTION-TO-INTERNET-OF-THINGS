@@ -32,9 +32,10 @@ const routes: Routes = [
     loadChildren: () => import('./programOffice/dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
   {
-    path: 'side-menu',
+    path: 'program-office',
     loadChildren: () => import('./programOffice/side-menu/side-menu.module').then( m => m.SideMenuPageModule)
   }
+
 
 
 ];

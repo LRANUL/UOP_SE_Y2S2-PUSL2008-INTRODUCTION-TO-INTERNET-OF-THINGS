@@ -58,10 +58,12 @@ export class LecturersPage implements OnInit {
   }
 
 
+  // Retrieving registered lecturer users and assigning them
   registeredLecturers;
-
   retrieveRegisteredLecturers = () => 
     this.fbService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturers = response));
+
+
 
 
   // Alert Box Implementation

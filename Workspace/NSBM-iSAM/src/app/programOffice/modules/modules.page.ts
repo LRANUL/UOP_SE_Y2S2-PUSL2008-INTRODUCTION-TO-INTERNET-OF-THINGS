@@ -12,7 +12,7 @@ export class ModulesPage implements OnInit {
 
   moduleRegistrationForm: FormGroup;
 
-  showLoadingSpinner: Boolean = true;
+  showLoadingDots: Boolean = true;
 
   constructor(
     private fbService: FirebaseService,
@@ -22,15 +22,21 @@ export class ModulesPage implements OnInit {
 
   ngOnInit() {
 
-	this.retrieveRegisteredLecturers();
-	
-	// Setting loading dots to false after the contents has loaded.
-    this.fbService.retrieveRegisteredLecturers().subscribe(() => this.showLoadingSpinner = false)
+  // Used to show registered lecturer records
+  this.retrieveRegisteredLecturers();
+  
+  // Used to show registered module records
+  this.retrieveRegisteredModules();
+
+  // Setting loading dots to false after the contents has loaded.
+  this.fbService.retrieveRegisteredModules().subscribe(() => this.showLoadingDots = false)
+
+
 
 	this.moduleRegistrationForm = this.formBuilder.group({
 		moduleCode: new FormControl(''),
 		moduleTitle: new FormControl(''),
-		creditWeighting: new FormControl(''),
+		creditsWeighting: new FormControl(''),
 		faculty: new FormControl(''),
 		program: new FormControl(''),
 		moduleLeader: new FormControl(''),
@@ -41,10 +47,17 @@ export class ModulesPage implements OnInit {
 
   registeredLecturers;
 
-
-
   retrieveRegisteredLecturers = () =>
   	this.fbService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturers = response));
+
+
+  registeredModules;
+
+  retrieveRegisteredModules = () =>
+  	this.fbService.retrieveRegisteredModules().subscribe(response => (this.registeredModules = response));
+
+
+
 
   // Alert Box Implementation
   async alertnotice ( title: string, content: string ) {
@@ -60,7 +73,14 @@ export class ModulesPage implements OnInit {
   }
 
 
-  
+  doModuleRegistration(value){
+
+	this.fbService.moduleRegistrationDetails(value);
+
+  }
+
+
+
 
 
 

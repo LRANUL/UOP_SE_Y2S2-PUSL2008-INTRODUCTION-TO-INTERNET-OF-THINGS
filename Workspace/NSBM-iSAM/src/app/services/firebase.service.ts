@@ -68,7 +68,7 @@ export class FirebaseService {
   }
 
 
-  /* NSBM iSAM Management System - Lecturers */
+  /* NSBM iSAM Management System - Lecturers Tab */
 
   // Retriving the current date and time from the localhost
   currentDT = new Date();
@@ -87,7 +87,7 @@ export class FirebaseService {
             console.log(" Lecturer UserID: " + success.user.uid);
 
             // Adding lecturer details into firestore
-            this.firestore.collection("lecturers").add({
+            this.firestore.collection("lecturerUsers").doc(value.nsbmEmail).set({
               userID: success.user.uid, // Retrieving UID of newly added user
               name: {
                 nameTitle: value.nameTitle,
@@ -114,34 +114,73 @@ export class FirebaseService {
 
   // Retrieving the registered lecturers from the firestore database
   retrieveRegisteredLecturers(){
-    return this.firestore.collection("lecturers").snapshotChanges();
+    return this.firestore.collection("lecturerUsers").snapshotChanges();
   }
 
+  // Creating new firestore document and adding new module details 
   moduleRegistrationDetails(value){
     return new Promise<any>((resolve, reject) => {
 
       // Adding module details into firestore
-      this.firestore.collection("lecturers").add({
-        
-        name: {
-          nameTitle: value.nameTitle,
-          firstName: value.firstName,
-          middleName: value.middleName,
-          lastName: value.lastName,
-        },
+      this.firestore.collection("modules").doc(value.moduleCode).set({
+        moduleTitle: value.moduleTitle,
+        creditsWeighting: value.creditsWeighting,
         faculty: value.faculty,
-              specialization: value.specialization,
-        createdInfo: {
-          createdBy_PO_uID: "logged in uid",
-          createdDateTime: this.currentDateTime,
-          createdFaculty: "user faculty"
-        }
+        program: value.program,
+        moduleLeader: value.moduleLeader,
+        teachingStaff_DocID: value.teachingStaff
       })
 
     })
   }
 
-   /* NSBM iSAM Management System - Lecturers */
+  // Retrieving the registered modules from the firestore database
+  retrieveRegisteredModules(){
+    return this.firestore.collection("modules").snapshotChanges();
+  }
+
+  /* NSBM iSAM Management System - Lecturers Tab */
+  
+  
+
+
+
+
+
+
+
+  /* NSBM iSAM Management System - Notices Tab */
+
+  // Creating new firestore document and adding new notice data into ths document
+  newStudentNoticeDetailsSubmission(value){
+    
+    this.firestore.collection("notices-PO-To-Students").add({
+      noticeTitle: value.noticeTitle,
+      noticeDescription: value.noticeDescription,
+      noticeCategory: value.noticeCategory,
+      noticeRecipient: {
+        noticeRecipientModule: value.noticeRecipientModule,
+        noticeRecipientBatch: value.noticeRecipientBatch
+      },
+      noticeCreatedInfo: {
+        createdByDocID: "User Doc ID",
+        createdByFaculty: value.noticeAuthor,
+        createdDateTime: this.currentDateTime
+      }
+    })
+
+  }
+
+  // Retrieving the sent student notices from the firestore database
+  retrieveSentStudentNotices(){
+    return this.firestore.collection("notice-PO-To-Student").snapshotChanges();
+  }
+
+
+
+
+
+  /* NSBM iSAM Management System - Notices Tab */
 
 
 }
