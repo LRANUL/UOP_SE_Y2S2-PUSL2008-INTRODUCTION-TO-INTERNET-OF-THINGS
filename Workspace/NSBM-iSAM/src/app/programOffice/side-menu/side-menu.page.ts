@@ -26,6 +26,11 @@ export class SideMenuPage implements OnInit {
       icon: '../../../assets/images/program-office/main-screen/student-attendance.png'
     },
     {
+      title: 'Lectures',
+      url: '/program-office/lectures',
+      icon: '../../../assets/images/program-office/main-screen/lectures.png'
+    },
+    {
       title: 'Modules',
       url: '/program-office/modules',
       icon: '../../../assets/images/program-office/main-screen/modules.png'
