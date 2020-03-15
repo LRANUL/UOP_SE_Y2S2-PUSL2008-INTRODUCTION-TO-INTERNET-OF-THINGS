@@ -1,3 +1,4 @@
+import { Geofence } from '@ionic-native/geofence/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -19,8 +20,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { HttpClientModule } from '@angular/common/http';
+import { AgmCoreModule } from '@agm/core';
 
- 
 firebase.initializeApp(environment.firebase);
 
 
@@ -28,13 +30,18 @@ firebase.initializeApp(environment.firebase);
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireAuthModule, ReactiveFormsModule, AngularFireAuthModule,
-    AngularFirestoreModule,
+    AngularFirestoreModule, HttpClientModule,
+    AgmCoreModule.forRoot({
+      // please get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
+      apiKey: 'GOOGLE_API_KEY',
+      libraries: ['geometry']
+    }),
     AngularFireModule.initializeApp(environment.firebase), AngularFireDatabaseModule],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    FirebaseService
+    FirebaseService, Geofence
   ],
   bootstrap: [AppComponent]
 })

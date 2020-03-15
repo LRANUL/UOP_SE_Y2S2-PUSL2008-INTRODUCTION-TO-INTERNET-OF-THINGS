@@ -2,33 +2,25 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'Login', pathMatch: 'full' },
   {
-    path: 'student',
+    path: 'Student',
     loadChildren: () => import('./student/student.module').then( m => m.StudentPageModule)
   },
   {
-    path: 'lecturer',
+    path: 'Lecturer',
     loadChildren: () => import('./lecturer/lecturer.module').then( m => m.LecturerPageModule)
   },
   {
-    path: 'login',
+    path: 'Login',
     loadChildren: () => import('./public/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'signup',
+    path: 'Signup',
     loadChildren: () => import('./public/signup/signup.module').then( m => m.SignupPageModule)
   },
   {
-    path: 'studentHome',
-    loadChildren: () => import('./student/home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'lecturerHome',
-    loadChildren: () => import('./lecturer/home/home.module').then( m => m.HomePageModule)
-  },
-  {
-    path: 'dashboard',
+    path: 'Office',
     loadChildren: () => import('./programOffice/dashboard/dashboard.module').then( m => m.DashboardPageModule)
   },
   {

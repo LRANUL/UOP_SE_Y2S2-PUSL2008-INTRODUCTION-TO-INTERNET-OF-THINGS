@@ -1,14 +1,15 @@
-.register{
-     padding: 1px;
+.register {
+    padding: 1px;
     height: 100%;
     width: 100%;
+    background-image: url(/assets/images/backgrounds/register.png);
     background-repeat: no-repeat;
-    background-size: cover;
-    background-image: url(/assets/register.png);
+    background-size:cover;
+     
 }
 .card {
      text-align: center;
-     margin-left: auto ;
-     margin-right: auto ;
+     margin-top: 50%;
      font-size: x-large;
+     opacity: 0.9;
 }

@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
 
         this.userEmail = this.authService.userDetails().email;
         // set conditions to auto redirect
-        this.navCtrl.navigateForward("studentHome");
+        this.navCtrl.navigateForward("Student");
         // this.navCtrl.navigateForward("lecturerHome");
         // this.navCtrl.navigateForward("dashboard");
 

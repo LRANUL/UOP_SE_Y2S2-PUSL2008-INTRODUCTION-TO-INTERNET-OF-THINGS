@@ -42,6 +42,34 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
     this.validations_form = this.formBuilder.group({
+      fName: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z]+$')
+      ])),
+      mName: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z]+$')
+      ])),
+      lName: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z]+$')
+      ])),
+      faculty: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('')
+      ])),
+      degree: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('')
+      ])),
+      batch: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^([0-9]{2}\.[0-9]{1,1})$')
+      ])),
+      sid: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[0-9]{8}$')
+      ])),
       email: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -54,7 +82,6 @@ export class SignupPage implements OnInit {
   }
 
   tryRegister(value) {
-    
     this.authService.registerUser(value)
       .then(res => {
         console.log(res);
@@ -65,12 +92,11 @@ export class SignupPage implements OnInit {
         this.errorMessage = err.message;
         this.successMessage = "";
       })
-
   }
 
 
   goLoginPage() {
-    this.navCtrl.navigateForward("/login");
+    this.navCtrl.navigateForward("/Login");
 
 
   }
