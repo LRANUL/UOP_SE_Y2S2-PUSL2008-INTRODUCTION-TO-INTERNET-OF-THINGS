@@ -21,8 +21,16 @@ const routes: Routes = [
         loadChildren: '../student-attendance/student-attendance.module#StudentAttendancePageModule'
       },
       {
+        path: 'lectures',
+        loadChildren: '../lectures/lectures.module#LecturesPageModule'
+      },
+      {
         path: 'modules',
         loadChildren: '../modules/modules.module#ModulesPageModule'
+      },
+      {
+        path: 'students',
+        loadChildren: '../students/students.module#StudentsPageModule'
       },
       {
         path: 'lecturers',

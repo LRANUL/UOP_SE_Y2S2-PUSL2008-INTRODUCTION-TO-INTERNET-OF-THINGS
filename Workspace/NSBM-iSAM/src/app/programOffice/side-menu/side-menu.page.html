@@ -27,6 +27,7 @@
           <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item-top]="selectedPath.startsWith(p.url)">
             <ion-label>
               <ion-img src="{{ p.icon }}" style="width: 26px;
+                                                height: 30px;
                                                 margin-top: -2px;"></ion-img>
 
               <!-- Ionic icon implmentation
@@ -44,7 +45,7 @@
     <ion-list style="position: absolute;
                     top: 78%;">
       <ion-menu-toggle auto-hide="false"> 
-        <ion-item [routerLink]="'/side-menu/profile'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/profile')">
+        <ion-item [routerLink]="'/program-office/profile'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/program-office/profile')">
           <ion-label>
             <ion-img src="../../../assets/images/program-office/main-screen/profile.png" style="width: 26px;
                                                                                             margin-top: -2px;"></ion-img>
@@ -56,10 +57,10 @@
           </ion-label>
         </ion-item>
 
-        <ion-item [routerLink]="'/side-menu/settings'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/side-menu/settings')">
+        <ion-item [routerLink]="'/program-office/settings'" routerDirection="root" [class.active-item-bottom]="selectedPath.startsWith('/program-office/settings')">
           <ion-label>
             <ion-icon name="settings-outline" style="width: 26px;
-                                                    margin-top: -2px;
+                                                    margin-top: 0px;
                                                     font-size: 25px;"></ion-icon>
           </ion-label>
           <ion-label style="position: absolute;

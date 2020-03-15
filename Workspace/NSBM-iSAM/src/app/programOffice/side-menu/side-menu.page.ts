@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-side-menu',
@@ -11,27 +12,37 @@ export class SideMenuPage implements OnInit {
   pagesTop = [
     {
       title: 'Dashboard',
-      url: '/side-menu/dashboard',
+      url: '/program-office/dashboard',
       icon: '../../../assets/images/program-office/main-screen/dashboard.png'
     },
     {
       title: 'Notices',
-      url: '/side-menu/notices',
+      url: '/program-office/notices',
       icon: '../../../assets/images/program-office/main-screen/notices.png'
     },
     {
       title: 'Student Attendance',
-      url: '/side-menu/student-attendance',
+      url: '/program-office/student-attendance',
       icon: '../../../assets/images/program-office/main-screen/student-attendance.png'
     },
     {
+      title: 'Lectures',
+      url: '/program-office/lectures',
+      icon: '../../../assets/images/program-office/main-screen/lectures.png'
+    },
+    {
       title: 'Modules',
-      url: '/side-menu/modules',
+      url: '/program-office/modules',
       icon: '../../../assets/images/program-office/main-screen/modules.png'
     },
     {
+      title: 'Students',
+      url: '/program-office/students',
+      icon: '../../../assets/images/program-office/main-screen/students.png'
+    },
+    {
       title: 'Lecturers',
-      url: '/side-menu/lecturers',
+      url: '/program-office/lecturers',
       icon: '../../../assets/images/program-office/main-screen/lecturers.png'
     }
   ];
@@ -41,7 +52,7 @@ export class SideMenuPage implements OnInit {
 
   constructor(
     private router: Router,
-
+    private alertController: AlertController
   ) { 
 
     this.router.events.subscribe((event: RouterEvent) => {
@@ -54,5 +65,44 @@ export class SideMenuPage implements OnInit {
 
   ngOnInit() {
   }
+
+
+   // Logout Process
+   logout(){
+
+    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
+    
+  }
+
+  // Alert Box Implementation (Logout)
+  async alertnotice ( title: string, content: string ) {
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Logout request canceled");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            this.router.navigate(["/login"]);
+            console.log("User Logged Out");
+          }
+        }
+
+      ]
+    });
+
+    await alert.present();
+
+  }
+
 
 }
