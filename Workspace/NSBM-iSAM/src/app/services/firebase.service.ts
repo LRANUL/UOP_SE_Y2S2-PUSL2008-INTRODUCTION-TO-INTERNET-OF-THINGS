@@ -144,7 +144,7 @@ export class FirebaseService {
               faculty: value.faculty,
                     specialization: value.specialization,
               createdInfo: {
-                createdBy_PO_uID: "logged in uid",
+                createdBy_PO_uID: "Logged In User ID",
                 createdDateTime: this.currentDateTime,
                 createdFaculty: "user faculty"
               }
@@ -199,8 +199,8 @@ export class FirebaseService {
 
   // Creating new firestore document and adding new notice data into ths document
   newStudentNoticeDetailsSubmission(value){
-    
-    this.firestore.collection("notices-PO-To-Students").add({
+
+    this.firestore.collection("notices/noticeTypes/notices-PO-To-Students").add({
       noticeTitle: value.noticeTitle,
       noticeDescription: value.noticeDescription,
       noticeCategory: value.noticeCategory,
@@ -209,7 +209,7 @@ export class FirebaseService {
         noticeRecipientBatch: value.noticeRecipientBatch
       },
       noticeCreatedInfo: {
-        createdByDocID: "User Doc ID",
+        createdByDocID: "Logged In User ID",
         createdByFaculty: value.noticeAuthor,
         createdDateTime: this.currentDateTime
       }
@@ -219,7 +219,7 @@ export class FirebaseService {
 
   // Retrieving the sent student notices from the firestore database
   retrieveSentStudentNotices(){
-    return this.firestore.collection("notice-PO-To-Student").snapshotChanges();
+    return this.firestore.collection("notices/noticeTypes/notice-PO-To-Students").snapshotChanges();
   }
 
 

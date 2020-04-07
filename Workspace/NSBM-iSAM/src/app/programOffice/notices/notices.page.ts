@@ -130,13 +130,13 @@ export class NoticesPage implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log("Create New Student Notice Request Denied");
+            console.log("Alert Box: Create New Student Notice Request Denied");
           }
         },
         {
           text: 'Continue',
           handler: () => {
-            console.log("Create New Student Notice Request Accepted");
+            console.log("Alert Box: Create New Student Notice Request Accepted");
 
             // Adding new student details into firestore if the user agrees
             this.fbService.newStudentNoticeDetailsSubmission(value);

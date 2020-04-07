@@ -20,16 +20,9 @@ const routes: Routes = [
     loadChildren: () => import('./public/signup/signup.module').then( m => m.SignupPageModule)
   },
   {
-    path: 'Office',
-    loadChildren: () => import('./programOffice/dashboard/dashboard.module').then( m => m.DashboardPageModule)
-  },
-  {
     path: 'program-office',
     loadChildren: () => import('./programOffice/side-menu/side-menu.module').then( m => m.SideMenuPageModule)
   }
-
-
-
 
 ];
 

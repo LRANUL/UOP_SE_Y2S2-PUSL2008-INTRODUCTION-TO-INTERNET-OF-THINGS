@@ -10,39 +10,39 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: '../dashboard/dashboard.module#DashboardPageModule'
+        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
       }, 
       {
         path: 'notices',
-        loadChildren: '../notices/notices.module#NoticesPageModule'
+        loadChildren: () => import('../notices/notices.module').then(m => m.NoticesPageModule)
       },
       {
         path: 'student-attendance',
-        loadChildren: '../student-attendance/student-attendance.module#StudentAttendancePageModule'
+        loadChildren: () => import('../student-attendance/student-attendance.module').then(m => m.StudentAttendancePageModule)
       },
       {
         path: 'lectures',
-        loadChildren: '../lectures/lectures.module#LecturesPageModule'
+        loadChildren: () => import('../lectures/lectures.module').then(m => m.LecturesPageModule)
       },
       {
         path: 'modules',
-        loadChildren: '../modules/modules.module#ModulesPageModule'
+        loadChildren: () => import('../modules/modules.module').then(m => m.ModulesPageModule)
       },
       {
         path: 'students',
-        loadChildren: '../students/students.module#StudentsPageModule'
+        loadChildren: () => import('../students/students.module').then(m => m.StudentsPageModule)
       },
       {
         path: 'lecturers',
-        loadChildren: '../lecturers/lecturers.module#LecturersPageModule'
+        loadChildren: () => import('../lecturers/lecturers.module').then(m => m.LecturersPageModule)
       },
       {
         path: 'profile',
-        loadChildren: '../profile/profile.module#ProfilePageModule'
+        loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
         path: 'settings',
-        loadChildren: '../settings/settings.module#SettingsPageModule'
+        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
       }
     ]
   }

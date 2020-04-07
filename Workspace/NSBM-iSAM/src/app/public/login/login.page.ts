@@ -102,7 +102,7 @@ export class LoginPage implements OnInit {
     );
   }
   goToRegisterPage() {
-    this.navCtrl.navigateForward("/signup");
+    this.navCtrl.navigateForward("/Signup");
   }
   
 }
