@@ -1,0 +1,7 @@
+{
+  "name": "iSAM",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,149 @@
+<ion-header style="height: 6%;">
+  <ion-toolbar>
+
+
+    <!-- This will add a button to show the side menu when the side menu is hidden in small screens -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    
+    <ion-title style="position: absolute;
+                      top: 40%;">Student Attendance</ion-title>
+
+    <!-- Header Contents Section -->
+    <div style="position: absolute;
+                right: 25px;
+                top: 8px;">
+      <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
+      <div>
+        <button ion-button style="width: 100px;
+                                  height: 45px;
+                                  background-color: white;">
+
+        <!-- Notification Bell Icon -->
+        <div style="height: 42px;
+                    width: 42px;
+                    border-radius: 5px;
+                    position: absolute;
+                    top: 3px;
+                    left: 10px;"> 
+          <ion-icon name="notifications-outline" style="font-size: 35px;
+                                                        position: absolute;
+                                                        top: 5px;
+                                                        left: 0px;"></ion-icon>
+      </div>
+
+      <!-- Unread Notifications Count -->
+      <div style="position: absolute;
+                top: 5px;
+                left: 40px;">
+        <ion-label style="color: red;">
+          10
+        </ion-label>
+      </div>
+
+        <!-- Arrow Icon -->
+      <div style="position: absolute;
+                  top: 13px;
+                  left: 70px;
+                  font-size: 26px;">
+        <ion-icon name="arrow-down-outline"></ion-icon>
+      </div>
+
+      </button>
+    </div>
+  </div>
+
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+
+    <ion-row>
+
+      <ion-col size="12" size-lg="12" size-xl="6">
+
+        <ion-card style="height: 95%;">
+          <ion-card-header>
+            <ion-card-title>Faculty Overview</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      
+      <ion-col size="12" size-lg="12" size-xl="6">
+
+        <ion-row>
+
+          <ion-card style="width: 100%;">
+            <ion-card-header>
+              <ion-card-title>Per Module</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+    
+            </ion-card-content>
+          </ion-card>
+
+        </ion-row>
+
+        <ion-row>
+
+          <ion-card style="width: 100%;">
+            <ion-card-header>
+              <ion-card-title>Per Student</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+    
+            </ion-card-content>
+          </ion-card>
+
+        </ion-row>
+
+
+      </ion-col>
+
+    </ion-row>
+    <ion-row>
+
+      <ion-col size="12" size-lg="12" size-xl="6">
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Today's Latest Analytics</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+      <ion-col size="12" size-lg="12" size-xl="6">
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Student Absence Overdue</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+    </ion-row>
+
+  </ion-grid>
+
+
+
+
+
+</ion-content>
