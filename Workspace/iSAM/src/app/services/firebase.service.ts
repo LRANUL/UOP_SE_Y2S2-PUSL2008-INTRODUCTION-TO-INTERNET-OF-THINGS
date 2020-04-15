@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import {Injectable} from '@angular/core';
 import * as firebase from 'firebase/app';
 import {AngularFirestore} from '@angular/fire/firestore';
@@ -8,6 +9,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
 
+   
     navCtrl : any;
     Date : Date = new Date();
     authService : any;
@@ -49,7 +51,25 @@ export class FirebaseService {
             });
         }
     }
+    sendEC(value){
+        var user = firebase.auth().currentUser;
+        return new Promise<any>((resolve, reject) => {
+            console.log('EC Form Stored')
+            this.firestore.collection('EC-Forms').doc(user.email).set({
+                name: {
+                    firstName: value.fName,
+                    lastName: value.lName
+                },
+                Email: user.email,
+                message: value.message,
+                Status: 'Still NOt Checked',
 
+            }).then((res) => {
+                resolve(res)
+            }, err => reject(err))
+        })
+  
+    }
     registerUser(value) {
         return new Promise<any>((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(res => resolve(res), err => reject(err))
@@ -66,11 +86,11 @@ export class FirebaseService {
                     nsbmStudentID: value.sid,
                     degree: value.degree,
                     batch: value.batch,
-                    uID: user.uid,
+                    uID: value.email,
                     createdDateTime: new Date(),
                     // ServerTime:firebase.firestore.FieldValue.serverTimestamp(),
                     edited: {
-                        editedByUID: [user.uid],
+                        editedByUID: [value.email],
                         editedDateTime: [new Date()],
                         editedSection: ["Initial Register"]
                     },

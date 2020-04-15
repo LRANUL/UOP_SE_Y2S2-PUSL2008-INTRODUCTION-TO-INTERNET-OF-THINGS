@@ -1,0 +1,50 @@
+<ion-app>
+  
+
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Extenuating Circumstances Form</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-card class="card">
+        <ion-card-header>
+          <ion-card-title>EC - Form</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <form class="form" [formGroup]="validations_form" (ngSubmit)="sendEC(validations_form.value)"
+            overflow-scroll="true">
+            <ion-item>
+              <ion-label position="floating" color="primary">First Name</ion-label>
+              <ion-input type="text" formControlName="fName">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating" color="primary">Last Name</ion-label>
+              <ion-input type="text" formControlName="lName">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating" color="primary">Email</ion-label>
+              <ion-input type="text" disabled="true" formControlName="email" ngModel pattern="(\W|^)[\w.+\-]*@(students.nsbm)\.lk(\W|$)" value="{{userEmail}}">
+              </ion-input>
+            </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Message</ion-label>
+          <ion-textarea type="text" formControlName="message">
+          </ion-textarea>
+        </ion-item>
+            <ion-button class="submit-btn" type="submit" [disabled]="!validations_form.valid" color="success">Send Form
+            </ion-button>
+            <label class="error-message">{{errorMessage}}</label>
+            <label class="success-message">{{successMessage}}</label>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </div>
+</ion-app>

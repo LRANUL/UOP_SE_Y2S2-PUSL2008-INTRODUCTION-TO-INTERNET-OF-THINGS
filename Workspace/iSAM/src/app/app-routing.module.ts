@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'office',
     loadChildren: () => import('./office/side-menu/side-menu.module').then( m => m.SideMenuPageModule)
   },
+  {
+    path: 'student',
+    loadChildren: () => import('./student/esign/esign.module').then( m => m.EsignPageModule)
+  },
 ];
 @NgModule({
   imports: [

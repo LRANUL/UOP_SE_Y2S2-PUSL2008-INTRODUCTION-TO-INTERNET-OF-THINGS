@@ -1,34 +1,40 @@
-import {FirebaseService} from './../services/firebase.service';
-import {Component, OnInit} from '@angular/core';
-import {NavController} from '@ionic/angular';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FirebaseService } from './../services/firebase.service';
+import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import * as firebase from 'firebase';
-import {LoadingController} from '@ionic/angular';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
-@Component({selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss']})
+@Component({ selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss'] })
 export class LoginPage implements OnInit {
-
-    validations_form : FormGroup;
-    errorMessage : string = '';
-    userEmail : string;
-
-    constructor(private router: Router,public navCtrl : NavController, private authService : FirebaseService, public loadingController : LoadingController, private formBuilder : FormBuilder,) {}
+    checked: boolean = true;
+    validations_form: FormGroup;
+    errorMessage: string = '';
+    userEmail: string;
+    admincheck(): void {
+        this.checked = !this.checked;
+        console.log("checked: " + this.checked);//it is working !!!
+    }
+    constructor(private router: Router, public navCtrl: NavController, private authService: FirebaseService, public loadingController: LoadingController, private formBuilder: FormBuilder, ) { }
 
     ngOnInit() {
+
+        /* AUTO LOGIN DISABLED TILL RELEASE FOR DEVELOPMENT PURPOSES */
+
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) { // User is signed in.
                 console.log('User is signed in');
-                const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
-                await loading.present();
+        //         const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
+        //         await loading.present();
 
-                const {role, data} = await loading.onDidDismiss();
-                console.log('Loading dismissed!');
+        //         const {role, data} = await loading.onDidDismiss();
+        //         console.log('Loading dismissed!');
 
-                this.userEmail = this.authService.userDetails().email;
-                // set conditions to auto redirect
-              this.router.navigate(['/office/dashboard']);
-                // this.navCtrl.navigateForward("lecturerHome");
-                // this.navCtrl.navigateForward("dashboard");
+        //         this.userEmail = this.authService.userDetails().email;
+        //         // set conditions to auto redirect
+        //       this.router.navigate(['/office/dashboard']);
+        //         // this.navCtrl.navigateForward("lecturerHome");
+        //         // this.navCtrl.navigateForward("dashboard");
 
             } else { // No user is signed in.
                 console.log('User is NOT signed in');
@@ -63,20 +69,25 @@ export class LoginPage implements OnInit {
     };
 
     async loginUser(value) {
-        const loading = await this.loadingController.create({message: 'Logging in...', duration: 2000});
+        const loading = await this.loadingController.create({ message: 'Logging in...', duration: 2000 });
 
         await loading.present();
 
-        const {role, data} = await loading.onDidDismiss();
+        const { role, data } = await loading.onDidDismiss();
         console.log('Loading dismissed!');
 
         this.authService.loginUser(value).then(async res => {
             console.log(res);
             this.errorMessage = "";
             this.userEmail = this.authService.userDetails().email;
-            this.router.navigate(['/office/dashboard']);
+            if (this.checked == true) {
+                this.router.navigate(['/office/dashboard']);
+            }
+            else {
+                this.router.navigate(['/student/eSign']);
 
-        //   this.router.navigate(['/student/eSign']);
+            }
+            //   this.router.navigate(['/student/eSign']);
             // this.navCtrl.navigateForward("lecturerHome");
             // this.navCtrl.navigateForward("dashboard");
         }, err => {
@@ -84,7 +95,7 @@ export class LoginPage implements OnInit {
         });
     }
     goToRegisterPage() {
-        this.navCtrl.navigateForward("Signup");
+        this.navCtrl.navigateForward("signup");
     }
 
 }

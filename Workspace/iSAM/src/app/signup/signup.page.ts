@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { FirebaseService } from '../services/firebase.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import 'firebase';
 @Component({
   selector: 'app-signup',
@@ -32,7 +31,6 @@ export class SignupPage implements OnInit {
     private navCtrl: NavController,
     private authService: FirebaseService,
     private formBuilder: FormBuilder,
-    private fireStore: AngularFirestore,
   ) { }
 
   ngOnInit() {
@@ -90,7 +88,7 @@ export class SignupPage implements OnInit {
 
 
   goLoginPage() {
-    this.navCtrl.navigateForward("Login");
+    this.navCtrl.navigateForward("login");
 
 
   }

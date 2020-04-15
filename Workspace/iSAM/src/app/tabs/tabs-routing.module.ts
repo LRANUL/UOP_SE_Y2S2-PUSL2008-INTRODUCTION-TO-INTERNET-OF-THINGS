@@ -4,49 +4,69 @@ import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
   {
-    path: 'tabs',
+    path: 'student',
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'eSign',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../student/esign/esign.module').then(m => m.EsignPageModule)
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'Attendance',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../student/attendance/attendance.module').then(m => m.AttendancePageModule)
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'Notices',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../student/notices/notices.module').then(m => m.NoticesPageModule)
+          }
+        ]
+      }, 
+      {
+        path: 'EC-Form',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../student/ec-form/ec-form.module').then(m => m.EcFormPageModule)
+          }
+        ]
+      },
+      {
+        path: 'Settings',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../student/settings/settings.module').then(m => m.SettingsPageModule)
           }
         ]
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/eSign',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/eSign',
     pathMatch: 'full'
   }
 ];
