@@ -15,6 +15,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { DegreeProgramsModalPageModule } from './office/commonModals/degree-programs-modal/degree-programs-modal.module';
 import { MoreDetailsModulePopoverPageModule } from './office/modules/more-details-module-popover/more-details-module-popover.module';
 import { EditModuleModalPageModule } from './office/modules/edit-module-modal/edit-module-modal.module';
+import { MoreDetailsLecturerPopoverPageModule } from './office/lecturers/more-details-lecturer-popover/more-details-lecturer-popover.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +28,8 @@ import { EditModuleModalPageModule } from './office/modules/edit-module-modal/ed
     AngularFireAuthModule,
     DegreeProgramsModalPageModule,
     EditModuleModalPageModule,
-    MoreDetailsModulePopoverPageModule
+    MoreDetailsModulePopoverPageModule,
+    MoreDetailsLecturerPopoverPageModule
   ],
   providers: [
     StatusBar,

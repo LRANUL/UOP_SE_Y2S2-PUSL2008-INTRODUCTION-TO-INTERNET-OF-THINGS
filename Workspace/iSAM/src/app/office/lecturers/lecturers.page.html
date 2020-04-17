@@ -75,12 +75,65 @@
           </ion-card-header>
           <ion-card-content>
 
-            <ion-item>
-              <ion-input type="text" clearInput>
-                <ion-icon name="search-outline" style="font-size: 20px;
-                                                      margin-right: 10px;"></ion-icon>
-              </ion-input>
-            </ion-item>
+            <form [formGroup]="searchRegisteredLecturerForm" (ngSubmit)="doSearchRegisteredLecturer(searchRegisteredLecturerForm.value)">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="5">
+                    <ion-item>
+                      <ion-input type="number" placeholder="Enter NSBM ID" clearInput formControlName="nsbmId"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="0.5">
+                    <ion-label style="position: absolute;
+                                      left: 50%;
+                                      top: 50%;
+                                      transform: translate(-50%, -50%);
+                                      font-size: 20px;">
+                      OR
+                    </ion-label>
+                  </ion-col>
+                  <ion-col size="5">
+                    <ion-item>
+                      <ion-input type="text" placeholder="Enter NSBM Email Address" clearInput formControlName="nsbmEmailAddress"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="1.5">
+                    <ion-button style="min-height: 100%;
+                                      min-width: 100%;
+                                      margin-top: 0px;" type="submit" [disabled]="searchRegisteredLecturerForm.valid">
+                      <ion-icon name="search-outline" style="margin-right: 5px;
+                                                            font-size: 15px;"></ion-icon>
+                      <ion-label style="font-size: 15px;">
+                        Search
+                      </ion-label>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+
+            <div style="border-top: #ccc solid 1px;
+                        min-width: 100%;"></div>
+
+            <!-- Page loading search module text -->
+            <div *ngIf="pageLoadSearchLecturerText" style="position: absolute;
+                                                        top: 150px;
+                                                        left: 50%;
+                                                        transform: translateX(-50%);
+                                                        font-size: 18px;
+                                                        border: rgb(100, 116, 121) solid 2px;
+                                                        border-radius: 5px;
+                                                        padding: 15px;
+                                                        min-width: 53%;">
+              <ion-icon name="chevron-up-circle-outline" style="color: rgb(8, 177, 219);
+                                                                font-size: 30px;
+                                                                margin-top: 2px;
+                                                                margin-right: 10px;"></ion-icon>
+              <ion-label style="position: relative;
+                                top: -5px;">
+                Please populate a field and click 'Search' button to search for a registered lecturer.
+              </ion-label>
+            </div>
 
 
             <ion-spinner name="dots" style="position: absolute;
@@ -92,19 +145,54 @@
 
 
             <div style="overflow-y: scroll; 
-                        height: 460px;
+                        height: 500px;
                         margin-top: 15px;">
               <ion-grid>
 
                 <ion-row>
 
-                  <ion-col size="4" size-sm="12" size-lg="3" *ngFor="let list of registeredLecturers">
+                  <ion-col size="4" size-sm="12" size-lg="3">
 
-                    <ion-card>
+                    <ion-card *ngIf="registeredLecturerCard">
                       <ion-card-header>
-                        <ion-card-title> {{ list.payload.doc.data().name.firstName }} {{ list.payload.doc.data().name.lastName }} </ion-card-title>
+                        <ion-card-title>{{ lecturerNamePrefix }} {{ lecturerNameFirstName }} {{ lecturerNameLastName }} </ion-card-title>
                       </ion-card-header>
-
+                      <ion-card-content>
+                        <b>Specialization: </b> {{ lecturerNameSpecialization }} <br>
+                        <b>Specialied Faculty: </b> {{ lecturerSpecializedFaculty }} <br>
+                        <b>Account Status: </b> {{ lecturerStatus }}
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button shape="round" color="secondary" style="min-width: 100%;">
+                                <ion-icon name="document-text-outline" style="margin-right: 5px;"></ion-icon>
+                                <ion-label style="color: white">
+                                  More Details
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                            <ion-col>
+                              <ion-button shape="round" color="warning" style="min-width: 100%;">
+                                <ion-icon name="create-outline" style="margin-right: 5px;
+                                                                      color: white;"></ion-icon>
+                                <ion-label style="color: white">
+                                  Edit
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col>
+                              <ion-button shape="round" color="danger" style="min-width: 100%;">
+                                <ion-icon name="lock-closed" style="margin-right: 5px;"></ion-icon>
+                                <ion-label style="color: white">
+                                  Disable Account
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-card-content>
                     </ion-card>
 
                   </ion-col>
@@ -137,7 +225,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       NSBM Lecturer ID
                     </ion-label>
 
@@ -154,7 +242,7 @@
                   
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       Name
                     </ion-label>
 
@@ -197,7 +285,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       Specialized Faculty
                     </ion-label>
 
@@ -220,7 +308,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       Specialization
                     </ion-label>
 
@@ -236,7 +324,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       NSBM Email
                     </ion-label>
 
@@ -254,7 +342,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       Password
                     </ion-label>
 
@@ -272,7 +360,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
                     
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       Confirm Password
                     </ion-label>
 
@@ -290,7 +378,7 @@
 
                   <ion-col size="12" size-sm="12" size-lg="6">
 
-                    <ion-label>
+                    <ion-label class="registerLecturerFormLabel">
                       User Account Status
                     </ion-label>
 

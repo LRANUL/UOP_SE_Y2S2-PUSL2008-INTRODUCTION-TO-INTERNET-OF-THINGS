@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { SideMenuPage } from '../side-menu/side-menu.page';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfilePage implements OnInit {
 
-  constructor() { }
+  
+
+  constructor(
+    private profileService: FirebaseService,
+    private sideMenuPageUserFaculty: SideMenuPage
+  ) { }
 
   ngOnInit() {
+
+    this.retrieveLoggedInUserDetailsFirestore();
+
   }
 
+  programOfficeUserDetails;
+  retrieveLoggedInUserDetailsFirestore = () =>
+    this.profileService.retrieveLoggedInUserDetailsFirestore(this.sideMenuPageUserFaculty.passLoggedInUserId()).subscribe(response => (this.programOfficeUserDetails = response));
 }

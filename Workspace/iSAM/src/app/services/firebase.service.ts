@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Injectable({providedIn: 'root'})
@@ -45,7 +46,7 @@ export class FirebaseService {
                 const userEmail = profile.email;
                 const displayName = profile.displayName;
                 console.log("  Photo URL: " + profile.photoURL);
-                return this.firestore.collection('studentUsers').doc(this.displayName).snapshotChanges();
+                return this.firestore.collection('users/userTypes/studentUsers').doc(this.displayName).snapshotChanges();
             });
         }
     }
@@ -56,7 +57,7 @@ export class FirebaseService {
             var user = firebase.auth().currentUser;
             return new Promise<any>((resolve, reject) => {
                 console.log('Student Record Stored')
-                this.firestore.collection('studentUsers').doc(value.email).set({
+                this.firestore.collection('users/userTypes/studentUsers/').doc(value.email).set({
                     name: {
                         firstName: value.fName,
                         middleName: value.mName,
@@ -113,15 +114,30 @@ export class FirebaseService {
         return firebase.auth().currentUser;
     }
 
+
+    /* Retrieving details from the documents to identify the type of user */
+
     // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
-    retrieveLoggedInUserDetailsFirestore(Uid){
+    retrieveLoggedInUserDetailsStudent(Uid){
+        return this.firestore.collection("users/userTypes/studentUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
+    }
+
+    // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
+    retrieveLoggedInUserDetailsLecturer(Uid){
+        return this.firestore.collection("users/userTypes/lecturerUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
+    }
+
+    // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
+    retrieveLoggedInUserDetailsProgramOffice(Uid){
         return this.firestore.collection("users/userTypes/programOfficeUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
     }
+
+    
+
 
     // Retriving the current date and time from the localhost
     currentDT = new Date();
     currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
-
 
     // Implementation of Registering a new lecturer into the system (firebase authentication)
     lecturerRegistrationDetails(value, loggedInUserId, loggedInUserFaculty) {
@@ -135,7 +151,7 @@ export class FirebaseService {
                     nsbmEmailAddress: value.nsbmEmail, // Retrieving UID of newly added user
                     nsbmLecturerId: value.nsbmLecturerId,
                     name: {
-                        nameTitle: value.nameTitle,
+                        prefix: value.nameTitle,
                         firstName: value.firstName,
                         middleName: value.middleName,
                         lastName: value.lastName
@@ -153,12 +169,8 @@ export class FirebaseService {
                         editedSection: "Registration Phase"
                     },
                     sessionDetails: {
-                        loginDateTime: [{
-                            0: new Date()
-                        }],
-                        logoutDateTime: [{
-                            0: new Date()
-                        }]
+                        loginDateTime: [new Date()],
+                        logoutDateTime: [new Date()]
                     },
                     status: value.lecturerStatus
                 });
@@ -214,10 +226,23 @@ export class FirebaseService {
         })
     }
 
+    // Searching for registered lecturer details with the user entered nsbm id 
+    searchRegisteredLecturerNSBMId(nsbmLecturerId){
+        return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
+                .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
+    }
+
+    // Searching for registered lecturer details with the user entered nsbm email address
+    searchRegisteredLecturerNSBMEmail(nsbmEmailAddress){
+        return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
+                .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+    }
+
+
 
     // Retrieving the registered lecturers from the firestore database
     retrieveRegisteredLecturers() {
-        return this.firestore.collection("lecturerUsers").snapshotChanges();
+        return this.firestore.collection("users/userTypes/lecturerUsers/").snapshotChanges();
     }
 
     // Retrieving the sent student notices from the firestore database

@@ -91,8 +91,6 @@ export class SignupPage implements OnInit {
 
   goLoginPage() {
     this.navCtrl.navigateForward("Login");
-
-
   }
 
 }
