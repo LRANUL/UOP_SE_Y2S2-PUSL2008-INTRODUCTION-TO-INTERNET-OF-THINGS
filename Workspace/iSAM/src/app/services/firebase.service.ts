@@ -113,97 +113,191 @@ export class FirebaseService {
         return firebase.auth().currentUser;
     }
 
+    // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
+    retrieveLoggedInUserDetailsFirestore(Uid){
+        return this.firestore.collection("users/userTypes/programOfficeUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
+    }
 
-/* NSBM iSAM Management System - Lecturers Tab */
-
-// Retriving the current date and time from the localhost
-currentDT = new Date();
-currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
+    // Retriving the current date and time from the localhost
+    currentDT = new Date();
+    currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
 
 
-// Implementation of Registering a new lecturer into the system (firebase authentication)
-lecturerRegistrationDetails(value) {
-    return new Promise<any>((resolve, reject) => { // Adding new record into firebase auth
-        firebase.auth().createUserWithEmailAndPassword(value.nsbmEmail, value.confirmPassword).then(success => {
-            console.log(" Lecturer UserID: " + success.user.uid);
+    // Implementation of Registering a new lecturer into the system (firebase authentication)
+    lecturerRegistrationDetails(value, loggedInUserId, loggedInUserFaculty) {
+        return new Promise<any>((resolve, reject) => { // Adding new record into firebase auth
+      
+            firebase.auth().createUserWithEmailAndPassword(value.nsbmEmail, value.confirmPassword).then(success => {
+                console.log(" Lecturer UserID: " + success.user.uid);
 
-            // Adding lecturer details into firestore
-            this.firestore.collection("lecturerUsers").doc(value.nsbmEmail).set({
-                userID: success.user.uid, // Retrieving UID of newly added user
-                name: {
-                    nameTitle: value.nameTitle,
-                    firstName: value.firstName,
-                    middleName: value.middleName,
-                    lastName: value.lastName
-                },
-                faculty: value.faculty,
-                specialization: value.specialization,
-                createdInfo: {
-                    createdBy_PO_uID: "logged in uid",
-                    createdDateTime: this.currentDateTime,
-                    createdFaculty: "user faculty"
-                }
-            })
-            resolve(success)
-        }, error => reject(error))
-    })
-
-}
-
-// Retrieving the registered lecturers from the firestore database
-retrieveRegisteredLecturers() {
-    return this.firestore.collection("lecturerUsers").snapshotChanges();
-}
-
-// Creating new firestore document and adding new module details
-moduleRegistrationDetails(value) {
-    return new Promise<any>((resolve, reject) => { // Adding module details into firestore
-        this.firestore.collection("modules").doc(value.moduleCode).set({
-            moduleTitle: value.moduleTitle,
-            creditsWeighting: value.creditsWeighting,
-            faculty: value.faculty,
-            program: value.program,
-            moduleLeader: value.moduleLeader,
-            teachingStaff_DocID: value.teachingStaff
+                // Adding lecturer details into firestore
+                this.firestore.collection("users/userTypes/lecturerUsers/").doc(success.user.uid).set({
+                    nsbmEmailAddress: value.nsbmEmail, // Retrieving UID of newly added user
+                    nsbmLecturerId: value.nsbmLecturerId,
+                    name: {
+                        nameTitle: value.nameTitle,
+                        firstName: value.firstName,
+                        middleName: value.middleName,
+                        lastName: value.lastName
+                    },
+                    specializedFaculty: value.specializedFaculty,
+                    specialization: value.specialization,
+                    createdDetails: {
+                        createdBy_PO_uID: loggedInUserId,
+                        createdDateTime: new Date(),
+                        createdFaculty: loggedInUserFaculty
+                    },
+                    editedDetails: {
+                        editedByUid: "Registration Phase",
+                        editedDateTime: new Date(),
+                        editedSection: "Registration Phase"
+                    },
+                    sessionDetails: {
+                        loginDateTime: [{
+                            0: new Date()
+                        }],
+                        logoutDateTime: [{
+                            0: new Date()
+                        }]
+                    },
+                    status: value.lecturerStatus
+                });
+                resolve(success);
+            }, error => reject(error))
+            
         })
+        
 
-    })
-}
-
-// Retrieving the registered modules from the firestore database
-retrieveRegisteredModules() {
-    return this.firestore.collection("modules").snapshotChanges();
-}
-
-/* NSBM iSAM Management System - Lecturers Tab */
+    }
 
 
-/* NSBM iSAM Management System - Notices Tab */
+    // Registering new module by adding the user provided details into the firestore database
+    registerModule(userFaculty, value, userFormAwardingBodyUniversity){
+        // Creating an ID for the document
+        const docId = this.firestore.createId();
 
-// Creating new firestore document and adding new notice data into ths document
-newStudentNoticeDetailsSubmission(value) {
-
-    this.firestore.collection("notices-PO-To-Students").add({
-        noticeTitle: value.noticeTitle,
-        noticeDescription: value.noticeDescription,
-        noticeCategory: value.noticeCategory,
-        noticeRecipient: {
-            noticeRecipientModule: value.noticeRecipientModule,
-            noticeRecipientBatch: value.noticeRecipientBatch
+        return this.firestore.collection("faculties/"+ userFaculty +"/modules").doc(docId).set({
+        moduleCode: value.moduleCode,
+        moduleTitle: value.moduleTitle,
+        creditsWeighting: value.creditsWeighting,
+        degree: value.degreeProgram,
+        awardingBodyUniversity: userFormAwardingBodyUniversity,
+        academicPeriod: {
+            academicYear: value.academicPeriodYear,
+            academicSemester: value.academicPeriodSemester
         },
-        noticeCreatedInfo: {
-            createdByDocID: "User Doc ID",
-            createdByFaculty: value.noticeAuthor,
-            createdDateTime: this.currentDateTime
-        }
-    })
+        moduleLeader: value.moduleLeader,
+        assignedLecturer: value.assignedLecturer,
+        assignedLectureHall: value.assignedLectureHall
+        }).then(function() {
+        console.log("Module registerd and values were added");
+        });
+    }
+
+
+    // Creating new firestore document and adding new notice data into ths document
+    newStudentNoticeDetailsSubmission(value) {
+
+        this.firestore.collection("notices-PO-To-Students").add({
+            noticeTitle: value.noticeTitle,
+            noticeDescription: value.noticeDescription,
+            noticeCategory: value.noticeCategory,
+            noticeRecipient: {
+                noticeRecipientModule: value.noticeRecipientModule,
+                noticeRecipientBatch: value.noticeRecipientBatch
+            },
+            noticeCreatedInfo: {
+                createdByDocID: "User Doc ID",
+                createdByFaculty: value.noticeAuthor,
+                createdDateTime: this.currentDateTime
+            }
+        })
+    }
+
+
+    // Retrieving the registered lecturers from the firestore database
+    retrieveRegisteredLecturers() {
+        return this.firestore.collection("lecturerUsers").snapshotChanges();
+    }
+
+    // Retrieving the sent student notices from the firestore database
+    retrieveSentStudentNotices() {
+        return this.firestore.collection("notice-PO-To-Student").snapshotChanges();
+    }
+
+    // Retrieving the registered modules from the firestore database
+    retrieveRegisteredModules() {
+        return this.firestore.collection("modules").snapshotChanges();
+    }
+
+    // Retrieving published degree programs and their details from the firestore database
+    retrievePublishedDegreeProgram(userFaculty) {
+        return this.firestore.collection("faculties/"+ userFaculty +"/degreePrograms").snapshotChanges();
+    }
+
+    // Retrieving published module credits weighting and their details from the firestore database
+    retrievePublishedModuleCreditsWeighting() {
+        return this.firestore.collection("noOfModuleCreditsWeighting", ref => ref
+                .where("status", "==", "Active")).snapshotChanges();
+    }
+
+    // Retrieving published user statuses and their details from the firestore database
+    retrievePublishedUserStatuses() {
+        return this.firestore.collection("userStatuses").snapshotChanges();
+    }
+
+    // Retrieving published lecture halls and their details from the firestore database
+    retrievePublishedLectureHalls(userFaculty) {
+        return this.firestore.collection("faculties/"+ userFaculty +"/lectureHalls").snapshotChanges();
+    }
+
+    // Retrieving registered module and their details from the firestore database for the module page (Module Code)
+    retrieveRegisterdModulesModuleCode(userFaculty, value){
+        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
+                .where("moduleCode", "==", value)).snapshotChanges();
+    }
+
+
+    // Retrieving registered module and their details from the firestore database for the module page (Module Title)
+    retrieveRegisterdModulesModuleTitle(userFaculty, value){
+        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
+                .where("moduleTitle", "==", value)).snapshotChanges();
+    }
+
+    // Retrieving registered module and their details from the firestore database for the module page (Degree Program)
+    retrieveRegisterdModulesDegreeProgram(userFaculty, userSelectedDegree, userSelectedAwardingBodyUniversity){
+        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
+                .where("degree", "==", userSelectedDegree)
+                .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)).snapshotChanges();
+    }
+
+    
+    // Updating module values in the firestore database
+    updateModule(userFaculty, docId, value, userFormDataAwardingBodyUniversity) {
+        return this.firestore.doc("faculties/"+ userFaculty +"/modules/"+ docId).update({
+        moduleCode: value.moduleCode,
+        moduleTitle: value.moduleTitle,
+        creditsWeighting: value.creditsWeighting,
+        degree: value.degreeProgram,
+        awardingBodyUniversity: userFormDataAwardingBodyUniversity,
+        academicPeriod: {
+            academicYear: value.academicPeriodYear,
+            academicSemester: value.academicPeriodSemester,
+        },
+        moduleLeader: value.moduleLeader,
+        assignedLecturer: value.assignedLecturer,
+        assignedLectureHall: value.assignedLectureHall
+        }).then(function() {
+        console.log("Module Details has been updated.");
+        });
+    }
+
+
+
+    // Removing registered modules from the firestore database
+    removeRegisteredModule(userFaculty, DocId){
+        this.firestore.doc("faculties/"+ userFaculty +"/modules/"+ DocId).delete();
+    }
 
 }
 
-// Retrieving the sent student notices from the firestore database
-retrieveSentStudentNotices() {
-    return this.firestore.collection("notice-PO-To-Student").snapshotChanges();
-}
-
-
-/* NSBM iSAM Management System - Notices Tab */}

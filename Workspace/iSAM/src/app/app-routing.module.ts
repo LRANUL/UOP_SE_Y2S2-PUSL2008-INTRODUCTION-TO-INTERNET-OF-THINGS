@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'office',
     loadChildren: () => import('./office/side-menu/side-menu.module').then( m => m.SideMenuPageModule)
+  },  {
+    path: 'degree-programs-modal',
+    loadChildren: () => import('./office/commonModals/degree-programs-modal/degree-programs-modal.module').then( m => m.DegreeProgramsModalPageModule)
   },
+
 ];
 @NgModule({
   imports: [

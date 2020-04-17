@@ -4,6 +4,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { SideMenuPage } from '../side-menu/side-menu.page';
 
 
 
@@ -18,30 +19,42 @@ export class LecturersPage implements OnInit {
 
   showLoadingDots: Boolean = true;
 
+  loggedInUserFaculty;
+
+
   constructor(
-    private fbService: FirebaseService,
-    private fireStore: AngularFirestore,
+    private lecturersService: FirebaseService,
     private formBuilder: FormBuilder,
-    private alertController: AlertController 
+    private alertController: AlertController,
+    private sideMenuPageUserFaculty: SideMenuPage
   ) { }
 
   ngOnInit() {
 
+    this.loggedInUserFaculty = this.sideMenuPageUserFaculty.passLoggedInUserFaculty();
+
     this.retrieveRegisteredLecturers();
 
+    this.retrievePublishedUserStatuses();
+
     // Setting loading dots to false after the contents has loaded.
-    this.fbService.retrieveRegisteredLecturers().subscribe(() => this.showLoadingDots = false)
+    this.lecturersService.retrieveRegisteredLecturers().subscribe(() => this.showLoadingDots = false)
 
     this.lecturerRegistrationForm = this.formBuilder.group({
-      nameTitle: new FormControl(''),
-      firstName: new FormControl(''),
+      nsbmLecturerId: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(8)
+      ])),
+      nameTitle: new FormControl('', Validators.required),
+      firstName: new FormControl('', Validators.required),
       middleName: new FormControl(''),
-      lastName: new FormControl(''),
-      specialization: new FormControl(''),
-      faculty: new FormControl(''),
+      lastName: new FormControl('', Validators.required),
+      specialization: new FormControl('', Validators.required),
+      specializedFaculty: new FormControl('', Validators.required),
       nsbmEmail: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.email
+        Validators.email,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
         Validators.required,
@@ -52,17 +65,23 @@ export class LecturersPage implements OnInit {
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(25)
-      ]))
+      ])),
+      lecturerStatus: new FormControl('', Validators.required),
+      termsAndConditionsAgreement: new FormControl('', Validators.required)
     });
 
   }
-
+  
 
   // Retrieving registered lecturer users and assigning them
   registeredLecturers;
   retrieveRegisteredLecturers = () => 
-    this.fbService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturers = response));
+    this.lecturersService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturers = response));
 
+  // Retrieving user statuses from the firestore database
+  publishedUserStatuses;
+  retrievePublishedUserStatuses = () => 
+    this.lecturersService.retrievePublishedUserStatuses().subscribe(response => (this.publishedUserStatuses = response));
 
 
 
@@ -80,18 +99,26 @@ export class LecturersPage implements OnInit {
   }
 
 
+  // Process of opening show terms and conditions modal
+  showTermsAndCondtions() {
+    console.log("Modal");
+  }
+
+
   doLecturerRegistration(value) {
 
 
     if(value.password == value.confirmPassword){
       // Firebase auth
-      this.fbService.lecturerRegistrationDetails(value)
+      this.lecturersService.lecturerRegistrationDetails(value, this.sideMenuPageUserFaculty.passLoggedInUserId(), this.loggedInUserFaculty)
         .then(success => {
           console.log(" (Firebase Auth) Lecturer Credentials Registration Successful, " + success);
 
           // Displaying new leaturer user created confirmation in alert message 
           this.alertnotice('Lecturer Registration Successful', 'New lecturer has been registered. New record can be viewed from the "Registered Lecturers" section.');
+          this.alertnotice('Alert', 'New user will be logged in.');
 
+          console.log(success);
         }, 
         error => {
           console.log(" (Firebase Auth) Lecturer Credentials Registration Failed, " + error);
