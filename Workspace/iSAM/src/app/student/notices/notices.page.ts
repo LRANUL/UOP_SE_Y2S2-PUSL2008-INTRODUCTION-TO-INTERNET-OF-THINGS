@@ -1,40 +1,52 @@
+import { FirebaseService } from 'src/app/services/firebase.service';
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase/app';
+import { AngularFirestore } from '@angular/fire/firestore/';
 
 @Component({ selector: 'app-notices', templateUrl: './notices.page.html', styleUrls: ['./notices.page.scss'] })
 export class NoticesPage implements OnInit {
-    Notice: any = '';
-    Title: any = '';
+    
+    title;
+    notices: any;
+    ngOnInit() {
+        this.firebase.fetchNotice().subscribe(data => {
 
-    constructor(private router: Router,private route: ActivatedRoute, private menu: MenuController, public navCtrl: NavController) 
- {
-     this.Notice = this.route.snapshot.params['Notice'];
- }
+            this.notices = data.map(e => {
+                return {
+                    noticeTitle: e.payload.doc.data()['noticeTitle'],
+                    noticeDescription: e.payload.doc.data()['noticeDescription'],
+                };
+            })
+            console.log(this.notices);
 
- ngOnInit() {
-}
+        });
+    }
 
-goSettings() {
-    this.router.navigate(['Student/Settings']);
-    console.log('settings');
-}
-goeSign() {
-    this.router.navigate(['Student/eSign']);
-    console.log('Home');
-}
-goECForm() {
-    this.router.navigate(['Student/EC-Form']);
-    console.log('EC-Form');
-}
-goAttendence() {
-    this.router.navigate(['Student/Attendence']);
-    console.log('Attendence');
-}
-goNotices() {
-    this.router.navigate(['Student/Notices']);
-    console.log('settings');
-}
+    constructor(private firestore: AngularFirestore,private firebase: FirebaseService, private router: Router, private route: ActivatedRoute, private menu: MenuController, public navCtrl: NavController) {
+
+    }
+
+    goSettings() {
+        this.router.navigate(['Student/Settings']);
+        console.log('settings');
+    }
+    goeSign() {
+        this.router.navigate(['Student/eSign']);
+        console.log('Home');
+    }
+    goECForm() {
+        this.router.navigate(['Student/EC-Form']);
+        console.log('EC-Form');
+    }
+    goAttendence() {
+        this.router.navigate(['Student/Attendence']);
+        console.log('Attendence');
+    }
+    goNotices() {
+        this.router.navigate(['Student/Notices']);
+        console.log('settings');
+    }
 
 }

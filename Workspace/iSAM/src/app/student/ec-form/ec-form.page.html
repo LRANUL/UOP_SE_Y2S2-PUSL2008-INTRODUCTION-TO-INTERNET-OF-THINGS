@@ -12,37 +12,41 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-card class="card">
-        <ion-card-header>
-          <ion-card-title>EC - Form</ion-card-title>
-        </ion-card-header>
+        <ion-card-title>
+          <ion-card-header>EC-Form</ion-card-header>
+        </ion-card-title>
         <ion-card-content>
-          <form class="form" [formGroup]="validations_form" (ngSubmit)="sendEC(validations_form.value)"
-            overflow-scroll="true">
+          <ion-grid fixed>
+            <ion-row>
+              <ion-col>
             <ion-item>
-              <ion-label position="floating" color="primary">First Name</ion-label>
-              <ion-input type="text" formControlName="fName">
+              <ion-label position="floating" color="primary">Name</ion-label>
+              <ion-input type="text" placeholder="Enter Your Name" [(ngModel)]="Name">
               </ion-input>
             </ion-item>
             <ion-item>
-              <ion-label position="floating" color="primary">Last Name</ion-label>
-              <ion-input type="text" formControlName="lName">
-              </ion-input>
+              <ion-label position="floating" color="primary">Faculty</ion-label>
+              <ion-select interface="action-sheet" [(ngModel)]="Faculty" value="">
+                <ion-select-option value="SOB">School of Business</ion-select-option>
+                <ion-select-option value="SOC">School of Computing</ion-select-option>
+                <ion-select-option value="SOE">School of Engineering</ion-select-option>
+              </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label position="floating" color="primary">Email</ion-label>
-              <ion-input type="text" disabled="true" formControlName="email" ngModel pattern="(\W|^)[\w.+\-]*@(students.nsbm)\.lk(\W|$)" value="{{userEmail}}">
+              <ion-label position="floating" color="primary">Lecturer Email</ion-label>
+              <ion-input type="text" placeholder="Enter Lecturer Email" [(ngModel)]="LecturerEmail" ngModel pattern="(\W|^)[\w.+\-]*@(students.nsbm)\.lk(\W|$)">
               </ion-input>
             </ion-item>
+                <p><i>Warning: If the entered email address is incorrect your EC-Forms will not be processed !</i></p>
         <ion-item>
           <ion-label position="floating" color="primary">Message</ion-label>
-          <ion-textarea type="text" formControlName="message">
+          <ion-textarea type="text" placeholder="Enter Your Message" [(ngModel)]="Message">
           </ion-textarea>
         </ion-item>
-            <ion-button class="submit-btn" type="submit" [disabled]="!validations_form.valid" color="success">Send Form
-            </ion-button>
-            <label class="error-message">{{errorMessage}}</label>
-            <label class="success-message">{{successMessage}}</label>
-          </form>
+            <ion-button (click)="sendEC()" color="success" [disabled]="!Name || !Faculty || !Message">Send Form</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-card-content>
       </ion-card>
     </ion-content>
