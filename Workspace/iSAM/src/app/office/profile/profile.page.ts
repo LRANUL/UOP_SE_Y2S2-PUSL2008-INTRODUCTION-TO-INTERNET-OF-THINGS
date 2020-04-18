@@ -24,5 +24,5 @@ export class ProfilePage implements OnInit {
 
   programOfficeUserDetails;
   retrieveLoggedInUserDetailsFirestore = () =>
-    this.profileService.retrieveLoggedInUserDetailsFirestore(this.sideMenuPageUserFaculty.passLoggedInUserId()).subscribe(response => (this.programOfficeUserDetails = response));
+    this.profileService.retrieveLoggedInUserDetailsLecturer(this.sideMenuPageUserFaculty.passLoggedInUserId()).subscribe(response => (this.programOfficeUserDetails = response));
 }

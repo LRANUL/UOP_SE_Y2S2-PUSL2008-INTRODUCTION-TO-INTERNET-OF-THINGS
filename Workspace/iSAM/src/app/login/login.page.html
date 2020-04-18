@@ -5,9 +5,6 @@
         <ion-card-title>Login</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-label>Admin Office [FOR DEVELOPMENT PURPOSE ONLY] </ion-label>
-        <br>
-        <ion-toggle (click)="admincheck($event)" checked="true" color="danger"></ion-toggle>
         <form class="form" [formGroup]="validations_form" (ngSubmit)="loginUser(validations_form.value)">
           <ion-item>
 

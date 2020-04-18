@@ -59,14 +59,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/eSign',
+        redirectTo: '/student/eSign',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/eSign',
+    redirectTo: '/student/eSign',
     pathMatch: 'full'
   }
 ];

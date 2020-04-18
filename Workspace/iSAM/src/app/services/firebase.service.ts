@@ -1,20 +1,20 @@
 import { async } from '@angular/core/testing';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {AngularFireDatabaseModule} from '@angular/fire/database';
-import {AngularFireAuth} from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { ThrowStmt } from '@angular/compiler';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class FirebaseService {
 
-   
-    navCtrl : any;
-    Date : Date = new Date();
-    authService : any;
-    constructor(private firestore : AngularFirestore) {
+
+    navCtrl: any;
+    Date: Date = new Date();
+    authService: any;
+    constructor(private firestore: AngularFirestore) {
 
         firebase.auth().onAuthStateChanged((user) => {
             if (user) { // User is signed in.
@@ -52,7 +52,7 @@ export class FirebaseService {
             });
         }
     }
-    sendEC(value){
+    sendEC(value) {
         var user = firebase.auth().currentUser;
         return new Promise<any>((resolve, reject) => {
             console.log('EC Form Stored')
@@ -69,15 +69,14 @@ export class FirebaseService {
                 resolve(res)
             }, err => reject(err))
         })
-  
+
     }
     registerUser(value) {
         return new Promise<any>((resolve, reject) => {
-            firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(res => resolve(res), err => reject(err))
-            var user = firebase.auth().currentUser;
-            return new Promise<any>((resolve, reject) => {
+            firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(success => {
+
                 console.log('Student Record Stored')
-                this.firestore.collection('users/userTypes/studentUsers/').doc(value.email).set({
+                this.firestore.collection('users/userTypes/studentUsers/').doc(success.user.uid).set({
                     name: {
                         firstName: value.fName,
                         middleName: value.mName,
@@ -102,12 +101,11 @@ export class FirebaseService {
                     faculty: value.faculty,
                     status: "active"
 
-                }).then((res) => {
-                    resolve(res)
-                }, err => reject(err))
-            })
-        })
+                })
+                resolve(success);
+            }, error => reject(error))
 
+        })
     }
 
 
@@ -138,21 +136,21 @@ export class FirebaseService {
     /* Retrieving details from the documents to identify the type of user */
 
     // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
-    retrieveLoggedInUserDetailsStudent(Uid){
+    retrieveLoggedInUserDetailsStudent(Uid) {
         return this.firestore.collection("users/userTypes/studentUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
     }
 
     // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
-    retrieveLoggedInUserDetailsLecturer(Uid){
+    retrieveLoggedInUserDetailsLecturer(Uid) {
         return this.firestore.collection("users/userTypes/lecturerUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
     }
 
     // Retrieving the details of the logged in user from firestore database with the use of firebase authentication Uid
-    retrieveLoggedInUserDetailsProgramOffice(Uid){
+    retrieveLoggedInUserDetailsProgramOffice(Uid) {
         return this.firestore.collection("users/userTypes/programOfficeUsers", ref => ref.where(firebase.firestore.FieldPath.documentId(), '==', Uid)).snapshotChanges();
     }
 
-    
+
 
 
     // Retriving the current date and time from the localhost
@@ -162,7 +160,7 @@ export class FirebaseService {
     // Implementation of Registering a new lecturer into the system (firebase authentication)
     lecturerRegistrationDetails(value, loggedInUserId, loggedInUserFaculty) {
         return new Promise<any>((resolve, reject) => { // Adding new record into firebase auth
-      
+
             firebase.auth().createUserWithEmailAndPassword(value.nsbmEmail, value.confirmPassword).then(success => {
                 console.log(" Lecturer UserID: " + success.user.uid);
 
@@ -196,33 +194,33 @@ export class FirebaseService {
                 });
                 resolve(success);
             }, error => reject(error))
-            
+
         })
-        
+
 
     }
 
 
     // Registering new module by adding the user provided details into the firestore database
-    registerModule(userFaculty, value, userFormAwardingBodyUniversity){
+    registerModule(userFaculty, value, userFormAwardingBodyUniversity) {
         // Creating an ID for the document
         const docId = this.firestore.createId();
 
-        return this.firestore.collection("faculties/"+ userFaculty +"/modules").doc(docId).set({
-        moduleCode: value.moduleCode,
-        moduleTitle: value.moduleTitle,
-        creditsWeighting: value.creditsWeighting,
-        degree: value.degreeProgram,
-        awardingBodyUniversity: userFormAwardingBodyUniversity,
-        academicPeriod: {
-            academicYear: value.academicPeriodYear,
-            academicSemester: value.academicPeriodSemester
-        },
-        moduleLeader: value.moduleLeader,
-        assignedLecturer: value.assignedLecturer,
-        assignedLectureHall: value.assignedLectureHall
-        }).then(function() {
-        console.log("Module registerd and values were added");
+        return this.firestore.collection("faculties/" + userFaculty + "/modules").doc(docId).set({
+            moduleCode: value.moduleCode,
+            moduleTitle: value.moduleTitle,
+            creditsWeighting: value.creditsWeighting,
+            degree: value.degreeProgram,
+            awardingBodyUniversity: userFormAwardingBodyUniversity,
+            academicPeriod: {
+                academicYear: value.academicPeriodYear,
+                academicSemester: value.academicPeriodSemester
+            },
+            moduleLeader: value.moduleLeader,
+            assignedLecturer: value.assignedLecturer,
+            assignedLectureHall: value.assignedLectureHall
+        }).then(function () {
+            console.log("Module registerd and values were added");
         });
     }
 
@@ -247,15 +245,15 @@ export class FirebaseService {
     }
 
     // Searching for registered lecturer details with the user entered nsbm id 
-    searchRegisteredLecturerNSBMId(nsbmLecturerId){
+    searchRegisteredLecturerNSBMId(nsbmLecturerId) {
         return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
-                .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
+            .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
     }
 
     // Searching for registered lecturer details with the user entered nsbm email address
-    searchRegisteredLecturerNSBMEmail(nsbmEmailAddress){
+    searchRegisteredLecturerNSBMEmail(nsbmEmailAddress) {
         return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
-                .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
+            .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
     }
 
 
@@ -277,13 +275,13 @@ export class FirebaseService {
 
     // Retrieving published degree programs and their details from the firestore database
     retrievePublishedDegreeProgram(userFaculty) {
-        return this.firestore.collection("faculties/"+ userFaculty +"/degreePrograms").snapshotChanges();
+        return this.firestore.collection("faculties/" + userFaculty + "/degreePrograms").snapshotChanges();
     }
 
     // Retrieving published module credits weighting and their details from the firestore database
     retrievePublishedModuleCreditsWeighting() {
         return this.firestore.collection("noOfModuleCreditsWeighting", ref => ref
-                .where("status", "==", "Active")).snapshotChanges();
+            .where("status", "==", "Active")).snapshotChanges();
     }
 
     // Retrieving published user statuses and their details from the firestore database
@@ -293,55 +291,55 @@ export class FirebaseService {
 
     // Retrieving published lecture halls and their details from the firestore database
     retrievePublishedLectureHalls(userFaculty) {
-        return this.firestore.collection("faculties/"+ userFaculty +"/lectureHalls").snapshotChanges();
+        return this.firestore.collection("faculties/" + userFaculty + "/lectureHalls").snapshotChanges();
     }
 
     // Retrieving registered module and their details from the firestore database for the module page (Module Code)
-    retrieveRegisterdModulesModuleCode(userFaculty, value){
-        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
-                .where("moduleCode", "==", value)).snapshotChanges();
+    retrieveRegisterdModulesModuleCode(userFaculty, value) {
+        return this.firestore.collection("faculties/" + userFaculty + "/modules", ref => ref
+            .where("moduleCode", "==", value)).snapshotChanges();
     }
 
 
     // Retrieving registered module and their details from the firestore database for the module page (Module Title)
-    retrieveRegisterdModulesModuleTitle(userFaculty, value){
-        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
-                .where("moduleTitle", "==", value)).snapshotChanges();
+    retrieveRegisterdModulesModuleTitle(userFaculty, value) {
+        return this.firestore.collection("faculties/" + userFaculty + "/modules", ref => ref
+            .where("moduleTitle", "==", value)).snapshotChanges();
     }
 
     // Retrieving registered module and their details from the firestore database for the module page (Degree Program)
-    retrieveRegisterdModulesDegreeProgram(userFaculty, userSelectedDegree, userSelectedAwardingBodyUniversity){
-        return this.firestore.collection("faculties/"+ userFaculty +"/modules", ref => ref 
-                .where("degree", "==", userSelectedDegree)
-                .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)).snapshotChanges();
+    retrieveRegisterdModulesDegreeProgram(userFaculty, userSelectedDegree, userSelectedAwardingBodyUniversity) {
+        return this.firestore.collection("faculties/" + userFaculty + "/modules", ref => ref
+            .where("degree", "==", userSelectedDegree)
+            .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)).snapshotChanges();
     }
 
-    
+
     // Updating module values in the firestore database
     updateModule(userFaculty, docId, value, userFormDataAwardingBodyUniversity) {
-        return this.firestore.doc("faculties/"+ userFaculty +"/modules/"+ docId).update({
-        moduleCode: value.moduleCode,
-        moduleTitle: value.moduleTitle,
-        creditsWeighting: value.creditsWeighting,
-        degree: value.degreeProgram,
-        awardingBodyUniversity: userFormDataAwardingBodyUniversity,
-        academicPeriod: {
-            academicYear: value.academicPeriodYear,
-            academicSemester: value.academicPeriodSemester,
-        },
-        moduleLeader: value.moduleLeader,
-        assignedLecturer: value.assignedLecturer,
-        assignedLectureHall: value.assignedLectureHall
-        }).then(function() {
-        console.log("Module Details has been updated.");
+        return this.firestore.doc("faculties/" + userFaculty + "/modules/" + docId).update({
+            moduleCode: value.moduleCode,
+            moduleTitle: value.moduleTitle,
+            creditsWeighting: value.creditsWeighting,
+            degree: value.degreeProgram,
+            awardingBodyUniversity: userFormDataAwardingBodyUniversity,
+            academicPeriod: {
+                academicYear: value.academicPeriodYear,
+                academicSemester: value.academicPeriodSemester,
+            },
+            moduleLeader: value.moduleLeader,
+            assignedLecturer: value.assignedLecturer,
+            assignedLectureHall: value.assignedLectureHall
+        }).then(function () {
+            console.log("Module Details has been updated.");
         });
     }
 
 
 
     // Removing registered modules from the firestore database
-    removeRegisteredModule(userFaculty, DocId){
-        this.firestore.doc("faculties/"+ userFaculty +"/modules/"+ DocId).delete();
+    removeRegisteredModule(userFaculty, DocId) {
+        this.firestore.doc("faculties/" + userFaculty + "/modules/" + DocId).delete();
     }
 
 }

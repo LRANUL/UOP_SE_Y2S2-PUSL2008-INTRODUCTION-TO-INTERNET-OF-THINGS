@@ -1,7 +1,6 @@
-import {FirebaseService} from './../services/firebase.service';
-import {Component, OnInit} from '@angular/core';
-import {NavController, AlertController} from '@ionic/angular';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FirebaseService } from './../services/firebase.service';
+import { Component, OnInit } from '@angular/core';
+import { NavController, AlertController } from '@ionic/angular';
 import * as firebase from 'firebase';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { LoadingController } from '@ionic/angular';
@@ -12,50 +11,33 @@ export class LoginPage implements OnInit {
     validations_form: FormGroup;
     errorMessage: string = '';
     userEmail: string;
-    admincheck(): void {
-        this.checked = !this.checked;
-        console.log("checked: " + this.checked);//it is working !!!
-    }
-    constructor(private router: Router, public navCtrl: NavController, private authService: FirebaseService, public loadingController: LoadingController, private formBuilder: FormBuilder, ) { }
+
+    constructor(private formBuilder: FormBuilder, private alertController: AlertController, private router: Router, public navCtrl: NavController, private authService: FirebaseService, public loadingController: LoadingController, ) { }
 
     ngOnInit() {
-
-    constructor(
-        private router: Router,
-        public navCtrl : NavController, 
-        private authService : FirebaseService, 
-        public loadingController : LoadingController, 
-        private formBuilder : FormBuilder,
-        private alertController: AlertController
-    ){}
-
-    ngOnInit() {
-
-        
 
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) { // User is signed in.
                 console.log('User is signed in');
-        //         const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
-        //         await loading.present();
+                        const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
+                        await loading.present();
 
-        //         const {role, data} = await loading.onDidDismiss();
-        //         console.log('Loading dismissed!');
+                        const {role, data} = await loading.onDidDismiss();
+                        console.log('Loading dismissed!');
 
                 this.userEmail = this.authService.userDetails().email;
-
 
                 const loggedInUserDetails = this.authService.userDetails();
 
                 /* Redirecting the user to their relevant user interface according to the user type */
                 // Checking if logged in user type in a student user
                 this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
-                        // this.navCtrl.navigateForward("/dashboard");
+                    if (response.length > 0) {
+                        this.router.navigate(['/student']);
                         console.log("Logged In User Type: StudentUser");
                         console.log("Record found in student users collection");
                     }
-                    else{
+                    else {
                         console.log("Record not found in student users collection");
                     }
                 }, error => {
@@ -65,12 +47,12 @@ export class LoginPage implements OnInit {
 
                 // Checking if logged in user type in a lecturer user
                 this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
-                        //this.navCtrl.navigateForward("/lecturerHome");
+                    if (response.length > 0) {
+                        this.router.navigate(['/lecturer']);
                         console.log("Logged In User Type: LecturerUser");
                         console.log("Record found in lecturer users collection");
                     }
-                    else{
+                    else {
                         console.log("Record not found in lecturer users collection");
                     }
                 }, error => {
@@ -80,19 +62,19 @@ export class LoginPage implements OnInit {
 
                 // Checking if logged in user type in a program office user
                 this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
+                    if (response.length > 0) {
                         this.router.navigate(['/office/dashboard']);
                         console.log("Logged In User Type: Program Office User");
                         console.log("Record found in program office users collection");
                     }
-                    else{
+                    else {
                         console.log("Record not found in program office users collection");
                     }
                 }, error => {
                     console.log("Error: " + error);
                     this.alertNotice("Error", "An error has occurred: " + error);
                 });
-             
+
 
             } else { // No user is signed in.
                 console.log('User is NOT signed in');
@@ -106,12 +88,12 @@ export class LoginPage implements OnInit {
     }
 
     // Alert Box Implementation
-    async alertNotice ( title: string, content: string ) {
+    async alertNotice(title: string, content: string) {
 
         const alert = await this.alertController.create({
-        header: title,
-        message: content,
-        buttons: ['OK']
+            header: title,
+            message: content,
+            buttons: ['OK']
         });
 
         await alert.present();
@@ -163,12 +145,12 @@ export class LoginPage implements OnInit {
             /* Redirecting the user to their relevant user interface according to the user type */
             // Checking if logged in user type in a student user
             this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     // this.navCtrl.navigateForward("/dashboard");
                     console.log("Logged In User Type: StudentUser");
                     console.log("Record found in student users collection");
                 }
-                else{
+                else {
                     console.log("Record not found in student users collection");
                 }
             }, error => {
@@ -178,12 +160,12 @@ export class LoginPage implements OnInit {
 
             // Checking if logged in user type in a lecturer user
             this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     //this.navCtrl.navigateForward("/lecturerHome");
                     console.log("Logged In User Type: LecturerUser");
                     console.log("Record found in lecturer users collection");
                 }
-                else{
+                else {
                     console.log("Record not found in lecturer users collection");
                 }
             }, error => {
@@ -193,12 +175,12 @@ export class LoginPage implements OnInit {
 
             // Checking if logged in user type in a program office user
             this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     this.router.navigate(['/office/dashboard']);
                     console.log("Logged In User Type: Program Office User");
                     console.log("Record found in program office users collection");
                 }
-                else{
+                else {
                     console.log("Record not found in program office users collection");
                 }
             }, error => {
