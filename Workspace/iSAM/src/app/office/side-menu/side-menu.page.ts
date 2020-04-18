@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-side-menu',
@@ -50,9 +52,12 @@ export class SideMenuPage implements OnInit {
   selectedPath = '';
 
 
+
   constructor(
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private sideMenuService: FirebaseService,
+    public angularFireAuth: AngularFireAuth
   ) { 
 
     this.router.events.subscribe((event: RouterEvent) => {
@@ -63,15 +68,55 @@ export class SideMenuPage implements OnInit {
 
   }
 
+  // Declaring variable to store the faculty of the logged in user
+  userFacultyFirestore: any;
+
+  userDetailsAuth: any;
+
   ngOnInit() {
+
+    // Retrieving the auth details of the logged in user
+    this.userDetailsAuth = this.sideMenuService.userDetails();
+
+    console.log(this.userDetailsAuth);
+    console.log(this.userDetailsAuth.uid);
+
+    this.retrieveLoggedInUserDetailsFirestore();
+
   }
 
 
-   // Logout Process
-   logout(){
+  // Retrieving the faculty of the logged in user and assign it the 'userFacultyFirestore' variable
+  retrieveLoggedInUserDetailsFirestore = () =>  {
+    this.sideMenuService.retrieveLoggedInUserDetailsProgramOffice(this.userDetailsAuth.uid).subscribe(userFacultyFirestore => (
+      userFacultyFirestore.forEach(document => {
+        let firestoreDoc:any = document.payload.doc.data();
+        firestoreDoc = firestoreDoc.faculty;
 
-    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
+        this.userFacultyFirestore = firestoreDoc;
+
+        console.log(this.userFacultyFirestore);
+      })
+    ));
+  }
+
+  // Passing user faculty
+  passLoggedInUserFaculty() {
+    console.log(this.userFacultyFirestore);
+    return this.userFacultyFirestore;
+  }
+
+  // Passing user id
+  passLoggedInUserId() {
+    return this.userDetailsAuth.uid;
+  }
+
+
     
+
+  // Logout Process
+  logout(){
+    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
   }
 
   // Alert Box Implementation (Logout)
@@ -92,6 +137,7 @@ export class SideMenuPage implements OnInit {
         {
           text: 'Continue',
           handler: () => {
+            this.sideMenuService.logoutUser();
             this.router.navigate(["/login"]);
             console.log("User Logged Out");
           }
@@ -103,6 +149,8 @@ export class SideMenuPage implements OnInit {
     await alert.present();
 
   }
+
+  
 
 
 }

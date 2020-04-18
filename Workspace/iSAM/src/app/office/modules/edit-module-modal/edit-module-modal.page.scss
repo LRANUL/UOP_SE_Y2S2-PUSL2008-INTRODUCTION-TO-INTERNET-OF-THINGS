@@ -6,16 +6,17 @@ ion-card{
     --ion-background-color: white;
 }
 
-ion-label{
-    color: black;
-}
-
 ion-item{
-    border: rgb(32, 32, 32) solid 1px;
+    border: #ccc solid 1px;
     border-radius: 5px;
 }
 
-.registerLecturerFormLabel{
+ion-label{
+    color: black;
+    font-size: 15px;
+}
+
+.editModuleFormLabel{
     position: relative;
     top: 15px;
 }

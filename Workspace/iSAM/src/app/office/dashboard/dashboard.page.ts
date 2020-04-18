@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SideMenuPage } from '../side-menu/side-menu.page';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private sideMenuPageUserFaculty: SideMenuPage
+  ) { }
 
   ngOnInit() {
+
+    console.log(this.sideMenuPageUserFaculty.passLoggedInUserId());
+    console.log(this.sideMenuPageUserFaculty.passLoggedInUserFaculty());
+    
+
   }
 
 }

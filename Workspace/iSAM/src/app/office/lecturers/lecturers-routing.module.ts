@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: LecturersPage
+  },  {
+    path: 'more-details-lecturer-popover',
+    loadChildren: () => import('./more-details-lecturer-popover/more-details-lecturer-popover.module').then( m => m.MoreDetailsLecturerPopoverPageModule)
   }
+
 ];
 
 @NgModule({
