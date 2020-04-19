@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('../lectures/lectures.module').then(m => m.LecturesPageModule)
       },
       {
+        path: 'semester-calendar',
+        loadChildren: () => import('../semester-calendar/semester-calendar.module').then(m => m.SemesterCalendarPageModule)
+      },
+      {
         path: 'modules',
         loadChildren: () => import('../modules/modules.module').then(m => m.ModulesPageModule)
       },

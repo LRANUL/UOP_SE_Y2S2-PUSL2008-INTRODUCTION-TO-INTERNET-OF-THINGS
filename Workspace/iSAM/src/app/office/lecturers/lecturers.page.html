@@ -102,8 +102,9 @@
                                       min-width: 100%;
                                       margin-top: 0px;" type="submit" [disabled]="searchRegisteredLecturerForm.valid">
                       <ion-icon name="search-outline" style="margin-right: 5px;
-                                                            font-size: 15px;"></ion-icon>
-                      <ion-label style="font-size: 15px;">
+                                                            font-size: 20px;"></ion-icon>
+                      <ion-label style="font-size: 20px;
+                                        color: white;">
                         Search
                       </ion-label>
                     </ion-button>
@@ -453,6 +454,12 @@
                                       top: 10px;" type="submit" [disabled]="!lecturerRegistrationForm.valid">
                       Register
                     </ion-button>
+
+                    <!-- Loading Spinner -->
+                    <ion-spinner name="crescent" style="position: absolute;
+                                                        top: 18px;
+                                                        left: 60%;
+                                                        transform: translateX(-40%);" *ngIf="registerLecturerLoadingSpinner"></ion-spinner>
 
                   </ion-col>
 

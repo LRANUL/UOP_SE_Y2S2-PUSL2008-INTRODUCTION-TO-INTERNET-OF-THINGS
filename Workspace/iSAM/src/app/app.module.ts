@@ -25,6 +25,9 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { NgCalendarModule  } from 'ionic2-calendar';
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -34,6 +37,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule, 
     AngularFireModule.initializeApp(environment.firebase), 
     AngularFireAuthModule,
+    NgCalendarModule,
     DegreeProgramsModalPageModule,
     EditModuleModalPageModule,
     MoreDetailsModulePopoverPageModule,

@@ -33,6 +33,11 @@ export class SideMenuPage implements OnInit {
       icon: '../../../assets/images/office/main-screen/lectures.png'
     },
     {
+      title: 'Semester Calendar',
+      url: '/office/semester-calendar',
+      icon: '../../../assets/images/office/main-screen/semester-calendar.png'
+    },
+    {
       title: 'Modules',
       url: '/office/modules',
       icon: '../../../assets/images/office/main-screen/modules.png'

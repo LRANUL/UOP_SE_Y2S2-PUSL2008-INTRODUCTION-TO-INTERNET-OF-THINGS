@@ -6,6 +6,7 @@ import { AlertController, PopoverController, ModalController } from '@ionic/angu
 import { AngularFirestore } from '@angular/fire/firestore';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { MoreDetailsLecturerPopoverPage } from './more-details-lecturer-popover/more-details-lecturer-popover.page';
+import { Router } from '@angular/router';
 
 
 
@@ -24,6 +25,8 @@ export class LecturersPage implements OnInit {
 
   pageLoadSearchLecturerText: Boolean = true;
 
+  registerLecturerLoadingSpinner: Boolean = false;
+
   loggedInUserFaculty;
 
 
@@ -33,10 +36,15 @@ export class LecturersPage implements OnInit {
     private alertController: AlertController,
     private sideMenuPageUserFaculty: SideMenuPage,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+
+    
+
+
 
     this.loggedInUserFaculty = this.sideMenuPageUserFaculty.passLoggedInUserFaculty();
 
@@ -150,6 +158,7 @@ export class LecturersPage implements OnInit {
           console.log("Registered Lecturer Record Found");
         }
         else{
+          this.showLoadingDots = false;
           this.alertNotice("Not Found", "Registered Lecture Record with NSBM ID: " + value.nsbmId + ", is not available");
           console.log("Registered Lecturer Record Not Found");
         }
@@ -264,19 +273,31 @@ export class LecturersPage implements OnInit {
   doLecturerRegistration(value) {
 
 
+    /*-- Lecturer User Registration Process Phase --*/
     if(value.password == value.confirmPassword){
+
+      // Setting loading spinner to spin
+      this.registerLecturerLoadingSpinner = true;
+
       // Firebase auth
       this.lecturersService.lecturerRegistrationDetails(value, this.sideMenuPageUserFaculty.passLoggedInUserId(), this.loggedInUserFaculty)
         .then(success => {
+
+          // Setting loading spinner to stop spinning
+          this.registerLecturerLoadingSpinner = false;
+
           console.log(" (Firebase Auth) Lecturer Credentials Registration Successful, " + success);
 
           // Displaying new leaturer user created confirmation in alert message 
           this.alertNotice('Lecturer Registration Successful', 'New lecturer has been registered. New record can be viewed from the "Registered Lecturers" section.');
-          this.alertNotice('Alert', 'New user will be logged in.');
+          this.alertNotice('Alert', 'Program Office User logged out');
 
           console.log(success);
         }, 
         error => {
+          // Setting loading spinner to stop spinning
+          this.registerLecturerLoadingSpinner = false;
+
           console.log(" (Firebase Auth) Lecturer Credentials Registration Failed, " + error);
 
           if(error == "Error: The email address is already in use by another account."){
@@ -300,6 +321,7 @@ export class LecturersPage implements OnInit {
       // Displaying entered passwords not similar error in alert message 
       this.alertNotice('Passwords Mismatch', 'Entered passwords do not match, please re-check.');
     }
+    /*-- Lecturer User Registration Process Phase --*/
 
   }
 

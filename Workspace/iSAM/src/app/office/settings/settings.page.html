@@ -61,4 +61,358 @@
 
 <ion-content>
 
+  <ion-grid>
+
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Change Academic Information
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        Degree Programs
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  min-height: 300px;
+                                  overflow-y: scroll;">
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Batch</th>
+                              <th>Degree Program</th>
+                              <th>Status</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedBatches">
+                              <td>{{ item.payload.doc.data().batch }}</td>
+                              <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
+                              <td>{{ item.payload.doc.data().batchStatus }}</td>
+                              <td>
+                                <ion-button>
+                                  <ion-icon name="create-outline" style="margin-right: 5px;"></ion-icon>
+                                  <ion-label style="color: white;">
+                                    EDIT
+                                  </ion-label>
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 87%;
+                                                        transform: translateX(-13%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        Batches
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  min-height: 300px;
+                                  overflow-x: scroll;">
+
+                        <table class="table" style="min-width: 300px;">
+                          <thead>
+                            <tr>
+                              <th>Degree Program</th>
+                              <th>No Of Years</th>
+                              <th>No Of Semesters Annually</th>
+                              <th>Program Delivery</th>
+                              <th>Program Coordinator</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedDegreePrograms">
+                              <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
+                              <td>{{ item.payload.doc.data().deliveryNoOfYears }}</td>
+                              <td>{{ item.payload.doc.data().deliveryNoOfSemesterAnnually }}</td>
+                              <td>{{ item.payload.doc.data().programDelivery }}</td>
+                              <td>{{ item.payload.doc.data().programCoordinator }}</td>
+                              <td>
+                                <ion-button>
+                                  EDIT
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        Credit Weightings
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  min-height: 300px;
+                                  overflow-x: scroll;">
+
+                        <table class="table" style="min-width: 500px;">
+                          <thead>
+                            <tr>
+                              <th>Credit Weightings</th>
+                              <th>Status</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedNoOfCreditWeightings">
+                              <td>{{ item.payload.doc.data().creditsWeighting }}</td>
+                              <td>{{ item.payload.doc.data().status }}</td>
+                              <td>
+                                <ion-button>
+                                  EDIT
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Change Status Information
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        Lecture Session Statuses
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  min-height: 300px;
+                                  overflow-x: scroll;">
+
+                        <table class="table" style="min-width: 300px;">
+                          <thead>
+                            <tr>
+                              <th>Status</th>
+                              <th>Description</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedSessionStatuses">
+                              <td>{{ item.payload.doc.data().status }}</td>
+                              <td>{{ item.payload.doc.data().description }}</td>
+                              <td>
+                                <ion-button>
+                                  EDIT
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        User Account Statuses
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  min-height: 300px;
+                                  overflow-x: scroll;">
+
+                        <table class="table" style="min-width: 300px;">
+                          <thead>
+                            <tr>
+                              <th>Status</th>
+                              <th>Description</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedUserStatuses">
+                              <td>{{ item.payload.doc.data().status }}</td>
+                              <td>{{ item.payload.doc.data().description }}</td>
+                              <td>
+                                <ion-button>
+                                  EDIT
+                                </ion-button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Change Account Details
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+          
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button color="medium" expand="block">
+                    Update Details
+                  </ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="medium" expand="block">
+                    Update Password
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              ABOUT
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+          
+            <ion-card id="aboutCardStyle">
+              <ion-card-header>
+                  <ion-avatar style="position: absolute;
+                                    top: 20px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background-color: white;
+                                    width: 100px;
+                                    height: 100px;">
+                    <img src="../../../assets/images/office/settings-page/aboutIcon.png">
+                  </ion-avatar>
+                </ion-card-header>   
+                <ion-card-content style="margin-top: 100px;"> 
+                  <h2 style="text-align: center;
+                            color: black;">iSAM Platform built by University of Plymouth Second Year students <br> 
+                              following BSc(Hons) Software Engineering Degree</h2><br>
+                  <h2 style="text-align: center;
+                            color: black;">Assignment Title: Coursework PUSL2008 - Intorduction to Internet of Things</h2>
+                </ion-card-content>     
+            </ion-card>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+
 </ion-content>

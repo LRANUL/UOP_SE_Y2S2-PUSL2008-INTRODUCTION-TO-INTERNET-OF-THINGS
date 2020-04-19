@@ -48,4 +48,11 @@
       </ion-card-content>
     </ion-card>
   </div>
+  <!-- Loading Spinner -->
+  <div style="position: absolute;
+              left: 50%;
+              transform: translateX(-50%);">
+    <ion-spinner name="crescent" color="primary" style="height: 100px;
+                                                          width: 100px;" *ngIf="loginLoadingSpinner"></ion-spinner>
+  </div>
 </ion-content>

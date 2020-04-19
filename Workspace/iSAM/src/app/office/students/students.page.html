@@ -66,17 +66,17 @@
       <ion-col>
 
         
-        <ion-card style="max-height: 600px;">
+        <ion-card style="max-height: 700px;">
           <ion-card-header>
             <ion-card-title>
-              Registered Lecturers
+              Registered Students
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             
 
 
-            <form [formGroup]="searchRegisteredLecturerForm" (ngSubmit)="doSearchRegisteredLecturer(searchRegisteredLecturerForm.value)">
+            <form [formGroup]="searchRegisteredStudentForm" (ngSubmit)="doSearchRegisteredStudent(searchRegisteredStudentForm.value)">
               <ion-grid>
                 <ion-row>
                   <ion-col size="5">
@@ -101,10 +101,11 @@
                   <ion-col size="1.5">
                     <ion-button style="min-height: 100%;
                                       min-width: 100%;
-                                      margin-top: 0px;" type="submit" [disabled]="searchRegisteredLecturerForm.valid">
+                                      margin-top: 0px;" type="submit" [disabled]="searchRegisteredStudentForm.valid">
                       <ion-icon name="search-outline" style="margin-right: 5px;
-                                                            font-size: 15px;"></ion-icon>
-                      <ion-label style="font-size: 15px;">
+                                                            font-size: 20x;"></ion-icon>
+                      <ion-label style="font-size: 20px;
+                                        color: white;">
                         Search
                       </ion-label>
                     </ion-button>
@@ -117,7 +118,7 @@
                         min-width: 100%;"></div>
 
             <!-- Page loading search module text -->
-            <div *ngIf="pageLoadSearchLecturerText" style="position: absolute;
+            <div *ngIf="pageLoadSearchStudentText" style="position: absolute;
                                                         top: 150px;
                                                         left: 50%;
                                                         transform: translateX(-50%);
@@ -132,7 +133,7 @@
                                                                 margin-right: 10px;"></ion-icon>
               <ion-label style="position: relative;
                                 top: -5px;">
-                Please populate a field and click 'Search' button to search for a registered lecturer.
+                Please populate a field and click 'Search' button to search for a registered student.
               </ion-label>
             </div>
 
@@ -153,14 +154,14 @@
 
                   <ion-col size="4" size-sm="12" size-lg="3">
 
-                    <ion-card *ngIf="registeredLecturerCard">
+                    <ion-card *ngIf="registeredStudentCard">
                       <ion-card-header>
-                        <ion-card-title>{{ lecturerNamePrefix }} {{ lecturerNameFirstName }} {{ lecturerNameLastName }} </ion-card-title>
+                        <ion-card-title> </ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
-                        <b>Specialization: </b> {{ lecturerNameSpecialization }} <br>
-                        <b>Specialied Faculty: </b> {{ lecturerSpecializedFaculty }} <br>
-                        <b>Account Status: </b> {{ lecturerStatus }}
+                        <b>Specialization: </b>  <br>
+                        <b>Specialied Faculty: </b>  <br>
+                        <b>Account Status: </b> 
                         <ion-grid>
                           <ion-row>
                             <ion-col>
