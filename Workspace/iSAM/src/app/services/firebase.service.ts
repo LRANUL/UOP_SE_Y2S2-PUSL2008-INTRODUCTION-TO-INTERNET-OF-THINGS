@@ -60,6 +60,23 @@ export class FirebaseService {
         return this.firestore.collection('EC-Forms/'+faculty+'/'+lecturer).add(record);
     }
 
+    sendAttendance(record, uid, module, email) {
+        return this.firestore.firestore.collection('Attendance/History/' + module).doc(email).set({
+            data: {
+                Module: module,
+                Attendace: firebase.firestore.FieldValue.increment(1),
+            },
+
+        })
+
+        // this.firestore.collection('Attendance / History /'+module+'/'+email).add(record);
+
+    }
+    fetchSession(Batch, Faculty, LectureDate, DegreeCode) {
+        //faculties/School of Business/11.1/SE/19-4-2020/
+        return this.firestore.collection('faculties').doc(Faculty).collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
+
+    }
     loadEC() {
 
         return this.firestore.collection('EC-Forms').snapshotChanges();

@@ -9,7 +9,7 @@ import 'firebase';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
- 
+
   validations_form: FormGroup;
   errorMessage: string = '';
   successMessage: string = '';
@@ -46,6 +46,10 @@ export class SignupPage implements OnInit {
       lName: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z]+$')
+      ])),
+      DegreeCode: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('')
       ])),
       faculty: new FormControl('', Validators.compose([
         Validators.required,
@@ -89,8 +93,6 @@ export class SignupPage implements OnInit {
 
   goLoginPage() {
     this.navCtrl.navigateForward("login");
-
-
   }
 
 }
