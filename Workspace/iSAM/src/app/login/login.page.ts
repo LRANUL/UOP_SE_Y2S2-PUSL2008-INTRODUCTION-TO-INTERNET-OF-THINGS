@@ -226,7 +226,7 @@ export class LoginPage implements OnInit {
             // Checking if logged in user type in a student user
             this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
                 if(response.length > 0){
-                    // this.navCtrl.navigateForward("/dashboard");
+                    this.router.navigate(['student']);
                     console.log("Logged In User Type: StudentUser");
                     console.log("Record found in student users collection");
 
@@ -244,7 +244,7 @@ export class LoginPage implements OnInit {
             // Checking if logged in user type in a lecturer user
             this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
                 if(response.length > 0){
-                    //this.navCtrl.navigateForward("/lecturerHome");
+                    this.router.navigate(['lecturer']);
                     console.log("Logged In User Type: LecturerUser");
                     console.log("Record found in lecturer users collection");
 

@@ -54,11 +54,10 @@ export class FirebaseService {
 
     registerUser(value) {
         return new Promise<any>((resolve, reject) => {
-            firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(res => resolve(res), err => reject(err))
-            var user = firebase.auth().currentUser;
-            return new Promise<any>((resolve, reject) => {
+            firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(success => {
+
                 console.log('Student Record Stored')
-                this.firestore.collection('users/userTypes/studentUsers/').doc(value.email).set({
+                this.firestore.collection('users/userTypes/studentUsers/').doc(success.user.uid).set({
                     name: {
                         firstName: value.fName,
                         middleName: value.mName,
@@ -68,11 +67,11 @@ export class FirebaseService {
                     nsbmStudentID: value.sid,
                     degree: value.degree,
                     batch: value.batch,
-                    uID: user.uid,
+                    uID: value.email,
                     createdDateTime: new Date(),
                     // ServerTime:firebase.firestore.FieldValue.serverTimestamp(),
                     edited: {
-                        editedByUID: [user.uid],
+                        editedByUID: [value.email],
                         editedDateTime: [new Date()],
                         editedSection: ["Initial Register"]
                     },
@@ -83,12 +82,11 @@ export class FirebaseService {
                     faculty: value.faculty,
                     status: "active"
 
-                }).then((res) => {
-                    resolve(res)
-                }, err => reject(err))
-            })
-        })
+                })
+                resolve(success);
+            }, error => reject(error))
 
+        })
     }
 
 
@@ -115,7 +113,13 @@ export class FirebaseService {
         return firebase.auth().currentUser;
     }
 
+    fetchNotice() {
+        return this.firestore.collection('notices/noticeTypes/notices-PO-To-Students').snapshotChanges();
+    }
 
+    sendEC(record, faculty, lecturer) {
+        return this.firestore.collection('EC-Forms/' + faculty + '/' + lecturer).add(record);
+    }
 
     sendAttendance(record, uid, module, email) {
         return this.firestore.firestore.collection('Attendance/History/' + module).doc(email).set({
@@ -123,26 +127,27 @@ export class FirebaseService {
                 Module: module,
                 Attendace: firebase.firestore.FieldValue.increment(1),
             },
+
         })
 
         // this.firestore.collection('Attendance / History /'+module+'/'+email).add(record);
 
     }
     fetchSession(Batch, Faculty, LectureDate, DegreeCode) {
-        //faculties/School of Business/11.1/SE/19-4-2020/
-        return this.firestore.collection('faculties').doc(Faculty).collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
+        //faculties/School of Business/lectureSeries/undergraduate/11.1/SE/19-4-2020/
+        return this.firestore.collection('faculties').doc(Faculty).collection('lectureSeries').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
+
+    }
+    loadEC() {
+
+        return this.firestore.collection('EC-Forms').snapshotChanges();
     }
 
-    fetchNotice() {
-        return this.firestore.collection('notices/noticeTypes/notices-PO-To-Students').snapshotChanges();
+    updateEC(value) {
+        this.firestore.collection('EC-Forms/Done' + value.email + '').add(value);
     }
 
-    sendEC(record,faculty,lecturer) {
-        return this.firestore.collection('EC-Forms/'+faculty+'/'+lecturer).add(record);
-    }
-
-
-
+   
 
 
     /* Retrieving details from the documents to identify the type of user */
