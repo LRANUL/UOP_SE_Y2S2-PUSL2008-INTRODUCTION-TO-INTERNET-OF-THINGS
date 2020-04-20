@@ -26,6 +26,8 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgCalendarModule  } from 'ionic2-calendar';
+import { EditLectureSessionModalPageModule } from './office/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
+import { MoreDetailsSessionPopoverPageModule } from './office/semester-calendar/more-details-session-popover/more-details-session-popover.module';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { NgCalendarModule  } from 'ionic2-calendar';
     DegreeProgramsModalPageModule,
     EditModuleModalPageModule,
     MoreDetailsModulePopoverPageModule,
-    MoreDetailsLecturerPopoverPageModule
+    MoreDetailsLecturerPopoverPageModule,
+    EditLectureSessionModalPageModule,
+    MoreDetailsSessionPopoverPageModule
   ],
   providers: [
     StatusBar,

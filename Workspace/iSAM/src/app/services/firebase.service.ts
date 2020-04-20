@@ -213,8 +213,6 @@ export class FirebaseService {
             }, error => reject(error))
             
         })
-        
-
     }
 
 
@@ -262,21 +260,43 @@ export class FirebaseService {
     }
 
     // Adding new lecture session by creating a new document
-    addNewLectureSession(value, userFaculty, awardingBodyUniversity, moduleTitle){
-        this.firestore.collection("faculties/"+ userFaculty +"/lectureSessions/").add({
-            academicSemester: parseInt(value.academicPeriodSemester),
-            academicYear: parseInt(value.academicPeriodYear),
-            degree: value.degreeProgram,
-            awardingBodyUniversity: awardingBodyUniversity,
-            batch: value.batch,
-            startDateTime: new Date(value.sessionStartTimeSingle),
-            endDateTime: new Date(value.sessionEndTimeSingle),
-            lectureHall: value.lectureHall,
-            lecturer: value.lecturer,
-            moduleCode: value.module,
-            moduleTitle: moduleTitle,
-            status: value.status
+    addNewLectureSession(userFaculty, value, awardingBodyUniversity, moduleTitle, sessionDate, sessionStartDateTime, sessionEndDateTime){
+        // Firestore pathway:
+        // faculties/ <facultyName> /lectureSessions/undergraduate/ <batch> / <degreeProgram> / <date> / <Module> /
+        // Sample: /faculties/School of Computing/lectureSessions/undergraduate/16.1/BSc(Hons) Networking, University of Plymouth/2020-3-20/SOFT255SL-Software Engineering with Java
+        /*
+        this.firestore.collection("faculties/"+ userFaculty +"/lectureSessions/undergraduate/"+ value.batch + "/"+
+            value.degreeProgram +", "+ awardingBodyUniversity +"/"+ sessionDate +"/").doc(value.module +"-"+ moduleTitle).set({
+                academicSemester: parseInt(value.academicPeriodSemester),
+                academicYear: parseInt(value.academicPeriodYear),
+                degree: value.degreeProgram,
+                awardingBodyUniversity: awardingBodyUniversity,
+                batch: value.batch,
+                startDateTime: new Date(sessionStartDateTime),
+                endDateTime: new Date(sessionEndDateTime),
+                lectureHall: value.lectureHall,
+                lecturer: value.lecturer,
+                moduleCode: value.module,
+                moduleTitle: moduleTitle,
+                status: value.status
+        });*/
+
+        this.firestore.collection("faculties/"+ userFaculty +"/allLectureSessions/").add({
+                academicSemester: parseInt(value.academicPeriodSemester),
+                academicYear: parseInt(value.academicPeriodYear),
+                degree: value.degreeProgram,
+                awardingBodyUniversity: awardingBodyUniversity,
+                batch: value.batch,
+                startDateTime: new Date(sessionStartDateTime),
+                endDateTime: new Date(sessionEndDateTime),
+                lectureHall: value.lectureHall,
+                lecturer: value.lecturer,
+                moduleCode: value.module,
+                moduleTitle: moduleTitle,
+                status: value.status
         });
+
+
     }
 
     // Adding new lecture series by creating a new document
@@ -363,7 +383,7 @@ export class FirebaseService {
 
     // Retrieving published lecture series and their details from the firestore database
     retrievePublishedLectureSeries(userFaculty, value, awardingBodyUniversity, moduleTitle){
-        return this.firestore.collection("faculties/"+ userFaculty +"/lectureSeries", ref => ref 
+        return this.firestore.collection("faculties/"+ userFaculty +"/lectureSeries/", ref => ref 
                 .where("degree", "==", value.degreeProgram)
                 .where("awardingBodyUniversity", "==", awardingBodyUniversity)
                 .where("moduleCode", "==", value.module)
@@ -400,13 +420,14 @@ export class FirebaseService {
     }
 
     // Retrieving published lecture session and their detais from the firestore database for the semester calendar page
-    retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, userSelectedAwardingBodyUniversity) {
-        return this.firestore.collection("faculties/"+ userFaculty +"/lectureSessions", ref => ref
+    retrievePublishedLectureSessionsSemesterCalendar(userFaculty, value, awardingBodyUniversity) {
+        return this.firestore.collection("faculties/"+ userFaculty +"/allLectureSessions/", ref => ref
                 .where("batch", "==", value.batch)
-                .where("degreeProgram", "==", value.degreeProgram)
-                .where("awardingBodyUniversity", "==", userSelectedAwardingBodyUniversity)
-                .where("academicYear", "==", parseInt(value.academicYearYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
-                .where("academicSemester", "==", parseInt(value.academicYearSemester))).snapshotChanges();
+                .where("degree", "==", value.degreeProgram)
+                .where("awardingBodyUniversity", "==", awardingBodyUniversity)
+                .where("academicYear", "==", parseInt(value.academicPeriodYear)) /* ( parseInt() ) Converting value data type from the form, string to int */
+                .where("academicSemester", "==", parseInt(value.academicPeriodSemester)))
+                .snapshotChanges();
     }
 
     
