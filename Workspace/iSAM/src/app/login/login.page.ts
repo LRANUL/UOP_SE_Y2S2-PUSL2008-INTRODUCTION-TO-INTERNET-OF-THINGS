@@ -1,27 +1,27 @@
-import {FirebaseService} from './../services/firebase.service';
-import {Component, OnInit} from '@angular/core';
-import {NavController, AlertController} from '@ionic/angular';
-import {FormGroup, FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FirebaseService } from './../services/firebase.service';
+import { Component, OnInit } from '@angular/core';
+import { NavController, AlertController } from '@ionic/angular';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as firebase from 'firebase';
-import {LoadingController} from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
-@Component({selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss']})
+@Component({ selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss'] })
 export class LoginPage implements OnInit {
 
-    validations_form : FormGroup;
-    errorMessage : string = '';
-    userEmail : string;
+    validations_form: FormGroup;
+    errorMessage: string = '';
+    userEmail: string;
 
     loginLoadingSpinner: Boolean = false;
 
     constructor(
         private router: Router,
-        public navCtrl : NavController, 
-        private authService : FirebaseService, 
-        public loadingController : LoadingController, 
-        private formBuilder : FormBuilder,
+        public navCtrl: NavController,
+        private authService: FirebaseService,
+        public loadingController: LoadingController,
+        private formBuilder: FormBuilder,
         private alertController: AlertController
-    ){}
+    ) { }
 
     ngOnInit() {
 
@@ -33,11 +33,12 @@ export class LoginPage implements OnInit {
                 this.loginLoadingSpinner = true;
 
                 console.log('User is signed in');
-                const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
-                await loading.present();
+                /*MOBILE APP */
+                // const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
+                // await loading.present();
 
-                const {role, data} = await loading.onDidDismiss();
-                console.log('Loading dismissed!');
+                // const {role, data} = await loading.onDidDismiss();
+                // console.log('Loading dismissed!');
 
                 this.userEmail = this.authService.userDetails().email;
 
@@ -48,29 +49,29 @@ export class LoginPage implements OnInit {
 
                 // After new lecturer account is created, that user will be automatically logged in usder the program office user interface
                 // If the router url is the program office user interface and if the user type is 'lecturerUser', the currently logged in user will be logged out
-                if(this.router.url == '/office/lecturers'){
+                if (this.router.url == '/office/lecturers') {
 
                     let loggedUserDetails = this.authService.userDetails();
                     console.log("vv");
                     // Checking if logged in user type in a lecturer user
                     this.authService.retrieveLoggedInUserDetailsLecturer(loggedUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
-                        console.log("dd");
-                        // Logging out the current logged in user as the user type is 'lecturerUser' and it is in the program office user interface router url
-                        this.authService.logoutUser();
-                        // Redirecting user to the login screen
-                        this.router.navigate(['/login']);
-            
-                        console.log("Lecturer Registration: Record found in lecturer users collection, Logged out");
-                    }
-                    else{
-                        console.log("Record not found in lecturer users collection");
-                    }
+                        if (response.length > 0) {
+                            console.log("dd");
+                            // Logging out the current logged in user as the user type is 'lecturerUser' and it is in the program office user interface router url
+                            this.authService.logoutUser();
+                            // Redirecting user to the login screen
+                            this.router.navigate(['/login']);
+
+                            console.log("Lecturer Registration: Record found in lecturer users collection, Logged out");
+                        }
+                        else {
+                            console.log("Record not found in lecturer users collection");
+                        }
                     }, error => {
                         console.log("Error: " + error);
                         this.alertNotice("Error", "An error has occurred: " + error);
                     });
-            
+
                 }
                 /*-- Lecturer User Registration Process Phase --*/
 
@@ -81,7 +82,7 @@ export class LoginPage implements OnInit {
                 /* Redirecting the user to their relevant user interface according to the user type */
                 // Checking if logged in user type in a student user
                 this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
+                    if (response.length > 0) {
                         this.router.navigate(['student']);
                         console.log("Logged In User Type: StudentUser");
                         console.log("Record found in student users collection");
@@ -89,7 +90,7 @@ export class LoginPage implements OnInit {
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
-                    else{
+                    else {
                         console.log("Record not found in student users collection");
                     }
                 }, error => {
@@ -102,7 +103,7 @@ export class LoginPage implements OnInit {
 
                 // Checking if logged in user type in a lecturer user
                 this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
+                    if (response.length > 0) {
                         this.router.navigate(['lecturer']);
                         console.log("Logged In User Type: LecturerUser");
                         console.log("Record found in lecturer users collection");
@@ -110,7 +111,7 @@ export class LoginPage implements OnInit {
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
-                    else{
+                    else {
                         console.log("Record not found in lecturer users collection");
                     }
                 }, error => {
@@ -123,7 +124,7 @@ export class LoginPage implements OnInit {
 
                 // Checking if logged in user type in a program office user
                 this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
-                    if(response.length > 0){
+                    if (response.length > 0) {
                         this.router.navigate(['/office/dashboard']);
                         console.log("Logged In User Type: Program Office User");
                         console.log("Record found in program office users collection");
@@ -131,7 +132,7 @@ export class LoginPage implements OnInit {
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
-                    else{
+                    else {
                         console.log("Record not found in program office users collection");
                     }
                 }, error => {
@@ -141,7 +142,7 @@ export class LoginPage implements OnInit {
                     console.log("Error: " + error);
                     this.alertNotice("Error", "An error has occurred: " + error);
                 });
-             
+
 
             } else { // No user is signed in.
 
@@ -151,9 +152,9 @@ export class LoginPage implements OnInit {
                 console.log('User is NOT signed in');
             }
         },
-        error => {
-            console.log("Error: " + error);
-        }
+            error => {
+                console.log("Error: " + error);
+            }
         );
         this.validations_form = this.formBuilder.group({
             email: new FormControl("", Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])),
@@ -162,12 +163,12 @@ export class LoginPage implements OnInit {
     }
 
     // Alert Box Implementation
-    async alertNotice ( title: string, content: string ) {
+    async alertNotice(title: string, content: string) {
 
         const alert = await this.alertController.create({
-        header: title,
-        message: content,
-        buttons: ['OK']
+            header: title,
+            message: content,
+            buttons: ['OK']
         });
 
         await alert.present();
@@ -198,15 +199,16 @@ export class LoginPage implements OnInit {
 
         // Setting loading spinner to spin
         this.loginLoadingSpinner = true;
+        /*MOBILE APP */
 
-        const loading = await this.loadingController.create({message: 'Logging in...', duration: 2000});
+        // const loading = await this.loadingController.create({message: 'Logging in...', duration: 2000});
 
-        await loading.present();
+        // await loading.present();
 
-        const {role, data} = await loading.onDidDismiss();
-        console.log('Loading dismissed!');
+        // const {role, data} = await loading.onDidDismiss();
+        // console.log('Loading dismissed!');
 
-        
+
 
 
         this.authService.loginUser(value).then(async res => {
@@ -225,7 +227,7 @@ export class LoginPage implements OnInit {
             /* Redirecting the user to their relevant user interface according to the user type */
             // Checking if logged in user type in a student user
             this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     this.router.navigate(['student']);
                     console.log("Logged In User Type: StudentUser");
                     console.log("Record found in student users collection");
@@ -233,7 +235,7 @@ export class LoginPage implements OnInit {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
-                else{
+                else {
                     console.log("Record not found in student users collection");
                 }
             }, error => {
@@ -243,7 +245,7 @@ export class LoginPage implements OnInit {
 
             // Checking if logged in user type in a lecturer user
             this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     this.router.navigate(['lecturer']);
                     console.log("Logged In User Type: LecturerUser");
                     console.log("Record found in lecturer users collection");
@@ -251,7 +253,7 @@ export class LoginPage implements OnInit {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
-                else{
+                else {
                     console.log("Record not found in lecturer users collection");
                 }
             }, error => {
@@ -261,7 +263,7 @@ export class LoginPage implements OnInit {
 
             // Checking if logged in user type in a program office user
             this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
-                if(response.length > 0){
+                if (response.length > 0) {
                     this.router.navigate(['/office/dashboard']);
                     console.log("Logged In User Type: Program Office User");
                     console.log("Record found in program office users collection");
@@ -269,7 +271,7 @@ export class LoginPage implements OnInit {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
-                else{
+                else {
                     console.log("Record not found in program office users collection");
                 }
             }, error => {

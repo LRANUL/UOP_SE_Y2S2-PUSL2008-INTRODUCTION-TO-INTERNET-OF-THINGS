@@ -11,7 +11,15 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <div style="display: block"><canvas id="chart"  max="1" value="0"></canvas></div>
+      <!-- <div style="display: block"><canvas id="chart"  max="1" value="0"></canvas></div> -->
+    <ion-card >
+      <ion-card-header>
+        Attendance Chart
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #ChartCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
     </ion-content>
   </div>
 </ion-app>
