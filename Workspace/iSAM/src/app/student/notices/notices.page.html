@@ -5,10 +5,20 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>Notices</ion-title>
+        <ion-title>Notices & Calendar</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+        <div>
+          <ion-item>
+          <ion-card>
+            <ion-card-title>Calendar</ion-card-title>
+            <calendar [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate">
+            </calendar>
+          </ion-card>
+          </ion-item>
+        </div>
+    <div>
       <ion-card *ngFor="let item of notices">
         <ion-card-header>
           <ion-card-title>{{item.noticeTitle}}</ion-card-title>
@@ -17,6 +27,7 @@
           <p class="card-text">{{item.noticeDescription}}</p>
         </ion-card-content>
       </ion-card>
+    </div>
     </ion-content>
   </div>
 </ion-app>

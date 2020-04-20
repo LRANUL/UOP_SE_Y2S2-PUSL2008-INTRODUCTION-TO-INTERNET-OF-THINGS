@@ -35,7 +35,7 @@
     "cordova-plugin-geofence": "^0.7.0",
     "core-js": "^2.5.4",
     "firebase": "^7.14.0",
-    "ionic2-calendar": "^0.5.0",
+    "ionic2-calendar": "^0.5.9",
     "ng2-charts": "^2.3.0",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",

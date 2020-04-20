@@ -135,7 +135,7 @@ export class FirebaseService {
     }
     fetchSession(Batch, Faculty, LectureDate, DegreeCode) {
         //faculties/School of Business/lectureSeries/undergraduate/11.1/SE/19-4-2020/
-        return this.firestore.collection('faculties').doc(Faculty).collection('lectureSeries').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
+        return this.firestore.collection('faculties').doc(Faculty).collection('lectureSessions').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
 
     }
     loadEC() {

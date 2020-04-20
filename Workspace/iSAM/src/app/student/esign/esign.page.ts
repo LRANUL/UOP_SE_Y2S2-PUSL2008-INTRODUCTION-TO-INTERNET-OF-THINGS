@@ -69,7 +69,7 @@ export class EsignPage implements OnInit {
                                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
                                     console.log(Batch + '' + Faculty + '' + LectureDate)
                                     this.session = data.map(e => {
-                                        ModuleCode = e.payload.doc.data()['ModuleCode']
+                                        ModuleCode = e.payload.doc.data()['Module']
                                         return {
 
                                             id: e.payload.doc.id,
@@ -84,7 +84,7 @@ export class EsignPage implements OnInit {
                                     console.log(this.session);
 
                                     console.log(ModuleCode)
-                                    this.firestore.collection('/faculties/' + Faculty + '/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
+                                    this.firestore.collection('/faculties/' + Faculty + '/lectureSessions/undergraduate/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
                                         if (doc.exists) {
                                             console.log(doc.data());
                                             this.CloudCode = doc.data().SessionCode
@@ -111,8 +111,6 @@ export class EsignPage implements OnInit {
         }).catch(function (error) {
             console.log("There was an error getting your document:", error);
         });
-        //return this.firestore.collection('/faculties/School of Business/Batch/11.1/19-4-2020'
-        // firestore.collection('faculties').doc(Faculty).collection(Batch).doc(DegreeCode).collection(LectureDate)
     }
 
     async addAttendaceToFirebase() {

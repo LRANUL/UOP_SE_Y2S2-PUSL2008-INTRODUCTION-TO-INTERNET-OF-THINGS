@@ -8,12 +8,15 @@ import { NoticesPageRoutingModule } from './notices-routing.module';
 
 import { NoticesPage } from './notices.page';
 
+import { NgCalendarModule } from 'ionic2-calendar';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NoticesPageRoutingModule
+    NoticesPageRoutingModule,
+    NgCalendarModule
   ],
   declarations: [NoticesPage]
 })
