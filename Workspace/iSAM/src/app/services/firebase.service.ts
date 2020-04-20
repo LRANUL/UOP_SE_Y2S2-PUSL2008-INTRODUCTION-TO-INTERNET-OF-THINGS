@@ -138,6 +138,12 @@ export class FirebaseService {
         return this.firestore.collection('faculties').doc(Faculty).collection('lectureSessions').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
 
     }
+    sendKey(faculty, PrepKey, DocID) {
+        return this.firestore.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').doc(DocID).set({
+                SessionCode: PrepKey,
+        })
+
+    }
     loadEC() {
 
         return this.firestore.collection('EC-Forms').snapshotChanges();

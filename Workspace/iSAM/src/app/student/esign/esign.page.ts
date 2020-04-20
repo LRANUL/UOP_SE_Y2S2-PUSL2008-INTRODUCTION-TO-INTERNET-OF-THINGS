@@ -81,7 +81,7 @@ export class EsignPage implements OnInit {
                                             Session: e.payload.doc.data()['Session'],
                                             Date: e.payload.doc.data()['startDateTime'].toDate(),
                                             Hall: e.payload.doc.data()['lectureHall'],
-                                            Lecturer: e.payload.doc.data()['lectureHall'],
+                                            Lecturer: e.payload.doc.data()['lecture'],
                                         };
                                     })
                                     console.log(this.session);

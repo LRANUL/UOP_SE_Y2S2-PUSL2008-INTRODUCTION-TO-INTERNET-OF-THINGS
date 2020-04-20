@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { LecturerPageRoutingModule } from './lecturer-routing.module';
 
 import { LecturerPage } from './lecturer.page';
+import { NgCalendarModule } from 'ionic2-calendar';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LecturerPageRoutingModule
+    LecturerPageRoutingModule,
+    NgCalendarModule
   ],
   declarations: [LecturerPage]
 })
