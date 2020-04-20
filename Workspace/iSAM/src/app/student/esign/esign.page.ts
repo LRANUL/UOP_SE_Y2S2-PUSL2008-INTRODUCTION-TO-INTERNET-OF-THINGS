@@ -8,7 +8,7 @@ import { AngularFirestore } from '@angular/fire/firestore/';
 @Component({ selector: 'app-esign', templateUrl: './esign.page.html', styleUrls: ['./esign.page.scss'] })
 
 export class EsignPage implements OnInit {
-    session: { SessionCode: any; Module: any; Session: any; Date: any; Time: any; Hall: any; }[];
+    session: { SessionCode: any; Module: any; Session: any; Date: any; Hall: any; }[];
     location: boolean;
     SessionCode: { SessionCode: any; Module: any; Session: any; Date: any; Time: any; Hall: any; }[];
     Module: any;
@@ -44,20 +44,23 @@ export class EsignPage implements OnInit {
 
             if (dd < 10) dd = 0 + dd;
             if (mm < 10) mm = 0 + mm;
-            return (dd + sp + mm + sp + yyyy);
+            return (yyyy + sp + mm + sp + dd);
         };
         // Fetch User Details For Query
 
         // Load Module Data from Database  
         LectureDate = checkdate('-');
+        LectureDate = '2020-4-21';
+        console.log(LectureDate)
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
             if (doc.exists) {
                 console.log(doc.data());
                 Batch = doc.data().batch.toString()
                 Faculty = doc.data().faculty
-                DegreeCode = doc.data().DegreeCode
-
+                DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity
+                console.log(DegreeCode)
                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
+                    console.log(data)
                     this.check = data.map(e => {
                         Module = e.payload.doc.data()['Module']
                         this.firestore.collection('Attendance/History/' + Module).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
@@ -69,16 +72,16 @@ export class EsignPage implements OnInit {
                                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
                                     console.log(Batch + '' + Faculty + '' + LectureDate)
                                     this.session = data.map(e => {
-                                        ModuleCode = e.payload.doc.data()['Module']
+                                        ModuleCode = e.payload.doc.data()['moduleCode'] +"-"+ e.payload.doc.data()['moduleTitle']
                                         return {
 
                                             id: e.payload.doc.id,
                                             SessionCode: e.payload.doc.data()['SessionCode'],
-                                            Module: e.payload.doc.data()['Module'],
+                                            Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
                                             Session: e.payload.doc.data()['Session'],
-                                            Date: e.payload.doc.data()['Date'],
-                                            Time: e.payload.doc.data()['Time'],
-                                            Hall: e.payload.doc.data()['Hall'],
+                                            Date: e.payload.doc.data()['startDateTime'].toDate(),
+                                            Hall: e.payload.doc.data()['lectureHall'],
+                                            Lecturer: e.payload.doc.data()['lectureHall'],
                                         };
                                     })
                                     console.log(this.session);
