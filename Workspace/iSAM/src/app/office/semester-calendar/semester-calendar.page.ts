@@ -51,8 +51,8 @@ export class SemesterCalendarPage implements OnInit {
     this.searchSemesterCalendar = this.formBuilder.group({
       batch: new FormControl('', Validators.required),
       degreeProgram: new FormControl('', Validators.required),
-      academicYearYear: new FormControl('', Validators.required),
-      academicYearSemester: new FormControl('', Validators.required)
+      academicPeriodYear: new FormControl('', Validators.required),
+      academicPeriodSemester: new FormControl('', Validators.required)
     });
 
     this.assignNewLectureSlotSC = this.formBuilder.group({
@@ -65,7 +65,7 @@ export class SemesterCalendarPage implements OnInit {
       lectureHall: new FormControl('', Validators.required),
       status: new FormControl('', Validators.required),
       addLectureContentLoadOption: new FormControl('', Validators.required),
-     // sessionDateSingle: new FormControl(''),
+      sessionDateSingle: new FormControl(''),
       sessionStartTimeSingle: new FormControl(''),
       sessionEndTimeSingle: new FormControl(''),
       sessionDayMultiple: new FormControl(''),
@@ -207,29 +207,45 @@ export class SemesterCalendarPage implements OnInit {
     console.log(value.academicYearSemester);
 
     
-
+    
     // Calling function to retrieve the published lecture sessions from the firestore database
-    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(lectureSlots => {
-      this.eventSourcePSCalendar = []; // Clearing the existing events on the calendar before syncing 
-      lectureSlots.forEach(snap => {
-        let eventPSCalendar:any = snap.payload.doc.data();
-        eventPSCalendar.id = snap.payload.doc.id;
-        eventPSCalendar.title = eventPSCalendar.moduleCode + "-" + eventPSCalendar.moduleTitle + " | Status: " + eventPSCalendar.status;
-        eventPSCalendar.startTime = eventPSCalendar.startDateTime.toDate();
-        eventPSCalendar.endTime = eventPSCalendar.endDateTime.toDate();
+    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(response => {
+      // Checking if any document values where returned
+      if (response.length > 0){
+        
+        this.eventSourcePSCalendar = []; // Clearing the existing events on the calendar before syncing 
+        response.forEach(snap => {
+          let eventPSCalendar:any = snap.payload.doc.data();
+          eventPSCalendar.id = snap.payload.doc.id;
+          eventPSCalendar.title = eventPSCalendar.moduleCode + "-" + eventPSCalendar.moduleTitle + " | Status: " + eventPSCalendar.status;
+          eventPSCalendar.startTime = eventPSCalendar.startDateTime.toDate();
+          eventPSCalendar.endTime = eventPSCalendar.endDateTime.toDate();
 
-        console.log(eventPSCalendar);
+          console.log(eventPSCalendar);
 
-        this.eventSourcePSCalendar.push(eventPSCalendar);
-      });
+          this.eventSourcePSCalendar.push(eventPSCalendar);
+        });
+        
+        this.alertNotice("Lecture Sessions Retrieval", "Available lecture sessions for this semester calendar are placed on the calendar.");
+
+        console.log("Semester Calendar Record Found");
+      }
+      else{
+        this.alertNotice("Not Found", "Lecture sessions for this semester calendar is not available");
+        console.log("Semester Calendar Record Found");
+      }
+    }, error => {
+      console.log("Error: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
     });
-
+  
     // Calling function to retrive the lecture sessions and setting loading dots to false after the contents has loaded.
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerPLS = false);
 
-    this.alertNotice("Lecture Sessions Retrieval", "Available lecture sessions are placed on the calendar.");
-    
+
   }
+
+
 
   // More details of lecture sessions popover
   async moreDetailsLectureSession(ev: Event, value){
@@ -240,14 +256,13 @@ export class SemesterCalendarPage implements OnInit {
         batch: value.batch,
         lecturer: value.lecturer,
         lectureHall: value.lectureHall,
-        degree: value.degreeProgram,
+        degree: value.degree,
         awardingBodyUniversity: value.awardingBodyUniversity,
         academicPeriodYear: value.academicYear,
         academicPeriodSemester: value.academicSemester
       },
       event: ev
     });
-
     moreDetailsLectureSessionPopover.present();
   }
 
@@ -343,62 +358,63 @@ export class SemesterCalendarPage implements OnInit {
 
   // (Publishing new lecture sessions section) and retrieving published lecture sessions 
   doPublishLectureSlotSC(value){
-    /*
-    let sessionDate = (new Date(value.sessionDateSingle).toISOString()).split("T")[0];
-    let sessionStartTime = (new Date(value.sessionStartTimeSingle).toISOString()).split("T")[1];
-    let sessionEndTime = (new Date(value.sessionEndTimeSingle).toISOString()).split("T")[1];
 
-    let startDateTime = new Date(sessionDate + "T" + sessionStartTime);
-    let endDateTime = new Date(sessionDate + "T" + sessionEndTime);
-    console.log(sessionDate);
-    console.log(sessionStartTime);
-    */
-   
+    // Retrieving selected session date
+    // Mon Apr 20 2020 10:13:54 GMT+0530 (India Standard Time)
+    let selectedSessionDateTime = new Date(value.sessionDateSingle);
+
+    let selectedSessionDate = selectedSessionDateTime.getFullYear() + "-" + selectedSessionDateTime.getMonth() + "-" + selectedSessionDateTime.getDate();
+    console.log(selectedSessionDate);
+    // Retrieving selected session start time
+    // Mon Apr 20 2020 09:07:54 GMT+0530 (India Standard Time)
+    let selectedSessionStartTime = new Date(value.sessionStartTimeSingle);
+
+    // Retrieving selected session end time
+    // Mon Apr 20 2020 12:02:54 GMT+0530 (India Standard Time)
+    let selectedSessionEndTime = new Date(value.sessionEndTimeSingle);
+
+    // taking the sesion date and session start time and merging them together. Assign this value to a variable
+    // Mon Apr 20 2020 09:07:00 GMT+0530 (India Standard Time)
+    let selectedSessionStartDateTime = new Date(selectedSessionDateTime.getFullYear(), selectedSessionDateTime.getMonth(), selectedSessionDateTime.getDate(), 
+      selectedSessionStartTime.getHours(), selectedSessionStartTime.getMinutes(), 0, 0);
     
+      // taking the sesion date and session end time and merging them together. Assign this value to a variable
+    // Mon Apr 20 2020 12:02:00 GMT+0530 (India Standard Time)
+    let selectedSessionEndDateTime = new Date(selectedSessionDateTime.getFullYear(), selectedSessionDateTime.getMonth(), selectedSessionDateTime.getDate(), 
+      selectedSessionEndTime.getHours(), selectedSessionEndTime.getMinutes(), 0, 0);
 
+     
       
-    // Checking if the lecture session was set for the same date
-    let sessionStartDate = (new Date(value.sessionStartTimeSingle).toISOString()).split("T")[0];
-    let sessionEndDate = (new Date(value.sessionEndTimeSingle).toISOString()).split("T")[0];
-    console.log("f: "+value.addLectureContentLoadOption);
-    if(sessionStartDate == sessionEndDate){
+    if(value.addLectureContentLoadOption == "lectureAssignIndividaully"){
+      // If user selects 'lectureAssignIndividaully' option
 
+      // Adding the lecture session details into the firestore database
+      this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity, this.moduleTitle, selectedSessionDate, selectedSessionStartDateTime, selectedSessionEndDateTime);
       
-      if(value.addLectureContentLoadOption == "lectureAssignIndividaully"){
-        // If user selects 'lectureAssignIndividaully' option
-
-        // Adding the lecture session details into the firestore database
-        this.semesterCalendarService.addNewLectureSession(value, this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), this.awardingBodyUniversity, this.moduleTitle);
-        
-        this.alertNotice("Lecture Session Added", "New Lecture Session has been added.");
+      this.alertNotice("Lecture Session Added", "New Lecture Session has been added.");
 
 
-        // Calling function to retrieving the new lecture sessions from the firestore database
-        this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(activeLectureSlots => {
-          this.eventSourceASCalendar = []; // Clearing the existing events on the calendar before syncing 
-          activeLectureSlots.forEach(snap => {
-            let eventASCalendar:any = snap.payload.doc.data();
-            eventASCalendar.id = snap.payload.doc.id;
-            eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
-            eventASCalendar.startTime = eventASCalendar.startDateTime.toDate();
-            eventASCalendar.endTime = eventASCalendar.endDateTime.toDate();
-
-            console.log(eventASCalendar);
-
-            this.eventSourceASCalendar.push(eventASCalendar);
-          });
-        });
-
-      }
-      else if(value.addLectureContentLoadOption == "lectureAssignGroup"){
-        // If user selects 'lectureAssignGroup' option
-
-      }
-       
     }
-    else if(sessionStartDate != sessionEndDate){
-      this.alertNotice("Error", "Lecture session is not on the same date");
+    else if(value.addLectureContentLoadOption == "lectureAssignGroup"){
+      // If user selects 'lectureAssignGroup' option
+
     }
+
+    // Calling function to retrieving the lecture sessions for this degree program, batch, academic period year and academic period semester from the firestore database
+    this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(activeLectureSlots => {
+      this.eventSourceASCalendar = []; // Clearing the existing events on the calendar before syncing 
+      activeLectureSlots.forEach(snap => {
+        let eventASCalendar:any = snap.payload.doc.data();
+        eventASCalendar.id = snap.payload.doc.id;
+        eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
+        eventASCalendar.startTime = eventASCalendar.startDateTime.toDate();
+        eventASCalendar.endTime = eventASCalendar.endDateTime.toDate();
+        console.log("ee");
+        console.log(eventASCalendar);
+
+        this.eventSourceASCalendar.push(eventASCalendar);
+      });
+    });
    
 
   }
@@ -447,7 +463,7 @@ export class SemesterCalendarPage implements OnInit {
           
           this.publishedLectureSeries = response;
 
-          console.log("lecture Series Record Found");
+          console.log("Lecture Series Record Found");
         }
         else{
           this.alertNotice("Not Found", "Lecture Series Record is not available");
