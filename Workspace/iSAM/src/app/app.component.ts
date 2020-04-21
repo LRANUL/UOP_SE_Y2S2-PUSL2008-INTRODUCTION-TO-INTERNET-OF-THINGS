@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +18,6 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private messaging: FCM,
     private router: Router,
   ) {
     this.initializeApp();
@@ -30,27 +28,27 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     /* CURRENTLY UNDER DEVELOPMENT, WILL BE USING STUDENT BATCH OR EMAIL FOR NOTICES*/
-      this.messaging.getToken().then(token => {
-        console.log(token);
-      this.messaging.subscribeToTopic('student');
+    //   this.messaging.getToken().then(token => {
+    //     console.log(token);
+    //   this.messaging.subscribeToTopic('student');
 
     
-    });
-      this.messaging.onNotification().subscribe(data => {
-        console.log(data);
-        if (data.wasTapped) {
+    // });
+    //   this.messaging.onNotification().subscribe(data => {
+    //     console.log(data);
+    //     if (data.wasTapped) {
 
-          console.log('Received in background');
-          this.router.navigate([NoticesPage, data.notice]);
-        } else {
-          console.log('Received in foreground');
-          this.router.navigate([NoticesPage, data.notice]);
-        }
-      });
+    //       console.log('Received in background');
+    //       this.router.navigate([NoticesPage, data.notice]);
+    //     } else {
+    //       console.log('Received in foreground');
+    //       this.router.navigate([NoticesPage, data.notice]);
+    //     }
+    //   });
 
-      this.messaging.onTokenRefresh().subscribe(token => {
-        console.log(token);
-      });
+    //   this.messaging.onTokenRefresh().subscribe(token => {
+    //     console.log(token);
+    //   });
       /*STUDENT NOT ALLOWED TO MANAGE CLOUD SUBSCRIPTION ! (NOTIFICATIONS CAN BE DISABLED LOCALLY)
       SUSCRIPTION MANAGEMENT FOR PROGRAM OFFICE BELOW
       

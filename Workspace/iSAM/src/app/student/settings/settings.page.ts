@@ -40,7 +40,7 @@ export class SettingsPage implements OnInit {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        console.log('Confirm Cancel');
+                        // console.log('Confirm Cancel');
                     }
                 },
                 {
@@ -49,7 +49,7 @@ export class SettingsPage implements OnInit {
                         var user = firebase.auth().currentUser;
                         var newPassword = alertData.password;
                         user.updatePassword(newPassword).then(async function () {
-                            console.log('Password Updated')
+                            // console.log('Password Updated')
 
                         }
                         ).catch(function (error) {
@@ -73,7 +73,7 @@ export class SettingsPage implements OnInit {
         this.authService
             .logoutUser()
             .then(async res => {
-                console.log(res);
+                // console.log(res);
                 const loading = await this.loadingController.create({
                     message: 'Logging out...',
                     duration: 2000
@@ -81,33 +81,33 @@ export class SettingsPage implements OnInit {
                 await loading.present();
 
                 const { role, data } = await loading.onDidDismiss();
-                console.log('Loading dismissed!');
+                // console.log('Loading dismissed!');
 
                 this.navCtrl.navigateBack("");
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
     goSettings() {
         this.router.navigate(['Student/Settings']);
-        console.log('settings');
+        // console.log('settings');
     }
     goeSign() {
         this.router.navigate(['Student/eSign']);
-        console.log('Home');
+        // console.log('Home');
     }
     goECForm() {
         this.router.navigate(['Student/EC-Form']);
-        console.log('EC-Form');
+        // console.log('EC-Form');
     }
     goAttendence() {
         this.router.navigate(['Student/Attendence']);
-        console.log('Attendence');
+        // console.log('Attendence');
     }
     goNotices() {
         this.router.navigate(['Student/Notices']);
-        console.log('settings');
+        // console.log('settings');
     }
 
 }

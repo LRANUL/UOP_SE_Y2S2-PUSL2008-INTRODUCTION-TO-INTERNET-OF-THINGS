@@ -35,7 +35,7 @@ export class EcFormPage implements OnInit {
             toast.present();
         })
             .catch(async error => {
-                console.log(error);
+                // console.log(error);
                 const toast = await this.toastController.create({
                     message: 'Error in Network, check back later.',
                     duration: 2000
@@ -46,23 +46,23 @@ export class EcFormPage implements OnInit {
 
     goSettings() {
         this.router.navigate(['Student/Settings']);
-        console.log('settings');
+        // console.log('settings');
     }
     goeSign() {
         this.router.navigate(['Student/eSign']);
-        console.log('Home');
+        // console.log('Home');
     }
     goECForm() {
         this.router.navigate(['Student/EC-Form']);
-        console.log('EC-Form');
+        // console.log('EC-Form');
     }
     goAttendence() {
         this.router.navigate(['Student/Attendence']);
-        console.log('Attendence');
+        // console.log('Attendence');
     }
     goNotices() {
         this.router.navigate(['Student/Notices']);
-        console.log('settings');
+        // console.log('settings');
     }
 
 }

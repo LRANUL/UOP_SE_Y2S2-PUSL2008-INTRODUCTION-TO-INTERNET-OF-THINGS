@@ -1,7 +1,8 @@
 {
   "name": "iSAM",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

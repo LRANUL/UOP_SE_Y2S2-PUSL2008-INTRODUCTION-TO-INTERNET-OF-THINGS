@@ -20,17 +20,17 @@ export class FirebaseService {
                 var user = firebase.auth().currentUser;
                 if (user != null) {
                     user.providerData.forEach(function (profile) {
-                        console.log("Sign-in provider: " + profile.providerId);
-                        console.log("  Provider-specific UID: " + profile.uid);
-                        console.log("  Name: " + profile.displayName);
-                        console.log("  Email: " + profile.email);
+                    //     console.log("Sign-in provider: " + profile.providerId);
+                    //     console.log("  Provider-specific UID: " + profile.uid);
+                    //     console.log("  Name: " + profile.displayName);
+                    //     console.log("  Email: " + profile.email);
                         const userEmail = profile.email;
                         const displayName = profile.displayName;
-                        console.log("  Photo URL: " + profile.photoURL);
+                        // console.log("  Photo URL: " + profile.photoURL);
                     });
                 }
             } else { // No user is signed in.
-                console.log('User is NOT signed in');
+                // console.log('User is NOT signed in');
             }
         });
 
@@ -40,13 +40,13 @@ export class FirebaseService {
         if (user != null) {
             user.providerData.forEach(function (profile) {
                 this.displayName = this.authService.currentUser.displayName;
-                console.log("Sign-in provider: " + profile.providerId);
-                console.log("  Provider-specific UID: " + profile.uid);
-                console.log("  Name: " + profile.displayName);
-                console.log("  Email: " + profile.email);
+                // console.log("Sign-in provider: " + profile.providerId);
+                // console.log("  Provider-specific UID: " + profile.uid);
+                // console.log("  Name: " + profile.displayName);
+                // console.log("  Email: " + profile.email);
                 const userEmail = profile.email;
                 const displayName = profile.displayName;
-                console.log("  Photo URL: " + profile.photoURL);
+                // console.log("  Photo URL: " + profile.photoURL);
                 return this.firestore.collection('users/userTypes/studentUsers').doc(this.displayName).snapshotChanges();
             });
         }
@@ -56,7 +56,7 @@ export class FirebaseService {
         return new Promise<any>((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(value.email, value.password).then(success => {
 
-                console.log('Student Record Stored')
+                // console.log('Student Record Stored')
                 this.firestore.collection('users/userTypes/studentUsers/').doc(success.user.uid).set({
                     name: {
                         firstName: value.fName,
@@ -100,7 +100,7 @@ export class FirebaseService {
         return new Promise((resolve, reject) => {
             if (firebase.auth().currentUser) {
                 firebase.auth().signOut().then(() => {
-                    console.log("Log out");
+                    // console.log("Log out");
                     resolve();
                 }).catch((error) => {
                     reject();

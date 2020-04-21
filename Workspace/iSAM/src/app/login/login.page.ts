@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
                 // Setting loading spinner to spin
                 this.loginLoadingSpinner = true;
 
-                console.log('User is signed in');
+                // console.log('User is signed in');
                 /*MOBILE APP */
                 // const loading = await this.loadingController.create({message: 'Please wait...', duration: 2000});
                 // await loading.present();
@@ -45,30 +45,28 @@ export class LoginPage implements OnInit {
 
 
                 /*-- Lecturer User Registration Process Phase --*/
-                console.log('Current router url: ', this.router.url);
+                // console.log('Current router url: ', this.router.url);
 
                 // After new lecturer account is created, that user will be automatically logged in usder the program office user interface
                 // If the router url is the program office user interface and if the user type is 'lecturerUser', the currently logged in user will be logged out
                 if (this.router.url == '/office/lecturers') {
 
                     let loggedUserDetails = this.authService.userDetails();
-                    console.log("vv");
                     // Checking if logged in user type in a lecturer user
                     this.authService.retrieveLoggedInUserDetailsLecturer(loggedUserDetails.uid).subscribe(response => {
                         if (response.length > 0) {
-                            console.log("dd");
                             // Logging out the current logged in user as the user type is 'lecturerUser' and it is in the program office user interface router url
                             this.authService.logoutUser();
                             // Redirecting user to the login screen
                             this.router.navigate(['/login']);
 
-                            console.log("Lecturer Registration: Record found in lecturer users collection, Logged out");
+                            // console.log("Lecturer Registration: Record found in lecturer users collection, Logged out");
                         }
                         else {
-                            console.log("Record not found in lecturer users collection");
+                            // console.log("Record not found in lecturer users collection");
                         }
                     }, error => {
-                        console.log("Error: " + error);
+                        // console.log("Error: " + error);
                         this.alertNotice("Error", "An error has occurred: " + error);
                     });
 
@@ -84,20 +82,20 @@ export class LoginPage implements OnInit {
                 this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
                         this.router.navigate(['student']);
-                        console.log("Logged In User Type: StudentUser");
-                        console.log("Record found in student users collection");
+                        // console.log("Logged In User Type: StudentUser");
+                        // console.log("Record found in student users collection");
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
                     else {
-                        console.log("Record not found in student users collection");
+                        // console.log("Record not found in student users collection");
                     }
                 }, error => {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
 
-                    console.log("Error: " + error);
+                    // console.log("Error: " + error);
                     this.alertNotice("Error", "An error has occurred: " + error);
                 });
 
@@ -105,20 +103,20 @@ export class LoginPage implements OnInit {
                 this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
                         this.router.navigate(['lecturer']);
-                        console.log("Logged In User Type: LecturerUser");
-                        console.log("Record found in lecturer users collection");
+                        // console.log("Logged In User Type: LecturerUser");
+                        // console.log("Record found in lecturer users collection");
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
                     else {
-                        console.log("Record not found in lecturer users collection");
+                        // console.log("Record not found in lecturer users collection");
                     }
                 }, error => {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
 
-                    console.log("Error: " + error);
+                    // console.log("Error: " + error);
                     this.alertNotice("Error", "An error has occurred: " + error);
                 });
 
@@ -126,20 +124,20 @@ export class LoginPage implements OnInit {
                 this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
                         this.router.navigate(['/office/dashboard']);
-                        console.log("Logged In User Type: Program Office User");
-                        console.log("Record found in program office users collection");
+                        // console.log("Logged In User Type: Program Office User");
+                        // console.log("Record found in program office users collection");
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
                     }
                     else {
-                        console.log("Record not found in program office users collection");
+                        // console.log("Record not found in program office users collection");
                     }
                 }, error => {
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
 
-                    console.log("Error: " + error);
+                    // console.log("Error: " + error);
                     this.alertNotice("Error", "An error has occurred: " + error);
                 });
 
@@ -149,11 +147,11 @@ export class LoginPage implements OnInit {
                 // Setting loading spinner to stop spinning
                 this.loginLoadingSpinner = false;
 
-                console.log('User is NOT signed in');
+                // console.log('User is NOT signed in');
             }
         },
             error => {
-                console.log("Error: " + error);
+                // console.log("Error: " + error);
             }
         );
         this.validations_form = this.formBuilder.group({
@@ -212,7 +210,7 @@ export class LoginPage implements OnInit {
 
 
         this.authService.loginUser(value).then(async res => {
-            console.log(res);
+            // console.log(res);
             this.errorMessage = "";
             this.userEmail = this.authService.userDetails().email;
 
@@ -229,17 +227,17 @@ export class LoginPage implements OnInit {
             this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
                     this.router.navigate(['student']);
-                    console.log("Logged In User Type: StudentUser");
-                    console.log("Record found in student users collection");
+                    // console.log("Logged In User Type: StudentUser");
+                    // console.log("Record found in student users collection");
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
                 else {
-                    console.log("Record not found in student users collection");
+                    // console.log("Record not found in student users collection");
                 }
             }, error => {
-                console.log("Error: " + error);
+                // console.log("Error: " + error);
                 this.alertNotice("Error", "An error has occurred: " + error);
             });
 
@@ -247,17 +245,17 @@ export class LoginPage implements OnInit {
             this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
                     this.router.navigate(['lecturer']);
-                    console.log("Logged In User Type: LecturerUser");
-                    console.log("Record found in lecturer users collection");
+                    // console.log("Logged In User Type: LecturerUser");
+                    // console.log("Record found in lecturer users collection");
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
                 else {
-                    console.log("Record not found in lecturer users collection");
+                    // console.log("Record not found in lecturer users collection");
                 }
             }, error => {
-                console.log("Error: " + error);
+                // console.log("Error: " + error);
                 this.alertNotice("Error", "An error has occurred: " + error);
             });
 
@@ -265,17 +263,17 @@ export class LoginPage implements OnInit {
             this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
                     this.router.navigate(['/office/dashboard']);
-                    console.log("Logged In User Type: Program Office User");
-                    console.log("Record found in program office users collection");
+                    // console.log("Logged In User Type: Program Office User");
+                    // console.log("Record found in program office users collection");
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
                 }
                 else {
-                    console.log("Record not found in program office users collection");
+                    // console.log("Record not found in program office users collection");
                 }
             }, error => {
-                console.log("Error: " + error);
+                // console.log("Error: " + error);
                 this.alertNotice("Error", "An error has occurred: " + error);
 
                 // Setting loading spinner to stop spinning
