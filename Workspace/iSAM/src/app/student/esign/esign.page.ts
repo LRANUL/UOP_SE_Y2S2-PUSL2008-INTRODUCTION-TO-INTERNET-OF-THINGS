@@ -1,7 +1,6 @@
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { NavController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { Geofence } from '@ionic-native/geofence/ngx';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore/';
@@ -23,7 +22,7 @@ export class EsignPage implements OnInit {
     Today: any;
     check: void[];
 
-    constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private geofence: Geofence, private toastController: ToastController) {
+    constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
 
     }
 

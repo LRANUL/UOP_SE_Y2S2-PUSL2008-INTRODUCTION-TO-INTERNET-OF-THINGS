@@ -1,6 +1,5 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { MapsAPILoader } from '@agm/core';
-import { Geofence } from '@ionic-native/geofence/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -55,7 +54,6 @@ import { EditLectureHallModalPageModule } from './office/settings/editModals/edi
     StatusBar,
     SplashScreen,
     AngularFirestore,
-    Geofence,
     HttpClient,
     AngularFireModule,
     AngularFireDatabase,
