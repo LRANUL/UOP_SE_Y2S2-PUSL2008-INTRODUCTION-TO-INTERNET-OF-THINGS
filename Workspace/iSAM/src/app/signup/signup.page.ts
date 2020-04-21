@@ -51,6 +51,10 @@ export class SignupPage implements OnInit {
         Validators.required,
         Validators.pattern('')
       ])),
+      degree: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('')
+      ])),
       faculty: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('')
