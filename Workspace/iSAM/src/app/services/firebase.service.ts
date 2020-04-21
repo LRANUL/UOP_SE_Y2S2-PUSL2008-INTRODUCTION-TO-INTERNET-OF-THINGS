@@ -147,6 +147,12 @@ export class FirebaseService {
         this.firestore.collection('EC-Forms/Done' + value.email + '').add(value);
     }
 
+    sendKey(faculty, PrepKey, DocID) {
+        return this.firestore.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').doc(DocID).set({
+                SessionCode: PrepKey,
+        });
+    }
+
    
 
 
@@ -323,6 +329,18 @@ export class FirebaseService {
             moduleCode: value.module,
             moduleTitle: moduleTitle,
             enrolledStudents: ["Initial Series Creation"]
+        });
+    }
+
+    // Adding new degree program by creating a new document and assigning the values in firestore database
+    addNewDegreeProgram(value, userFaculty){
+        this.firestore.collection("faculties/"+ userFaculty +"/degreePrograms/").add({
+            degree: value.degree,
+            awardingBodyUniversity: value.awardingBodyUniversity,
+            deliveryNoOfYears: value.academicPeriodYear,
+            deliveryNoOfSemestersAnnually: value.academicPeriodSemester,
+            programDelivery: value.programDelivery,
+            programCoordinator: value.programCoordinator
         });
     }
 
@@ -581,6 +599,11 @@ export class FirebaseService {
     // Removing lecture session from the firestore database
     removeLectureSession(userFaculty, id) {
         return this.firestore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).delete();
+    }
+
+    //Removing degree program fron the firestore database
+    removeDegreeProgram(docId, userFaculty){
+        return this.firestore.doc("faculties/"+ userFaculty +"/degreePrograms/"+ docId).delete();
     }
 
 

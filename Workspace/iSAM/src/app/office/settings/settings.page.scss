@@ -10,6 +10,11 @@ ion-label{
     color: black;
 }
 
+ion-item{
+    border: #ccc solid 1px;
+    border-radius: 5px;
+}
+
 #aboutCardStyle{
     min-height: 250px;
     --ion-background-color: rgb(235, 235, 235);

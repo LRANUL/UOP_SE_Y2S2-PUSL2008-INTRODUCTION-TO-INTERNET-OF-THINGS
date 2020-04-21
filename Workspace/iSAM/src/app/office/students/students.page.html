@@ -178,7 +178,7 @@
                           </ion-row>
                           <ion-row *ngIf="disableButton">
                             <ion-col>
-                              <ion-button shape="round" color="danger" style="min-width: 100%;" (click)="disableStudentAccount('Confirmation','This student account will be DISABLED, do you want to continue?')">
+                              <ion-button shape="round" color="danger" style="min-width: 100%;" (click)="disableStudentAccount('Confirmation Required','This student account will be DISABLED, do you want to continue?')">
                                 <ion-icon name="lock-closed" style="margin-right: 5px;"></ion-icon>
                                 <ion-label style="color: white">
                                   Disable Account
@@ -188,7 +188,7 @@
                           </ion-row>
                           <ion-row *ngIf="enableButton">
                             <ion-col>
-                              <ion-button shape="round" color="medium" style="min-width: 100%;" (click)="enableStudentAccount('Confirmation','This student account will be ENABLED, do you want to continue?')">
+                              <ion-button shape="round" color="medium" style="min-width: 100%;" (click)="enableStudentAccount('Confirmation Required','This student account will be ENABLED, do you want to continue?')">
                                 <ion-icon name="lock-open-outline" style="margin-right: 5px;"></ion-icon>
                                 <ion-label style="color: white">
                                   Enable Account
