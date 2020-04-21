@@ -81,7 +81,7 @@ export class EsignPage implements OnInit {
                                             Session: e.payload.doc.data()['Session'],
                                             Date: e.payload.doc.data()['startDateTime'].toDate(),
                                             Hall: e.payload.doc.data()['lectureHall'],
-                                            Lecturer: e.payload.doc.data()['lecture'],
+                                            Lecturer: e.payload.doc.data()['lecturer'],
                                         };
                                     })
                                     console.log(this.session);
@@ -143,11 +143,11 @@ export class EsignPage implements OnInit {
                     console.log(doc.data());
                     Batch = doc.data().batch.toString()
                     Faculty = doc.data().faculty
-                    DegreeCode = doc.data().DegreeCode
+                    DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity
                     this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
                         console.log(Batch + '' + Faculty + '' + LectureDate)
                         this.session = data.map(e => {
-                            Module = e.payload.doc.data()['Module']
+                            Module = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
                             return {
                                 id: e.payload.doc.id,
                                 SessionCode: e.payload.doc.data()['SessionCode'],
