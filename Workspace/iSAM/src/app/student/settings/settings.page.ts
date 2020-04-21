@@ -3,11 +3,12 @@ import {Component, OnInit} from '@angular/core';
 import {MenuController, NavController, LoadingController, AlertController, ToastController} from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore/';
 
 @Component({selector: 'app-settings', templateUrl: './settings.page.html', styleUrls: ['./settings.page.scss']})
 export class SettingsPage implements OnInit {
     userEmail: string;
-    constructor(
+    constructor(private firestore: AngularFirestore,
         private authService: FirebaseService,
         public loadingController: LoadingController,
         public alertController: AlertController,
@@ -69,7 +70,9 @@ export class SettingsPage implements OnInit {
     }
 
     async logout() {
-
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().uid).set({
+            Activity: 'Offline',
+        }, { merge: true });
         this.authService
             .logoutUser()
             .then(async res => {

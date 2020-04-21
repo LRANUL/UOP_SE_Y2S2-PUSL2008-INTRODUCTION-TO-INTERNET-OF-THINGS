@@ -27,6 +27,14 @@ export class EsignPage implements OnInit {
     }
 
     async ngOnInit() {
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+            Activity: 'Online',
+        }, { merge: true });
+        this.firestore.collection('userActivityMonitoring').doc(this.firebase.userDetails().uid).set({
+            loginDateTime: Date(),
+            userId: this.firebase.userDetails().uid,
+            userEmail: this.firebase.userDetails().email,
+        }, { merge: true });
         var Batch: string
         var Faculty: string
         var LectureDate: string
