@@ -135,13 +135,7 @@ export class FirebaseService {
     }
     fetchSession(Batch, Faculty, LectureDate, DegreeCode) {
         //faculties/School of Business/lectureSeries/undergraduate/11.1/SE/19-4-2020/
-        return this.firestore.collection('faculties').doc(Faculty).collection('lectureSessions').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
-
-    }
-    sendKey(faculty, PrepKey, DocID) {
-        return this.firestore.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').doc(DocID).set({
-                SessionCode: PrepKey,
-        })
+        return this.firestore.collection('faculties').doc(Faculty).collection('lectureSeries').doc('undergraduate').collection(Batch).doc(DegreeCode).collection(LectureDate).snapshotChanges();
 
     }
     loadEC() {
@@ -246,10 +240,9 @@ export class FirebaseService {
     }
 
 
-    // Creating new firestore document and adding new notice data into ths document
-    newStudentNoticeDetailsSubmission(value) {
-
-        this.firestore.collection("notices-PO-To-Students").add({
+    // Creating new firestore document and adding new student notice data into ths document
+    newStudentNoticeDetailsSubmission(value, uId, userFaculty) {
+        this.firestore.collection("notices/noticeTypes/notices-PO-To-Students/").add({
             noticeTitle: value.noticeTitle,
             noticeDescription: value.noticeDescription,
             noticeCategory: value.noticeCategory,
@@ -258,11 +251,26 @@ export class FirebaseService {
                 noticeRecipientBatch: value.noticeRecipientBatch
             },
             noticeCreatedInfo: {
-                createdByDocID: "User Doc ID",
-                createdByFaculty: value.noticeAuthor,
-                createdDateTime: this.currentDateTime
+                createdByDocID: uId,
+                createdByFaculty: userFaculty,
+                createdDateTime: new Date()
             }
-        })
+        });
+    }
+
+    // Creating new firestore document and add the new lecturer noticw details into this document
+    newLecturerNoticeDetailsSubmission(value, uId, userFaculty) {
+        this.firestore.collection("notices/noticeTypes/notices-PO-To-Lecturers/").add({
+            noticeTitle: value.noticeTitle,
+            noticeDescription: value.noticeDescription,
+            noticeCategory: value.noticeCategory,
+            noticeRecipient: value.noticeRecipient,
+            noticeCreatedInfo: {
+                createdByDocID: uId,
+                createdByFaculty: userFaculty,
+                createdDateTime: new Date()
+            }
+        });
     }
 
     // Adding new lecture session by creating a new document
@@ -270,7 +278,7 @@ export class FirebaseService {
         // Firestore pathway:
         // faculties/ <facultyName> /lectureSessions/undergraduate/ <batch> / <degreeProgram> / <date> / <Module> /
         // Sample: /faculties/School of Computing/lectureSessions/undergraduate/16.1/BSc(Hons) Networking, University of Plymouth/2020-3-20/SOFT255SL-Software Engineering with Java
-        /*
+        
         this.firestore.collection("faculties/"+ userFaculty +"/lectureSessions/undergraduate/"+ value.batch + "/"+
             value.degreeProgram +", "+ awardingBodyUniversity +"/"+ sessionDate +"/").doc(value.module +"-"+ moduleTitle).set({
                 academicSemester: parseInt(value.academicPeriodSemester),
@@ -285,7 +293,7 @@ export class FirebaseService {
                 moduleCode: value.module,
                 moduleTitle: moduleTitle,
                 status: value.status
-        });*/
+        });
 
         this.firestore.collection("faculties/"+ userFaculty +"/allLectureSessions/").add({
                 academicSemester: parseInt(value.academicPeriodSemester),
@@ -318,17 +326,93 @@ export class FirebaseService {
         });
     }
 
+    
+
+    // Searching for registered student details with the user entered nsbm id 
+    searchRegisteredStudentNSBMId(nsbmStudentId){
+        return this.firestore.collection("users/userTypes/studentUsers", ref => ref
+                .where("nsbmStudentID", "==", nsbmStudentId)).snapshotChanges();
+    }
+
+    // Searching for registered student details with the user entered nsbm email address
+    searchRegisteredStudentNSBMEmail(nsbmEmailAddress){
+        return this.firestore.collection("users/userTypes/studentUsers", ref => ref
+                .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+    }
+
+
+
     // Searching for registered lecturer details with the user entered nsbm id 
     searchRegisteredLecturerNSBMId(nsbmLecturerId){
-        return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
+        return this.firestore.collection("users/userTypes/lecturerUsers", ref => ref
                 .where("nsbmLecturerId", "==", nsbmLecturerId)).snapshotChanges();
     }
 
     // Searching for registered lecturer details with the user entered nsbm email address
     searchRegisteredLecturerNSBMEmail(nsbmEmailAddress){
-        return this.firestore.collection("users/userTypes/lecturerUsers/", ref => ref
+        return this.firestore.collection("users/userTypes/lecturerUsers", ref => ref
                 .where("nsbmEmailAddress", "==", nsbmEmailAddress)).snapshotChanges();
     }
+
+
+
+    // Retrieving published Lectuers to PO notices from current date to three days before from the firestore database
+    retrievePublishedLecturerToPONotice(currentDate, dateThreeDaysBeforeCurrentDate){
+        return this.firestore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
+    // Retrieving published PO to Students notices from current date to three days before from the firestore database
+    retrievePublishedPOToStudentNotice(currentDate, dateThreeDaysBeforeCurrentDate){
+        return this.firestore.collection("notices/noticeTypes/notices-PO-To-Students/", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
+    // Retrieving published PO to Lectuers notices from current date to three days before from the firestore database
+    retrievePublishedPOToLecturerNotice(currentDate, dateThreeDaysBeforeCurrentDate){
+        return this.firestore.collection("notices/noticeTypes/notices-PO-To-Lecturers", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(currentDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
+
+
+
+    // Retrieving published Lecturers to PO notices for the selected date from the firestore database
+    retrievePublishedLecturerToPONoticeSelectedDate(selectedDate, nextDate){
+        return this.firestore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(selectedDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(nextDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
+    // Retrieving published PO to Students notices for the selected date from the firestore database
+    retrievePublishedPOToStudentNoticeSelectedDate(selectedDate, nextDate){
+        return this.firestore.collection("notices/noticeTypes/notices-PO-To-Students/", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(selectedDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(nextDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
+    // Retrieving published PO to Lecturers notices for the selected date from the firestore database
+    retrievePublishedPOToLecturerSelectedDate(selectedDate, nextDate){
+        return this.firestore.collection("notices/noticeTypes/notices-PO-To-Lecturers/", ref => ref
+                    .where("noticeCreatedInfo.createdDateTime", ">=", new Date(selectedDate))
+                    .where("noticeCreatedInfo.createdDateTime", "<=", new Date(nextDate))
+                    .orderBy("noticeCreatedInfo.createdDateTime", "desc")
+                    ).snapshotChanges();
+    }
+
 
 
 
@@ -337,12 +421,19 @@ export class FirebaseService {
         return this.firestore.collection("users/userTypes/lecturerUsers/").snapshotChanges();
     }
 
-    // Retrieving the sent student notices from the firestore database
-    retrieveSentStudentNotices() {
-        return this.firestore.collection("notice-PO-To-Student").snapshotChanges();
+     // Retrieving published lecture sessions and their detais from the firestore database for the lecture schedule page
+    retrievePublishedLectureSessionsLectureSchedule(userFaculty, currentDate, nextDate) {
+        return this.firestore.collection("faculties/"+ userFaculty +"/allLectureSessions", ref => ref
+                .where("startDateTime", ">=", new Date(currentDate))
+                .where("startDateTime", "<=", new Date(nextDate))
+                .orderBy("startDateTime")
+                ).snapshotChanges();
     }
 
-    
+    // Retrieving all published lecture sessions and their details from the firestore database
+    retrieveAllPublishedLectureSessions(userFaculty){
+        return this.firestore.collection("faculties/"+ userFaculty +"/allLectureSessions").snapshotChanges();
+    }
 
     // Retrieving published degree programs and their details from the firestore database
     retrievePublishedDegreeProgram(userFaculty) {
@@ -364,6 +455,11 @@ export class FirebaseService {
     // Retrieving published user statuses and their details from the firestore database
     retrievePublishedUserStatuses() {
         return this.firestore.collection("userStatuses").snapshotChanges();
+    }
+
+    // Retrieving published notice categories and their details from the firestore database
+    retrievePublishedNoticeCategories() {
+        return this.firestore.collection("noticeCategories").snapshotChanges();
     }
 
     // Retrieving published lecture halls and their details from the firestore database
@@ -440,39 +536,39 @@ export class FirebaseService {
     // Updating module values in the firestore database
     updateModule(userFaculty, docId, value, userFormDataAwardingBodyUniversity) {
         return this.firestore.doc("faculties/"+ userFaculty +"/modules/"+ docId).update({
-        moduleCode: value.moduleCode,
-        moduleTitle: value.moduleTitle,
-        creditsWeighting: value.creditsWeighting,
-        degree: value.degreeProgram,
-        awardingBodyUniversity: userFormDataAwardingBodyUniversity,
-        academicPeriod: {
-            academicYear: value.academicPeriodYear,
-            academicSemester: value.academicPeriodSemester,
-        },
-        moduleLeader: value.moduleLeader,
-        assignedLecturer: value.assignedLecturer,
-        assignedLectureHall: value.assignedLectureHall
-        }).then(function() {
-        console.log("Module Details has been updated.");
+            moduleCode: value.moduleCode,
+            moduleTitle: value.moduleTitle,
+            creditsWeighting: value.creditsWeighting,
+            degree: value.degreeProgram,
+            awardingBodyUniversity: userFormDataAwardingBodyUniversity,
+            academicPeriod: {
+                academicYear: value.academicPeriodYear,
+                academicSemester: value.academicPeriodSemester,
+            },
+            moduleLeader: value.moduleLeader,
+            assignedLecturer: value.assignedLecturer,
+            assignedLectureHall: value.assignedLectureHall
+            }).then(function() {
+            console.log("Module Details has been updated.");
         });
     }
 
     // Updating lecture session values in the firestore database
     updateLectureSession(userFaculty, id, value, userFormDataModuleCode, userFormDataSessionStartDateTime, userFormDataSessionEndDateTime) {
         return this.firestore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).update({
-        batch: value.batch,
-        degreeProgram: value.degreeProgram,
-        academicYear: value.academicYear,
-        academicSemester: value.academicSemester,
-        moduleCode: userFormDataModuleCode,
-        moduleTitle: value.moduleTitle,
-        lecture: value.lecturer,
-        lectureHall: value.lectureHall,
-        status: value.lectureStatus,
-        startDateTime: userFormDataSessionStartDateTime,
-        endDateTime: userFormDataSessionEndDateTime
-        }).then(function() {
-        console.log("Lecture Session Details has been updated.");
+            batch: value.batch,
+            degreeProgram: value.degreeProgram,
+            academicYear: value.academicYear,
+            academicSemester: value.academicSemester,
+            moduleCode: userFormDataModuleCode,
+            moduleTitle: value.moduleTitle,
+            lecture: value.lecturer,
+            lectureHall: value.lectureHall,
+            status: value.lectureStatus,
+            startDateTime: userFormDataSessionStartDateTime,
+            endDateTime: userFormDataSessionEndDateTime
+            }).then(function() {
+            console.log("Lecture Session Details has been updated.");
         });
     }
 
@@ -486,6 +582,28 @@ export class FirebaseService {
     removeLectureSession(userFaculty, id) {
         return this.firestore.doc("faculties/"+ userFaculty +"/lectureSessions/"+ id).delete();
     }
+
+
+
+
+    // Disabling the user acount by updating user account status to 'disabled' in the firestore database
+    disableUserAccount(userType, docId){
+        return this.firestore.doc("users/userTypes/"+ userType +"/"+ docId).update({
+            status: "Disabled"
+        }).then(function() {
+            console.log("User Account has been disabled");
+        });
+    }
+
+    // Enabling the user acount by updating user account status to 'disabled' in the firestore database
+    enableUserAccount(userType, docId){
+        return this.firestore.doc("users/userTypes/"+ userType +"/"+ docId).update({
+            status: "Active"
+        }).then(function() {
+            console.log("User Account has been disabled");
+        });
+    }
+    
 
 }
 

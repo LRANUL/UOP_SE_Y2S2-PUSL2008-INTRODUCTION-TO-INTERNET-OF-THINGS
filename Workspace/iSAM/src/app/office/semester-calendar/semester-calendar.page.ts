@@ -23,6 +23,8 @@ export class SemesterCalendarPage implements OnInit {
 
   loadingSpinnerPLS: Boolean = false;
 
+  showPublishedLectureSeries: Boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private alertController: AlertController,
@@ -146,11 +148,7 @@ export class SemesterCalendarPage implements OnInit {
 
   numberOfLectureSessions;
   
-
   publishedLectureSlots;
-
-  // Declaring an array to initialize the number of events (lecture sessions) and their ids
-  numberOfLectureSessionsDocuments = [];
 
   userSelectedAwardingBodyUniversity;
 
@@ -298,7 +296,6 @@ export class SemesterCalendarPage implements OnInit {
 
   // Confirm Box Implementation (Remove existing lecture session)
   async removeLectureSession ( title: string, content: string, value) {
-
     const alert = await this.alertController.create({
       header: title,
       message: content,
@@ -324,9 +321,7 @@ export class SemesterCalendarPage implements OnInit {
 
       ]
     });
-
     await alert.present();
-
   }
 
   userSelectedOption;
@@ -402,15 +397,13 @@ export class SemesterCalendarPage implements OnInit {
 
     // Calling function to retrieving the lecture sessions for this degree program, batch, academic period year and academic period semester from the firestore database
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(activeLectureSlots => {
-      this.eventSourceASCalendar = []; // Clearing the existing events on the calendar before syncing 
+      this.eventSourceASCalendar = []; // Clearing the existing lecture sessions on the calendar before syncing 
       activeLectureSlots.forEach(snap => {
         let eventASCalendar:any = snap.payload.doc.data();
         eventASCalendar.id = snap.payload.doc.id;
         eventASCalendar.title = eventASCalendar.moduleCode + "-" + eventASCalendar.moduleTitle + "\n | Status: " + eventASCalendar.status;
         eventASCalendar.startTime = eventASCalendar.startDateTime.toDate();
         eventASCalendar.endTime = eventASCalendar.endDateTime.toDate();
-        console.log("ee");
-        console.log(eventASCalendar);
 
         this.eventSourceASCalendar.push(eventASCalendar);
       });
@@ -439,6 +432,8 @@ export class SemesterCalendarPage implements OnInit {
     this.eventSourceASCalendar = []; 
   }
 
+
+
   // Process of adding a new lecture series
   doCreateNewLectureSeries(value){
 
@@ -447,6 +442,17 @@ export class SemesterCalendarPage implements OnInit {
     this.alertNotice("Lecture Series Created", "New Lecture Series has been created.");
 
   }
+
+  // Resetting create new lecture series form
+  resetCreatedLectureSeries(){
+
+    this.createNewLectureSeriesForm.reset();
+
+    this.publishedLectureSeries = "";
+  }
+
+  
+
 
   publishedLectureSeries;
 
@@ -457,9 +463,11 @@ export class SemesterCalendarPage implements OnInit {
     console.log(this.awardingBodyUniversity);
     console.log(this.moduleTitle);
 
-    this.semesterCalendarService.retrievePublishedLectureSeries(this.sideMenuPageUserFaculty, value, this.awardingBodyUniversity, this.moduleTitle).subscribe(response => {
+    this.semesterCalendarService.retrievePublishedLectureSeries(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity, this.moduleTitle).subscribe(response => {
         // Checking if any document values where returned
         if (response.length > 0){
+
+          this.showPublishedLectureSeries = true;
           
           this.publishedLectureSeries = response;
 
@@ -473,9 +481,22 @@ export class SemesterCalendarPage implements OnInit {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
       });
-    
   }
 
+  // Resetting search lecture series form
+  resetSearchCreatedLectureSeries(){
+
+    this.searchLectureSeriesForm.reset();
+
+    this.showPublishedLectureSeries = false;
+
+  }
+
+  
+
+
+  // Declaring an array to initialize the number of events (lecture sessions) and their details
+  lectureSessionsDocuments = [];
 
   // Published Semester Calendar
   eventSourcePSCalendar;
@@ -512,18 +533,18 @@ export class SemesterCalendarPage implements OnInit {
       ", disabled: " + event.disabled);
 
       if((event.events !== undefined && event.events.length !== 0) == false){
-        this.numberOfLectureSessionsDocuments = [];
+        this.lectureSessionsDocuments = [];
       }
       else if ((event.events !== undefined && event.events.length !== 0) == true){
-        this.numberOfLectureSessionsDocuments = event.events;
+        this.lectureSessionsDocuments = event.events;
       }
-      console.log(this.numberOfLectureSessionsDocuments);
+      console.log(this.lectureSessionsDocuments);
   }
 
   onCurrentDateChangedPSCalendar(event: Date){
     console.log("Current Lecture Session Date Change: " + event);
 
-    this.numberOfLectureSessionsDocuments = [];
+    this.lectureSessionsDocuments = [];
   }
 
   onRangeChangedPSCalendar(evt) {

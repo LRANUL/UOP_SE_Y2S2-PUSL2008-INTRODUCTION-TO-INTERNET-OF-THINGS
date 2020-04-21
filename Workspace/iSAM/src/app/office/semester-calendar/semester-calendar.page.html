@@ -152,31 +152,7 @@
                                               margin-top: -25px;
                                               height: 100px;
                                               width: 100px;" *ngIf="loadingSpinnerPLS"></ion-spinner>
-                  
-                  <ion-grid style="margin-top: 50px;
-                                  padding-top: 10px;">
-                    <ion-row>
-                      <ion-col>
-                        <ion-button style="min-width: 100%;" color="medium">
-                          <ion-icon name="refresh-outline"></ion-icon>
-                          <ion-label style="color: white;
-                                            margin-left: 10px;">
-                            Generate PDF
-                          </ion-label>
-                        </ion-button>
-                      </ion-col>
-                      <ion-col>
-                        <ion-button style="min-width: 100%;" color="medium">
-                          <ion-icon name="cloud-download-outline"></ion-icon>
-                          <ion-label style="color: white;
-                                            margin-left: 10px;">
-                            Download PDF
-                          </ion-label>
-                        </ion-button>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-
+                
 
                 </ion-col>
 
@@ -228,10 +204,10 @@
                       [calendarMode]="calendarPSCalendar.mode"
                       [currentDate]="calendarPSCalendar.currentDate"
                       (onCurrentDateChanged)="onCurrentDateChangedPSCalendar($event)"
-                      (onRangeChanged)="reloadSourcePSCalendar(startTime, endTime)"
+                      (onRangeChanged)="reloadSourcePSCalendar($event)"
                       (onEventSelected)="onEventSelectedPSCalendar($event)"
                       (onTitleChanged)="onViewTitleChangedPSCalendar($event)"
-                      (onTimeSelected)="onTimeSelectedPSCalendar($event, searchSemesterCalendar.value)"
+                      (onTimeSelected)="onTimeSelectedPSCalendar($event)"
                       startHour="9"
                       endHour="17"
                       step="30"
@@ -248,7 +224,7 @@
                                   right: 1%;
                                   padding: 0;
                                   margin: 0;">
-                    <ion-row *ngFor="let session of numberOfLectureSessionsDocuments">
+                    <ion-row *ngFor="let session of lectureSessionsDocuments">
                       <ion-col>
                         <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsLectureSession($event, session)" style="width: 40px;
                                                                                                                                                                     height: 40px;
@@ -526,40 +502,6 @@
 
                         
                         <!-- Assign Each Session Manually -->
-                       <!-- <ion-grid *ngIf="userSelectionLectureAssignIndividually">
-                          <ion-row>
-                            <ion-col>
-                              <ion-label>
-                                Select Lecture Session Start and End on Same Date
-                              </ion-label>
-                            </ion-col>
-                          </ion-row>
-                          <ion-row>
-                            <ion-col size="12" size-sm="12" size-lg="6">
-                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
-                                Session Start Time
-                              </ion-label>
-                            </ion-col>
-                            <ion-col size="12" size-sm="12" size-lg="6">
-                              <ion-item>
-                                <ion-datetime display-format="MMM DD, YYYY HH:mm" picker-format="MMM DD, YYYY HH:mm" placeholder="Select Date Time" formControlName="sessionStartTimeSingle"></ion-datetime>
-                              </ion-item>
-                            </ion-col>
-                          </ion-row>
-                          <ion-row>
-                            <ion-col size="12" size-sm="12" size-lg="6">
-                              <ion-label style="margin-left: 50px;" class="assignNewLectureSessionSlotFormLabel">
-                                Session End Time
-                              </ion-label>
-                            </ion-col>
-                            <ion-col size="12" size-sm="12" size-lg="6">
-                              <ion-item>
-                                <ion-datetime display-format="MMM DD, YYYY HH:mm" picker-format="MMM DD, YYYY HH:mm" placeholder="Select Date Time" formControlName="sessionEndTimeSingle"></ion-datetime>
-                              </ion-item>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>-->
-
                         <ion-grid *ngIf="userSelectionLectureAssignIndividually">
                           <ion-row>
                             <ion-col size="12" size-sm="12" size-lg="6">
@@ -569,7 +511,7 @@
                             </ion-col>
                             <ion-col size="12" size-sm="12" size-lg="6">
                               <ion-item>
-                                <ion-datetime formControlName="sessionDateSingle"></ion-datetime>
+                                <ion-datetime placeholder="Pick Session Date" formControlName="sessionDateSingle"></ion-datetime>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -581,7 +523,7 @@
                             </ion-col>
                             <ion-col size="12" size-sm="12" size-lg="6">
                               <ion-item>
-                                <ion-datetime display-format="h:mm A" formControlName="sessionStartTimeSingle"></ion-datetime>
+                                <ion-datetime placeholder="Pick Start Time" display-format="h:mm A" formControlName="sessionStartTimeSingle"></ion-datetime>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -593,7 +535,7 @@
                             </ion-col>
                             <ion-col size="12" size-sm="12" size-lg="6">
                               <ion-item>
-                                <ion-datetime display-format="h:mm A" formControlName="sessionEndTimeSingle"></ion-datetime>
+                                <ion-datetime placeholder="Pick End Time" display-format="h:mm A" formControlName="sessionEndTimeSingle"></ion-datetime>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -866,7 +808,7 @@
                                 Enrollment KEY
                               </ion-label>
                               <ion-button style="position: absolute;
-                                                right: 10%;">
+                                                right: 5%;">
                                 Generate
                               </ion-button>
                             </ion-col>
@@ -895,6 +837,19 @@
                         </ion-grid>
                       </form>
 
+
+                      <!-- Reset Button -->
+                      <ion-button style="width: 90px;
+                                        position: absolute;
+                                        top: -55px;
+                                        right: 1.5%;" color="dark" fill="outline" size="small" (click)="resetCreatedLectureSeries()"> 
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        <ion-label style="color: rgb(59, 59, 59);
+                                          margin-left: 5px;">
+                          Reset
+                        </ion-label>
+                      </ion-button>
+                  
 
                     </ion-card-content>
                   </ion-card>
@@ -984,54 +939,70 @@
                         </ion-button>
                       </form>
 
-                      <ion-card *ngFor="let item of publishedLectureSeries">
+                      <ng-container *ngIf="showPublishedLectureSeries">
+                        <ion-card *ngFor="let item of publishedLectureSeries">
 
-                        <ion-card-content>
+                          <ion-card-content>
 
-                          <ion-label style="font-size: 15px;">
-                            Published Lecturer Series
-                          </ion-label>
+                            <ion-label style="font-size: 15px;">
+                              Published Lecturer Series
+                            </ion-label>
 
-                          <ion-card>
+                            <ion-card>
 
-                            <ion-card-content>
-                              <ion-grid>
-                                <ion-row>
-                                  <ion-col size="5">
-                                    <ion-label>
-                                      <b>Enrollment Key: </b>
-                                    </ion-label>
-                                  </ion-col>
-                                  <ion-col size="7">
-                                    <ion-label>
-                                      {{ item.payload.doc.data().enrollmentKey }}
-                                    </ion-label>
-                                  </ion-col>
-                                </ion-row>
-                                <ion-row>
-                                  <ion-col size="5">
-                                    <ion-label>
-                                      <b>Enrolled Students </b>
-                                    </ion-label>
-                                  </ion-col>
-                                  <ion-col size="7">
-                                    <div style="height: 200px;
-                                                overflow: scroll;">
+                              <ion-card-content>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col size="5">
                                       <ion-label>
-                                        {{ item.payload.doc.data().enrolledStudents }}
+                                        <b>Enrollment Key: </b>
                                       </ion-label>
-                                    </div>
-                                  </ion-col>
-                                </ion-row>
-                                  
-                              </ion-grid>
-                            </ion-card-content>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                      <ion-label>
+                                        {{ item.payload.doc.data().enrollmentKey }}
+                                      </ion-label>
+                                    </ion-col>
+                                  </ion-row>
+                                  <ion-row>
+                                    <ion-col size="5">
+                                      <ion-label>
+                                        <b>Enrolled Students </b>
+                                      </ion-label>
+                                    </ion-col>
+                                    <ion-col size="7">
+                                      <div style="height: 300px;
+                                                  overflow-y: scroll;">
+                                        <ion-label>
+                                          {{ item.payload.doc.data().enrolledStudents }}
+                                        </ion-label>
+                                      </div>
+                                    </ion-col>
+                                  </ion-row>
+                                    
+                                </ion-grid>
+                              </ion-card-content>
 
-                          </ion-card>
+                            </ion-card>
 
-                        </ion-card-content>
+                          </ion-card-content>
 
-                      </ion-card>
+                        </ion-card>
+                      </ng-container>
+
+
+                       <!-- Reset Button -->
+                      <ion-button style="width: 90px;
+                                        position: absolute;
+                                        top: -55px;
+                                        right: 1.5%;" color="dark" fill="outline" size="small" (click)="resetSearchCreatedLectureSeries()"> 
+                        <ion-icon name="refresh-outline"></ion-icon>
+                        <ion-label style="color: rgb(59, 59, 59);
+                                          margin-left: 5px;">
+                          Reset
+                        </ion-label>
+                      </ion-button>
+                  
 
 
                     </ion-card-content>

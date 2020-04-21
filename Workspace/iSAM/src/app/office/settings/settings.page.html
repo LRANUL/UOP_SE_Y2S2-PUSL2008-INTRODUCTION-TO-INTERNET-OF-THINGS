@@ -89,35 +89,55 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  min-height: 300px;
-                                  overflow-y: scroll;">
+                                  height: 460px;
+                                  overflow: scroll;">
 
-                        <table class="table">
+                        <table class="table" style="width: 800px;">
                           <thead>
                             <tr>
-                              <th>Batch</th>
                               <th>Degree Program</th>
-                              <th>Status</th>
+                              <th>No Of Years</th>
+                              <th>No Of Semesters Annually</th>
+                              <th>Program Delivery</th>
+                              <th>Program Coordinator</th>
                               <th></th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of publishedBatches">
-                              <td>{{ item.payload.doc.data().batch }}</td>
+                            <tr *ngFor="let item of publishedDegreePrograms">
                               <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
-                              <td>{{ item.payload.doc.data().batchStatus }}</td>
+                              <td>{{ item.payload.doc.data().deliveryNoOfYears }}</td>
+                              <td>{{ item.payload.doc.data().deliveryNoOfSemesterAnnually }}</td>
+                              <td>{{ item.payload.doc.data().programDelivery }}</td>
+                              <td>{{ item.payload.doc.data().programCoordinator }}</td>
                               <td>
-                                <ion-button>
-                                  <ion-icon name="create-outline" style="margin-right: 5px;"></ion-icon>
-                                  <ion-label style="color: white;">
-                                    EDIT
-                                  </ion-label>
-                                </ion-button>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
                               </td>
                             </tr>
                           </tbody>
                         </table>
-
+                        
                       </div>
 
                       <ion-button color="medium" style="position: relative;
@@ -147,37 +167,61 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  min-height: 300px;
-                                  overflow-x: scroll;">
+                                  height: 460px;
+                                  overflow-y: scroll;">
 
-                        <table class="table" style="min-width: 300px;">
+                        <table class="table">
                           <thead>
                             <tr>
+                              <th>Batch</th>
                               <th>Degree Program</th>
-                              <th>No Of Years</th>
-                              <th>No Of Semesters Annually</th>
-                              <th>Program Delivery</th>
-                              <th>Program Coordinator</th>
+                              <th>Status</th>
                               <th></th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of publishedDegreePrograms">
+                            <tr *ngFor="let item of publishedBatches">
+                              <td>{{ item.payload.doc.data().batch }}</td>
                               <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
-                              <td>{{ item.payload.doc.data().deliveryNoOfYears }}</td>
-                              <td>{{ item.payload.doc.data().deliveryNoOfSemesterAnnually }}</td>
-                              <td>{{ item.payload.doc.data().programDelivery }}</td>
-                              <td>{{ item.payload.doc.data().programCoordinator }}</td>
+                              <td>{{ item.payload.doc.data().batchStatus }}</td>
                               <td>
-                                <ion-button>
-                                  EDIT
-                                </ion-button>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
                               </td>
                             </tr>
                           </tbody>
                         </table>
-
                       </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 87%;
+                                                        transform: translateX(-13%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
 
                     </ion-card-content>
                   </ion-card>
@@ -198,8 +242,8 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  min-height: 300px;
-                                  overflow-x: scroll;">
+                                  height: 460px;
+                                  overflow-y: scroll;">
 
                         <table class="table" style="min-width: 500px;">
                           <thead>
@@ -214,15 +258,114 @@
                               <td>{{ item.payload.doc.data().creditsWeighting }}</td>
                               <td>{{ item.payload.doc.data().status }}</td>
                               <td>
-                                <ion-button>
-                                  EDIT
-                                </ion-button>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
                               </td>
                             </tr>
                           </tbody>
                         </table>
-
                       </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 87%;
+                                                        transform: translateX(-13%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
+
+                    </ion-card-content>
+                  </ion-card>
+
+                </ion-col>
+                <ion-col size="6">
+
+                  <ion-card>
+                    <ion-card-content>
+
+                      <ion-label style="font-size: 20px;">
+                        Lecture Halls
+                      </ion-label>
+
+                      <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  height: 460px;
+                                  overflow-y: scroll;">
+
+                        <table class="table" style="min-width: 500px;">
+                          <thead>
+                            <tr>
+                              <th>Lecture Hall</th>
+                              <th>Approximate No Of Seats Available</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of publishedLectureHalls">
+                              <td>{{ item.payload.doc.data().lectureHall }}</td>
+                              <td>{{ item.payload.doc.data().approximateNoOfSeatsAvailable }}</td>
+                              <td>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 87%;
+                                                        transform: translateX(-13%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
 
                     </ion-card-content>
                   </ion-card>
@@ -262,8 +405,8 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  min-height: 300px;
-                                  overflow-x: scroll;">
+                                  height: 460px;
+                                  overflow-y: scroll;">
 
                         <table class="table" style="min-width: 300px;">
                           <thead>
@@ -274,19 +417,48 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor="let item of publishedSessionStatuses">
+                            <tr *ngFor="let item of publishedLectureSessionStatuses">
                               <td>{{ item.payload.doc.data().status }}</td>
                               <td>{{ item.payload.doc.data().description }}</td>
                               <td>
-                                <ion-button>
-                                  EDIT
-                                </ion-button>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
                               </td>
                             </tr>
                           </tbody>
                         </table>
 
                       </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 87%;
+                                                        transform: translateX(-13%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
 
                     </ion-card-content>
                   </ion-card>
@@ -305,8 +477,8 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  min-height: 300px;
-                                  overflow-x: scroll;">
+                                  height: 460px;
+                                  overflow-y: scroll;">
 
                         <table class="table" style="min-width: 300px;">
                           <thead>
@@ -321,15 +493,44 @@
                               <td>{{ item.payload.doc.data().status }}</td>
                               <td>{{ item.payload.doc.data().description }}</td>
                               <td>
-                                <ion-button>
-                                  EDIT
-                                </ion-button>
+                                <ion-grid>
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-button style="width: 120px;">
+                                        <ion-icon name="create-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          EDIT
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                    <ion-col>
+                                      <ion-button color="danger" style="width: 120px;">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <ion-label style="color: white;
+                                                          margin-left: 5px;">
+                                          REMOVE
+                                        </ion-label>
+                                      </ion-button>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
                               </td>
                             </tr>
                           </tbody>
                         </table>
 
                       </div>
+
+                      <ion-button color="medium" style="position: relative;
+                                                        left: 85%;
+                                                        transform: translateX(-15%);
+                                                        width: 100px;">
+                        <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                        <ion-label style="color: white;">
+                          ADD
+                        </ion-label>
+                      </ion-button>
 
                     </ion-card-content>
                   </ion-card>
@@ -349,6 +550,90 @@
         <ion-card>
           <ion-card-header>
             <ion-card-title>
+              Change Notice Information
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+          
+            <ion-card>
+              <ion-card-content>
+
+                <ion-label style="font-size: 20px;">
+                  Notice Categories
+                </ion-label>
+
+                <div style="margin-top: 5px;
+                            border: #ccc solid 1px;
+                            border-radius: 5px;
+                            min-width: 100%;
+                            height: 460px;
+                            overflow-y: scroll;">
+
+                  <table class="table" style="min-width: 300px;">
+                    <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of publishedNoticeCategory">
+                        <td>{{ item.payload.doc.data().category }}</td>
+                        <td>{{ item.payload.doc.data().description }}</td>
+                        <td>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col>
+                                <ion-button style="width: 120px;">
+                                  <ion-icon name="create-outline"></ion-icon>
+                                  <ion-label style="color: white;
+                                                    margin-left: 5px;">
+                                    EDIT
+                                  </ion-label>
+                                </ion-button>
+                              </ion-col>
+                              <ion-col>
+                                <ion-button color="danger" style="width: 120px;">
+                                  <ion-icon name="trash-outline"></ion-icon>
+                                  <ion-label style="color: white;
+                                                    margin-left: 5px;">
+                                    REMOVE
+                                  </ion-label>
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+                <ion-button color="medium" style="position: relative;
+                                                  left: 85%;
+                                                  transform: translateX(-15%);
+                                                  width: 100px;">
+                  <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                  <ion-label style="color: white;">
+                    ADD
+                  </ion-label>
+                </ion-button>
+
+              </ion-card-content>
+            </ion-card>
+           
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
               Change Account Details
             </ion-card-title>
           </ion-card-header>
@@ -357,12 +642,12 @@
             <ion-grid>
               <ion-row>
                 <ion-col>
-                  <ion-button color="medium" expand="block">
+                  <ion-button color="medium" expand="block" style="height: 50px;">
                     Update Details
                   </ion-button>
                 </ion-col>
                 <ion-col>
-                  <ion-button color="medium" expand="block">
+                  <ion-button color="medium" expand="block" style="height: 50px;">
                     Update Password
                   </ion-button>
                 </ion-col>

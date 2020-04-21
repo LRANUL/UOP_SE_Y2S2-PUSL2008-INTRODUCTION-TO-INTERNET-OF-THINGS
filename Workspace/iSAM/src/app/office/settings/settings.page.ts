@@ -22,9 +22,13 @@ export class SettingsPage implements OnInit {
 
     this.retrievePublishedModuleCreditsWeighting();
 
+    this.retrievePublishedLectureHalls();
+
     this.retrievePublishedLectureSessionStatuses();
 
     this.retrievePublishedUserStatuses();
+
+    this.retrievePublishedNoticeCategories();
 
   }
 
@@ -38,19 +42,30 @@ export class SettingsPage implements OnInit {
   retrievePublishedDegreeProgram = () => 
     this.settingsService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreePrograms = response));
 
-  // Retrieving published no of credit weightings and their detailk from the firestore database
+  // Retrieving published no of credit weightings and their details from the firestore database
   publishedNoOfCreditWeightings;
   retrievePublishedModuleCreditsWeighting = () => 
     this.settingsService.retrievePublishedModuleCreditsWeighting().subscribe(response => (this.publishedNoOfCreditWeightings = response));
+
+  // Retrieving published lecture halls and their details from the firestore database
+  publishedLectureHalls;
+  retrievePublishedLectureHalls = () => 
+    this.settingsService.retrievePublishedLectureHalls(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedLectureHalls = response));
 
   // Retrieving published lecture session statuses and their details from the firestore database
   publishedLectureSessionStatuses;
   retrievePublishedLectureSessionStatuses = () =>
     this.settingsService.retrievePublishedLectureSessionStatuses().subscribe(response => (this.publishedLectureSessionStatuses = response));
 
-  // Retrieving published user statuses and their detailk from the firestore database
+  // Retrieving published user statuses and their details from the firestore database
   publishedUserStatuses;
   retrievePublishedUserStatuses = () =>
     this.settingsService.retrievePublishedUserStatuses().subscribe(response => (this.publishedUserStatuses = response));
+
+  // Retrieving published notice categories and their details from the firestore database
+  publishedNoticeCategory;
+  retrievePublishedNoticeCategories = () =>
+    this.settingsService.retrievePublishedNoticeCategories().subscribe(response => (this.publishedNoticeCategory = response));
+
 
 }

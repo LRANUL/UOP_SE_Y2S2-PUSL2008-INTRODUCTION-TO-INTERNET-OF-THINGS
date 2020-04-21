@@ -117,7 +117,7 @@
             <div style="border-top: #ccc solid 1px;
                         min-width: 100%;"></div>
 
-            <!-- Page loading search module text -->
+            <!-- Page loading search registered student text -->
             <div *ngIf="pageLoadSearchStudentText" style="position: absolute;
                                                         top: 150px;
                                                         left: 50%;
@@ -156,24 +156,18 @@
 
                     <ion-card *ngIf="registeredStudentCard">
                       <ion-card-header>
-                        <ion-card-title> </ion-card-title>
+                        <ion-card-title>{{ studentNamePrefix }} {{ studentNameFirstName }} {{ studentNameMiddleName }} {{ studentNameLastName }}</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
-                        <b>Specialization: </b>  <br>
-                        <b>Specialied Faculty: </b>  <br>
-                        <b>Account Status: </b> 
+                        <b>NSBM ID: </b> {{ studentNsbmStudentId }} <br>
+                        <b>NSBM Email Address: </b> {{ studentNsbmEmailAddress }} <br>
+                        <b>Batch: </b> {{ studentBatch }} <br>
+                        <b>Degree: </b> {{ studentDegree }}, {{ studentAwardingBodyUniversity }} <br>
+                        <b>Account Status: </b> {{ studentStatus }}
                         <ion-grid>
                           <ion-row>
                             <ion-col>
                               <ion-button shape="round" color="secondary" style="min-width: 100%;">
-                                <ion-icon name="document-text-outline" style="margin-right: 5px;"></ion-icon>
-                                <ion-label style="color: white">
-                                  More Details
-                                </ion-label>
-                              </ion-button>
-                            </ion-col>
-                            <ion-col>
-                              <ion-button shape="round" color="warning" style="min-width: 100%;">
                                 <ion-icon name="create-outline" style="margin-right: 5px;
                                                                       color: white;"></ion-icon>
                                 <ion-label style="color: white">
@@ -182,12 +176,22 @@
                               </ion-button>
                             </ion-col>
                           </ion-row>
-                          <ion-row>
+                          <ion-row *ngIf="disableButton">
                             <ion-col>
-                              <ion-button shape="round" color="danger" style="min-width: 100%;">
+                              <ion-button shape="round" color="danger" style="min-width: 100%;" (click)="disableStudentAccount('Confirmation','This student account will be DISABLED, do you want to continue?')">
                                 <ion-icon name="lock-closed" style="margin-right: 5px;"></ion-icon>
                                 <ion-label style="color: white">
                                   Disable Account
+                                </ion-label>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row *ngIf="enableButton">
+                            <ion-col>
+                              <ion-button shape="round" color="medium" style="min-width: 100%;" (click)="enableStudentAccount('Confirmation','This student account will be ENABLED, do you want to continue?')">
+                                <ion-icon name="lock-open-outline" style="margin-right: 5px;"></ion-icon>
+                                <ion-label style="color: white">
+                                  Enable Account
                                 </ion-label>
                               </ion-button>
                             </ion-col>

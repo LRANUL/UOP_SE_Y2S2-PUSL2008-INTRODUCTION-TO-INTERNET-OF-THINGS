@@ -29,6 +29,10 @@ export class LecturersPage implements OnInit {
 
   loggedInUserFaculty;
 
+  disableButton: Boolean = false;
+
+  enableButton: Boolean = true;
+
 
   constructor(
     private lecturersService: FirebaseService,
@@ -104,6 +108,7 @@ export class LecturersPage implements OnInit {
   lecturerDocId;
   lecturerNamePrefix;
   lecturerNameFirstName;
+  lecturerNameMiddleName;
   lecturerNameLastName;
   lecturerNsbmLecturerId;
   lecturerNsbmEmailAddress;
@@ -116,7 +121,7 @@ export class LecturersPage implements OnInit {
   doSearchRegisteredLecturer(value){
 
     // Response action if the user clicks the 'Search' button without entering a search value.
-    if(value.nsbmId == "" || value.nsbmEmailAddress){
+    if(value.nsbmId == "" && value.nsbmEmailAddress == ""){
       this.pageLoadSearchLecturerText = true;
 
       this.showLoadingDots = false;
@@ -141,12 +146,16 @@ export class LecturersPage implements OnInit {
           // Setting loading dots to false
           this.showLoadingDots = false;
 
+          // Disabling loading text
+          this.pageLoadSearchLecturerText = false;
+
           // Assigning retrieved values to this variables
           this.registeredLecturers = response.forEach(document => {
             let firestoreDoc: any = document.payload.doc.data();
             this.lecturerDocId = document.payload.doc.id;
-            this.lecturerNamePrefix = firestoreDoc.name.firstName;
+            this.lecturerNamePrefix = firestoreDoc.name.prefix;
             this.lecturerNameFirstName = firestoreDoc.name.firstName;
+            this.lecturerNameMiddleName = firestoreDoc.name.middleName;
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
             this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
@@ -155,16 +164,24 @@ export class LecturersPage implements OnInit {
             this.lecturerSpecialization = firestoreDoc.specialization;
           });
 
+          if(this.lecturerStatus == "Disabled"){
+            this.enableButton = true;
+          }
+          else if(this.lecturerStatus == "Active"){
+            this.disableButton = true;
+          }
+
           console.log("Registered Lecturer Record Found");
         }
         else{
           this.showLoadingDots = false;
-          this.alertNotice("Not Found", "Registered Lecture Record with NSBM ID: " + value.nsbmId + ", is not available");
+          this.alertNotice("Not Found", "Registered Lecturer Record with NSBM ID: " + value.nsbmId + ", is not available");
           console.log("Registered Lecturer Record Not Found");
         }
       }, error => {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
+        this.showLoadingDots = false;
       });
     }
     else if(value.nsbmEmailAddress){
@@ -176,12 +193,16 @@ export class LecturersPage implements OnInit {
           // Setting loading dots to false
           this.showLoadingDots = false;
 
+          // Disabling loading text
+          this.pageLoadSearchLecturerText = false;
+
           // Assigning retrieved values to this variables
           this.registeredLecturers = response.forEach(document => {
             let firestoreDoc: any = document.payload.doc.data();
             this.lecturerDocId = document.payload.doc.id;
-            this.lecturerNamePrefix = firestoreDoc.name.firstName;
+            this.lecturerNamePrefix = firestoreDoc.name.prefix;
             this.lecturerNameFirstName = firestoreDoc.name.firstName;
+            this.lecturerNameMiddleName = firestoreDoc.name.middleName;
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
             this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
@@ -190,17 +211,90 @@ export class LecturersPage implements OnInit {
             this.lecturerSpecialization = firestoreDoc.specialization;
           });
 
+          if(this.lecturerStatus == "Disabled"){
+            this.enableButton = true;
+          }
+          else if(this.lecturerStatus == "Active"){
+            this.disableButton = true;
+          }
+
           console.log("Registered Lecturer Record Found");
         }
         else{
-          this.alertNotice("Not Found", "Registered Lecture Record with NSBM Email Address: " + value.nsbmEmailAddress + ", is not available");
+          this.alertNotice("Not Found", "Registered Lecturer Record with NSBM Email Address: " + value.nsbmEmailAddress + ", is not available");
           console.log("Registered Lecturer Record Not Found");
         }
       }, error => {
         console.log("Error: " + error);
         this.alertNotice("Error", "An error has occurred: " + error);
+        this.showLoadingDots = false;
       });
     }
+  }
+
+
+  // Confirm Box Implementation (Disabling lecturer user account)
+  async disableLecturerAccount (title: string, content: string) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Disable Lecturer User Account Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Disable Lecturer User Account Request Accepted");
+
+            this.disableButton = false;
+
+            // Calling function to disable user account
+            this.lecturersService.disableUserAccount("lecturerUsers" , this.lecturerDocId);
+            
+            this.enableButton = true;
+
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  // Confirm Box Implementation (Enabling lecturer user account)
+  async enableLecturerAccount (title: string, content: string) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Enable Lecturer User Account Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Enable Lecturer User Account Request Accepted");
+
+            this.enableButton = false;
+
+            // Calling function to disable user account
+            this.lecturersService.enableUserAccount("lecturerUsers" , this.lecturerDocId);
+
+            this.disableButton = true;
+            
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 

@@ -28,6 +28,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgCalendarModule  } from 'ionic2-calendar';
 import { EditLectureSessionModalPageModule } from './office/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
 import { MoreDetailsSessionPopoverPageModule } from './office/semester-calendar/more-details-session-popover/more-details-session-popover.module';
+import { AddLectureHallModalPageModule } from './office/settings/addModals/add-lecture-hall-modal/add-lecture-hall-modal.module';
+import { EditLectureHallModalPageModule } from './office/settings/editModals/edit-lecture-hall-modal/edit-lecture-hall-modal.module';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { MoreDetailsSessionPopoverPageModule } from './office/semester-calendar/
     MoreDetailsModulePopoverPageModule,
     MoreDetailsLecturerPopoverPageModule,
     EditLectureSessionModalPageModule,
-    MoreDetailsSessionPopoverPageModule
+    MoreDetailsSessionPopoverPageModule,
+    AddLectureHallModalPageModule,
+    EditLectureHallModalPageModule
   ],
   providers: [
     StatusBar,
