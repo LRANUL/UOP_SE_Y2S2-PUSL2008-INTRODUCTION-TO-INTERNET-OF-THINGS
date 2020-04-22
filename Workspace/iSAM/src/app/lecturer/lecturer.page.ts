@@ -23,6 +23,13 @@ export class LecturerPage implements OnInit {
   Module: string;
   constructor(private toastController: ToastController,private firestore: AngularFirestore, private firebase: FirebaseService, public loadingController: LoadingController, public navCtrl: NavController) { }
   ngOnInit() {
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+      Activity: 'Online',
+    }, { merge: true });
+    this.firestore.collection('userActivityMonitoring').add({
+      loginDateTime: new Date(),
+      userId: this.firebase.userDetails().uid,
+    })
     var name;
     var faculty;
 
@@ -103,7 +110,9 @@ this.Key = uniquekey.toUpperCase()
 }
 
   async logout() {
-
+    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+      Activity: 'Offline',
+    }, { merge: true });
       this.firebase
         .logoutUser()
         .then(async res => {

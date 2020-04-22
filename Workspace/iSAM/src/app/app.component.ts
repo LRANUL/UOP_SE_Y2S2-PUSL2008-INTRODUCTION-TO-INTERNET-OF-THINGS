@@ -26,7 +26,9 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      this.splashScreen.show();
+     
+
     /* CURRENTLY UNDER DEVELOPMENT, WILL BE USING STUDENT BATCH OR EMAIL FOR NOTICES*/
     //   this.messaging.getToken().then(token => {
     //     console.log(token);

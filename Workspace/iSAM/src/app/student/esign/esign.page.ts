@@ -21,7 +21,8 @@ export class EsignPage implements OnInit {
     Faculty: any;
     Today: any;
     check: void[];
-
+nosession:any;
+signed:any;
     constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
 
     }
@@ -30,17 +31,19 @@ export class EsignPage implements OnInit {
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
             Activity: 'Online',
         }, { merge: true });
-        this.firestore.collection('userActivityMonitoring').doc(this.firebase.userDetails().uid).set({
-            loginDateTime: Date(),
+        this.firestore.collection('userActivityMonitoring').add({
+            loginDateTime: new Date(),
             userId: this.firebase.userDetails().uid,
-            userEmail: this.firebase.userDetails().email,
-        }, { merge: true });
+        })
+        this.fetchdata()
+    }
+
+    fetchdata() {
         var Batch: string
         var Faculty: string
         var LectureDate: string
         var DegreeCode: string
         var ModuleCode: string
-        var Module: string
 
         // Fetch Date to Query
         var checkdate = function (sp) {
@@ -68,52 +71,60 @@ export class EsignPage implements OnInit {
                 // console.log(DegreeCode)
                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
                     // console.log(data)
-                    this.check = data.map(e => {
-                        Module = e.payload.doc.data()['Module']
-                        this.firestore.collection('Attendance/History/' + Module).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
-                            if (doc.exists) {
-                                // console.log(doc.data())
-                                console.log('ALREADY SIGNED')
-                            }
-                            else {
-                                this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
-                                    // console.log(Batch + '' + Faculty + '' + LectureDate)
-                                    this.session = data.map(e => {
-                                        ModuleCode = e.payload.doc.data()['moduleCode'] +"-"+ e.payload.doc.data()['moduleTitle']
-                                        return {
-
-                                            id: e.payload.doc.id,
-                                            SessionCode: e.payload.doc.data()['SessionCode'],
-                                            Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
-                                            Session: e.payload.doc.data()['Session'],
-                                            Date: e.payload.doc.data()['startDateTime'].toDate(),
-                                            Hall: e.payload.doc.data()['lectureHall'],
-                                            Lecturer: e.payload.doc.data()['lecturer'],
-                                        };
-                                    })
-                                    // console.log(this.session);
-
-                                    // console.log(ModuleCode)
-                                    this.firestore.collection('/faculties/' + Faculty + '/lectureSessions/undergraduate/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
-                                        if (doc.exists) {
-                                            // console.log(doc.data());
-                                            this.CloudCode = doc.data().SessionCode
-                                            // console.log(this.CloudCode)
-                                        } else {
-                                            // console.log("There is no document!");
-
-                                        }
-                                    }).catch(function (error) {
-                                        // console.log("There was an error getting your document:", error);
-                                    });
-
+                    if (!doc.exists) {
+                        // console.log('NO SESSION FOR TODAY ')
+                        this.nosession = true;
+                    }
+                    else {
+                        this.nosession = false;
+                        this.check = data.map(e => {
+                            ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
+                            this.firestore.collection('Attendance/History/' + ModuleCode).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+                                if (doc.exists) {
+                                    // console.log(doc.data())
+                                    // console.log('ALREADY SIGNED')
+                                    this.signed = true;
                                 }
-                                )
-                            }
-                        })
-                    });
-                    this.location = true;
-                })
+                                else {
+                                    this.signed = false;
+                                    this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
+                                        // console.log(Batch + '' + Faculty + '' + LectureDate)
+                                        this.session = data.map(e => {
+                                            ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
+                                            return {
+
+                                                id: e.payload.doc.id,
+                                                SessionCode: e.payload.doc.data()['SessionCode'],
+                                                Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
+                                                Session: e.payload.doc.data()['Session'],
+                                                Date: e.payload.doc.data()['startDateTime'].toDate(),
+                                                Hall: e.payload.doc.data()['lectureHall'],
+                                                Lecturer: e.payload.doc.data()['lecturer'],
+                                            };
+                                        })
+                                        // console.log(this.session);
+
+                                        // console.log(ModuleCode)
+                                        this.firestore.collection('/faculties/' + Faculty + '/lectureSessions/undergraduate/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
+                                            if (doc.exists) {
+                                                // console.log(doc.data());
+                                                this.CloudCode = doc.data().SessionCode
+                                                // console.log(this.CloudCode)
+                                            } else {
+                                                // console.log("There is no document!");
+
+                                            }
+                                        }).catch(function (error) {
+                                            // console.log("There was an error getting your document:", error);
+                                        });
+
+                                    })
+                                }
+                            })
+
+                        });
+                        this.location = true;}
+                    })
             } else {
                 // console.log("There is no document!");
 
@@ -128,7 +139,7 @@ export class EsignPage implements OnInit {
         var Faculty: string
         var LectureDate: string
         var DegreeCode: string
-        var Module: string
+        var ModuleCode: string
         if (this.CloudCode == this.SessionCode) {
             // Fetch Date to Query
             var checkdate = function (sp) {
@@ -145,6 +156,7 @@ export class EsignPage implements OnInit {
 
             // Load Module Data from Database  
             LectureDate = checkdate('-');
+            LectureDate = '2020-4-21';
             this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
                 if (doc.exists) {
                     // console.log(doc.data());
@@ -154,29 +166,27 @@ export class EsignPage implements OnInit {
                     this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
                         // console.log(Batch + '' + Faculty + '' + LectureDate)
                         this.session = data.map(e => {
-                            Module = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
+                            ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
                             return {
+
                                 id: e.payload.doc.id,
                                 SessionCode: e.payload.doc.data()['SessionCode'],
-                                Module: e.payload.doc.data()['Module'],
+                                Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
                                 Session: e.payload.doc.data()['Session'],
-                                Date: e.payload.doc.data()['Date'],
-                                Time: e.payload.doc.data()['Time'],
-                                Hall: e.payload.doc.data()['Hall'],
+                                Date: e.payload.doc.data()['startDateTime'].toDate(),
+                                Hall: e.payload.doc.data()['lectureHall'],
+                                Lecturer: e.payload.doc.data()['lecturer'],
                             };
                         })
                         // SENDING to FIRESTORE
-                        this.firebase.userDetails().uid
-                        let record = {};
-                        record['Date'] = Date();
-                        record['' + Module + ''] = firebase.firestore.FieldValue.increment(+1);
-                        record['Email'] = this.firebase.userDetails().email;
-                        this.firebase.sendAttendance(record, this.firebase.userDetails().uid, Module, this.firebase.userDetails().email).then(async resp => {
+                        console.log(ModuleCode)
+                        this.firebase.sendAttendance(ModuleCode, this.firebase.userDetails().email).then(async resp => {
                             const toast = await this.toastController.create({
                                 message: 'Your Attendance has been accepted',
                                 duration: 2000
                             });
                             toast.present();
+                            this.fetchdata();
                         })
                             .catch(async error => {
                                 // console.log(error);
