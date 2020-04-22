@@ -4,6 +4,7 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { ModalController, AlertController, PopoverController } from '@ionic/angular';
 import { EditLectureSessionModalPage } from '../semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.page';
 import { MoreDetailsSessionPopoverPage } from '../semester-calendar/more-details-session-popover/more-details-session-popover.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-lectures',
@@ -82,6 +83,19 @@ export class LecturesPage implements OnInit {
     });
 
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
 
 
 

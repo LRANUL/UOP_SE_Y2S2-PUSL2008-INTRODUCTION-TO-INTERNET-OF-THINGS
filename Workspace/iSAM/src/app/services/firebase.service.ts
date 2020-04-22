@@ -63,7 +63,7 @@ export class FirebaseService {
                         middleName: value.mName,
                         lastName: value.lName
                     },
-                    Email: value.email,
+                    email: value.email,
                     nsbmStudentID: value.sid,
                     degree: value.degree,
                     batch: value.batch,
@@ -77,10 +77,11 @@ export class FirebaseService {
                     },
                     sessionDateTime: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()]
+                        logoutDateTime: [new Date()],
+                        accountActivity: "Offline"
                     },
                     faculty: value.faculty,
-                    status: "active"
+                    accountStatus: "Active"
 
                 })
                 resolve(success);
@@ -95,6 +96,23 @@ export class FirebaseService {
             firebase.auth().signInWithEmailAndPassword(value.email, value.password).then(res => resolve(res), err => reject(err))
         })
     }
+    
+
+    // Verifying entered login credentials after the user has already logged in
+    verifyLoginCredentials(value) {
+        return new Promise<any>((resolve, reject) => {
+            const loginCredentials = firebase.auth.EmailAuthProvider.credential(
+                value.emailAddress,
+                value.password
+            )
+            let currentUser = firebase.auth().currentUser;
+            currentUser.reauthenticateWithCredential(loginCredentials).then(
+                response => resolve(response),
+                error => reject(error)
+            );
+        });
+    }
+
 
     logoutUser() {
         return new Promise((resolve, reject) => {
@@ -209,7 +227,8 @@ export class FirebaseService {
                     },
                     sessionDetails: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()]
+                        logoutDateTime: [new Date()],
+                        accountActivity: "Offline"
                     },
                     status: value.lecturerStatus
                 });

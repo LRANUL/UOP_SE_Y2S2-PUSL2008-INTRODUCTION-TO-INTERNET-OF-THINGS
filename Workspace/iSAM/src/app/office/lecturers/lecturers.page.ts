@@ -7,6 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { MoreDetailsLecturerPopoverPage } from './more-details-lecturer-popover/more-details-lecturer-popover.page';
 import { Router } from '@angular/router';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 
 
@@ -93,6 +94,19 @@ export class LecturersPage implements OnInit {
     });
 
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
   
 
   

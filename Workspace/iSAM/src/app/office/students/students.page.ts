@@ -3,6 +3,7 @@ import { PopoverController, ModalController, AlertController } from '@ionic/angu
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-students',
@@ -40,6 +41,19 @@ export class StudentsPage implements OnInit {
     });
 
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
 
 
   registeredStudents;

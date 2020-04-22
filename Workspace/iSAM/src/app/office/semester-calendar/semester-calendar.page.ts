@@ -6,6 +6,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { EditLectureSessionModalPage } from './edit-lecture-session-modal/edit-lecture-session-modal.page';
 import { MoreDetailsSessionPopoverPage } from './more-details-session-popover/more-details-session-popover.page';
 import { EditLectureSeriesModalPage } from './edit-lecture-series-modal/edit-lecture-series-modal.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-semester-calendar',
@@ -92,8 +93,21 @@ export class SemesterCalendarPage implements OnInit {
       module: new FormControl('', Validators.required)
     });
 
-
   }
+
+  
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
 
   // Retrieving the published batch from the firestore database
   publishedBatches;

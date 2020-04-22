@@ -81,9 +81,31 @@ export class LoginPage implements OnInit {
                 // Checking if logged in user type in a student user
                 this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
-                        this.router.navigate(['student']);
-                        // console.log("Logged In User Type: StudentUser");
-                        // console.log("Record found in student users collection");
+
+                        /* Process of checking account status is ACTIVE or not */
+                        let resgisteredStudentUser = response;
+                        let studentUserAccountStatus;
+
+                        // Retrieving the account status of this student user account
+                        resgisteredStudentUser.forEach(document => {
+                            let firestoreDoc: any = document.payload.doc.data();
+                            studentUserAccountStatus = firestoreDoc.accountStatus;
+                        });
+
+                        // Checking if the student user account is active
+                        if(studentUserAccountStatus == "Active"){
+                            this.router.navigate(['student']);
+                            // console.log("Logged In User Type: Student User");
+                            // console.log("Record found in student users collection");
+                            // console.log("Student User Account is ACTIVE");
+                        }
+                        else{
+                            this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact your specialized faculty program office.");
+                            this.authService.logoutUser();
+                            this.router.navigate(["/login"]);
+                            // console.log("Student User Account is not ACTIVE");
+                        }
+
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
@@ -102,9 +124,31 @@ export class LoginPage implements OnInit {
                 // Checking if logged in user type in a lecturer user
                 this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
-                        this.router.navigate(['lecturer']);
-                        // console.log("Logged In User Type: LecturerUser");
-                        // console.log("Record found in lecturer users collection");
+
+                        /* Process of checking account status is ACTIVE or not */
+                        let resgisteredLecturerUser = response;
+                        let lecturerUserAccountStatus;
+
+                        // Retrieving the account status of this lecturer user account
+                        resgisteredLecturerUser.forEach(document => {
+                            let firestoreDoc: any = document.payload.doc.data();
+                            lecturerUserAccountStatus = firestoreDoc.accountStatus;
+                        });
+
+                        // Checking if the lecturer user account is active
+                        if(lecturerUserAccountStatus == "Active"){
+                            this.router.navigate(['lecturer']);
+                            // console.log("Logged In User Type: Lecturer User");
+                            // console.log("Record found in lecturer users collection");
+                            // console.log("Lecturer User Account is ACTIVE");
+                        }
+                        else{
+                            this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact your specialized faculty program office.");
+                            this.authService.logoutUser();
+                            this.router.navigate(["/login"]);
+                            // console.log("Lecturer User Account is not ACTIVE");
+                        }
+
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
@@ -123,9 +167,31 @@ export class LoginPage implements OnInit {
                 // Checking if logged in user type in a program office user
                 this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
                     if (response.length > 0) {
-                        this.router.navigate(['/office/dashboard']);
-                        // console.log("Logged In User Type: Program Office User");
-                        // console.log("Record found in program office users collection");
+
+                        /* Process of checking account status is ACTIVE or not */
+                        let resgisteredProgramOfficeUser = response;
+                        let programOfficeUserAccountStatus;
+
+                        // Retrieving the account status of this program office user account
+                        resgisteredProgramOfficeUser.forEach(document => {
+                            let firestoreDoc: any = document.payload.doc.data();
+                            programOfficeUserAccountStatus = firestoreDoc.accountStatus;
+                        });
+                        
+                        // Checking if the program office user account is active
+                        if(programOfficeUserAccountStatus == "Active"){
+                            this.router.navigate(['/office/dashboard']);
+                            // console.log("Logged In User Type: Program Office User");
+                            // console.log("Record found in program office users collection");
+                            // console.log("Program Office User Account is ACTIVE");
+                        }
+                        else{
+                            this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact Web Administrator.");
+                            this.authService.logoutUser();
+                            this.router.navigate(["/login"]);
+                            // console.log("Program Office User Account is not ACTIVE");
+                        }
+
 
                         // Setting loading spinner to stop spinning
                         this.loginLoadingSpinner = false;
@@ -226,9 +292,29 @@ export class LoginPage implements OnInit {
             // Checking if logged in user type in a student user
             this.authService.retrieveLoggedInUserDetailsStudent(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
-                    this.router.navigate(['student']);
-                    // console.log("Logged In User Type: StudentUser");
-                    // console.log("Record found in student users collection");
+
+                    /* Process of checking account status is ACTIVE or not */
+                    let resgisteredStudentUser = response;
+                    let studentUserAccountStatus;
+
+                    // Retrieving the account status of this student user account
+                    resgisteredStudentUser.forEach(document => {
+                        let firestoreDoc: any = document.payload.doc.data();
+                        studentUserAccountStatus = firestoreDoc.accountStatus;
+                    });
+
+                    // Checking if the student user account is active
+                    if(studentUserAccountStatus == "Active"){
+                        this.router.navigate(['student']);
+                        // console.log("Logged In User Type: Student User");
+                        // console.log("Record found in student users collection");
+                        // console.log("Student User Account is ACTIVE");
+                    }
+                    else{
+                        this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact your specialized faculty program office.");
+                        // console.log("Student User Account is not ACTIVE");
+                    }
+
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
@@ -244,9 +330,29 @@ export class LoginPage implements OnInit {
             // Checking if logged in user type in a lecturer user
             this.authService.retrieveLoggedInUserDetailsLecturer(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
-                    this.router.navigate(['lecturer']);
-                    // console.log("Logged In User Type: LecturerUser");
-                    // console.log("Record found in lecturer users collection");
+
+                    /* Process of checking account status is ACTIVE or not */
+                    let resgisteredLecturerUser = response;
+                    let lecturerUserAccountStatus;
+
+                    // Retrieving the account status of this lecturer user account
+                    resgisteredLecturerUser.forEach(document => {
+                        let firestoreDoc: any = document.payload.doc.data();
+                        lecturerUserAccountStatus = firestoreDoc.accountStatus;
+                    });
+
+                    // Checking if the lecturer user account is active
+                    if(lecturerUserAccountStatus == "Active"){
+                        this.router.navigate(['lecturer']);
+                        // console.log("Logged In User Type: Lecturer User");
+                        // console.log("Record found in lecturer users collection");
+                        // console.log("Lecturer User Account is ACTIVE");
+                    }
+                    else{
+                        this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact your specialized faculty program office.");
+                        // console.log("Lecturer User Account is not ACTIVE");
+                    }
+
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;
@@ -262,9 +368,29 @@ export class LoginPage implements OnInit {
             // Checking if logged in user type in a program office user
             this.authService.retrieveLoggedInUserDetailsProgramOffice(loggedInUserDetails.uid).subscribe(response => {
                 if (response.length > 0) {
-                    this.router.navigate(['/office/dashboard']);
-                    // console.log("Logged In User Type: Program Office User");
-                    // console.log("Record found in program office users collection");
+
+                    /* Process of checking account status is ACTIVE or not */
+                    let resgisteredProgramOfficeUser = response;
+                    let programOfficeUserAccountStatus;
+
+                    // Retrieving the account status of this program office user account
+                    resgisteredProgramOfficeUser.forEach(document => {
+                        let firestoreDoc: any = document.payload.doc.data();
+                        programOfficeUserAccountStatus = firestoreDoc.accountStatus;
+                    });
+                    
+                    // Checking if the program office user account is active
+                    if(programOfficeUserAccountStatus == "Active"){
+                        this.router.navigate(['/office/dashboard']);
+                        // console.log("Logged In User Type: Program Office User");
+                        // console.log("Record found in program office users collection");
+                        // console.log("Program Office User Account is ACTIVE");
+                    }
+                    else{
+                        this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact Web Administrator.");
+                        // console.log("Program Office User Account is not ACTIVE");
+                    }
+
 
                     // Setting loading spinner to stop spinning
                     this.loginLoadingSpinner = false;

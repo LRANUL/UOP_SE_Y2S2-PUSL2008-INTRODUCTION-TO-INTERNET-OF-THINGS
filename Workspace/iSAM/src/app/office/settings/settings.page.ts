@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-settings',
@@ -19,6 +20,8 @@ export class SettingsPage implements OnInit {
   addLectureSessionStatusFormSection: Boolean = false;
   addUserAccountStatusFormSection: Boolean = false;
   addNoticeCategoryFormSection: Boolean = false;
+  updateDetailsLoginFormSection: Boolean = false;
+  updatePasswordLoginFormSection: Boolean = false;
 
   /* Add Buttons */
   addDegreeProgramButton: Boolean = true;
@@ -37,6 +40,8 @@ export class SettingsPage implements OnInit {
   closeLectureSessionStatusFormButton: Boolean = false;
   closeUserAccountStatusFormButton: Boolean = false;
   closeNoticeCategoryFormButton: Boolean = false;
+  closeUpdateDetailsLoginFormButton: Boolean = false;
+  closeUpdatePasswordLoginFormButton: Boolean = false;
 
   /* Loading Spinners */
   loadingSpinnerDegreeProgram: Boolean = true;
@@ -55,6 +60,8 @@ export class SettingsPage implements OnInit {
   addLectureSessionStatusForm: FormGroup;
   addUserAccountStatusForm: FormGroup;
   addNoticeCategoryForm: FormGroup;
+  updateDetailsLoginForm: FormGroup;
+  updatePasswordLoginForm: FormGroup;
 
   awardingBodyUniversity;
 
@@ -62,7 +69,8 @@ export class SettingsPage implements OnInit {
     private sideMenuPageUserFaculty: SideMenuPage,
     private settingsService: FirebaseService,
     private alertController: AlertController,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -129,7 +137,30 @@ export class SettingsPage implements OnInit {
       description: new FormControl('', Validators.required)
     });
 
+    this.updateDetailsLoginForm = this.formBuilder.group({
+      emailAddress: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    });
+
+    this.updatePasswordLoginForm = this.formBuilder.group({
+      emailAddress: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    });
+
   }
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
 
   // Retrieving published degree programs and their details from the firestore database
   publishedDegreePrograms;
@@ -307,6 +338,73 @@ export class SettingsPage implements OnInit {
     }
   }
 
+  openUpdateDetailsLoginForm(){
+    if(this.updatePasswordLoginFormSection == true){
+      this.updatePasswordLoginFormSection = false;
+      this.closeUpdatePasswordLoginFormButton = false;
+
+      this.updateDetailsLoginFormSection = true;
+      this.closeUpdateDetailsLoginFormButton = true;
+    }
+    else if(this.updateDetailsLoginFormSection == false){
+      this.updateDetailsLoginFormSection = true;
+      this.closeUpdateDetailsLoginFormButton = true;
+    }
+    else if(this.updateDetailsLoginFormSection == true){
+      this.updateDetailsLoginFormSection = false;
+      this.closeUpdateDetailsLoginFormButton = false;
+    }
+  }
+
+  openUpdatePasswordLoginForm(){
+    if(this.updateDetailsLoginFormSection == true){
+      this.updateDetailsLoginFormSection = false;
+      this.closeUpdateDetailsLoginFormButton = false;
+
+      this.updatePasswordLoginFormSection = true;
+      this.closeUpdatePasswordLoginFormButton = true;
+    }
+    else if(this.updatePasswordLoginFormSection == false){
+      this.updatePasswordLoginFormSection = true;
+      this.closeUpdatePasswordLoginFormButton = true;
+    }
+    else if (this.updatePasswordLoginFormSection == true){
+      this.updatePasswordLoginFormSection = false;
+      this.closeUpdatePasswordLoginFormButton = false;
+    }
+  }
+
+
+  // Process of updating user account details
+  doUpdateDetails(value){
+
+    // Verifying entered login credentials
+    this.settingsService.verifyLoginCredentials(value).then(async response => {
+      
+
+
+    }, error => {
+      console.log("Error during login credential verification: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
+    });
+
+
+  }
+
+  // Process of update user account password
+  doUpdatePassword(value){
+
+    // Verifying entered login credentials
+    this.settingsService.verifyLoginCredentials(value).then(async response => {
+      
+      
+
+    }, error => {
+      console.log("Error during login credential verification: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
+    });
+
+  }
 
 
   publishedAwardingBodyUniversityOfDegree;

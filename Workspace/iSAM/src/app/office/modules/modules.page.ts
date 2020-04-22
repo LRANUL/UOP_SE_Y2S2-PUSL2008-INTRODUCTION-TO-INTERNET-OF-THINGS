@@ -7,6 +7,7 @@ import { DegreeProgramsModalPage } from '../commonModals/degree-programs-modal/d
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { EditModuleModalPage } from './edit-module-modal/edit-module-modal.page';
 import { MoreDetailsModulePopoverPage } from './more-details-module-popover/more-details-module-popover.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-modules',
@@ -69,320 +70,336 @@ export class ModulesPage implements OnInit {
     });
   }
 
- // Retrieving the published module credits weighting and their details from the firestore database
- publishedModuleCreditsWeighting;
 
- retrievePublishedModuleCreditsWeightingActive = () => {
-   this.modulesService.retrievePublishedModuleCreditsWeightingActive().subscribe(response => (this.publishedModuleCreditsWeighting = response));
- }
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+  
 
 
- // Retrieving the published degree programs and their details from the firestore database
- publishedDegreePrograms;
+  // Retrieving the published module credits weighting and their details from the firestore database
+  publishedModuleCreditsWeighting;
 
- publishedDegreeProgramDegree;
- publishedDegreeProgramAwardingBodyUniversity;
- publishedDegreeProgramNoOfYears;
- publishedDegreeProgramNoOfSemestersAnnaully;
+  retrievePublishedModuleCreditsWeightingActive = () => {
+    this.modulesService.retrievePublishedModuleCreditsWeightingActive().subscribe(response => (this.publishedModuleCreditsWeighting = response));
+  }
 
- retrievePublishedDegreeProgram = () => {
-   this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreePrograms = 
+
+  // Retrieving the published degree programs and their details from the firestore database
+  publishedDegreePrograms;
+
+  publishedDegreeProgramDegree;
+  publishedDegreeProgramAwardingBodyUniversity;
+  publishedDegreeProgramNoOfYears;
+  publishedDegreeProgramNoOfSemestersAnnaully;
+
+  retrievePublishedDegreeProgram = () => {
+    this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreePrograms = 
       response.forEach(document => {
-       let firestoreDoc: any = document.payload.doc.data();
-       this.publishedDegreeProgramDegree = firestoreDoc.degree;
-       this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-       this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
-       this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
-     })
-   ));
- }
+        let firestoreDoc: any = document.payload.doc.data();
+        this.publishedDegreeProgramDegree = firestoreDoc.degree;
+        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
+        this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
+      })
+    ));
+  }
 
- // Implementation of generating an array for the count of, no of years and no of semesters
- convertToArray(n: number): any[] {
-   return Array(n);
- }
-
-
- // Retrieving registered lecturer users and their details from the firestore database
- registeredLecturerUsers;
-
- retrieveRegisteredLecturers = () => {
-   this.modulesService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturerUsers = response));
- }
+  // Implementation of generating an array for the count of, no of years and no of semesters
+  convertToArray(n: number): any[] {
+    return Array(n);
+  }
 
 
- // Retrieving published lecture halls and their details from the firestore database
- publishedLectureHalls;
+  // Retrieving registered lecturer users and their details from the firestore database
+  registeredLecturerUsers;
 
- retrievePublishedLectureHalls = () => {
-   this.modulesService.retrievePublishedLectureHalls(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedLectureHalls = response))
- }
-
-
-
- // Declaring variable to store the string value of true or false for the search registered modules button
- searchRegisteredModuleButtonDisabled: string;
-
- // Checking if user entered a value to module code field (Search Registered Module section)
- validateModuleCodeInput(evModuleCode: any){
-   
-   // Assigning entered value into this variable
-   let moduleCodeValue = evModuleCode.target.value;
-
-   // If field is not empty, search registered modules button will be enabled
-   if(moduleCodeValue != ""){
-     this.searchRegisteredModuleButtonDisabled = "false";
-   }// If field id empty, search registered modules button will be disabled
-   else if (moduleCodeValue == ""){
-     this.searchRegisteredModuleButtonDisabled = "true";
-   }
- }
-
- // Checking if user entered a value to module title field (Search Registered Module section)
- validateModuleTitleInput(evModuleTitle: any){
- 
-   // Assigning entered value into this variable
-   let moduleTitleValue = evModuleTitle.target.value;
-
-   // If field is not empty, search registered modules button will be enabled
-   if(moduleTitleValue != ""){
-     this.searchRegisteredModuleButtonDisabled = "false";
-   }// If field id empty, search registered modules button will be disabled
-   else if (moduleTitleValue == ""){
-     this.searchRegisteredModuleButtonDisabled = "true";
-   }
- }
-
- // Checking if user entered a value to degree program field (Search Registered Module section)
- validateDegreeProgramSelect(evDegreeProgram: any){
-
-   // Assigning entered value into this variable
-   let degreeProgramValue = evDegreeProgram.target.value;
-
-   // If field is not empty, search registered modules button will be enabled
-   if(degreeProgramValue != ""){
-     this.searchRegisteredModuleButtonDisabled = "false";
-   }// If field id empty, search registered modules button will be disabled
-   else if (degreeProgramValue == ""){
-     this.searchRegisteredModuleButtonDisabled = "true";
-   }
- }
+  retrieveRegisteredLecturers = () => {
+    this.modulesService.retrieveRegisteredLecturers().subscribe(response => (this.registeredLecturerUsers = response));
+  }
 
 
- // Alert Box Implementation
- async alertNotice ( title: string, content: string ) {
+  // Retrieving published lecture halls and their details from the firestore database
+  publishedLectureHalls;
 
-   const alert = await this.alertController.create({
-     header: title,
-     message: content,
-     buttons: ['OK']
-   });
-
-   await alert.present();
-
- }
+  retrievePublishedLectureHalls = () => {
+    this.modulesService.retrievePublishedLectureHalls(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedLectureHalls = response))
+  }
 
 
- registeredModules;
 
- // Used to store the user selected awarding body university, which is identified by the selected degree
- userDataAwardingBodyUniversity;
+  // Declaring variable to store the string value of true or false for the search registered modules button
+  searchRegisteredModuleButtonDisabled: string;
 
- doSearchRegisteredModule(value){
+  // Checking if user entered a value to module code field (Search Registered Module section)
+  validateModuleCodeInput(evModuleCode: any){
+    
+    // Assigning entered value into this variable
+    let moduleCodeValue = evModuleCode.target.value;
 
-   // Setting page load search module text to false
-   this.pageLoadSearchModuleText = false;
+    // If field is not empty, search registered modules button will be enabled
+    if(moduleCodeValue != ""){
+      this.searchRegisteredModuleButtonDisabled = "false";
+    }// If field id empty, search registered modules button will be disabled
+    else if (moduleCodeValue == ""){
+      this.searchRegisteredModuleButtonDisabled = "true";
+    }
+  }
 
-   // Setting loading spinner as true until necessary content is loaded
-   this.loadingSpinnerSearchRegisteredModule = true;
+  // Checking if user entered a value to module title field (Search Registered Module section)
+  validateModuleTitleInput(evModuleTitle: any){
 
-   // Depending on the user's input the necessary reponse and operation is taken
-   if(value.moduleCode != "" && value.moduleTitle != "" && value.degreeProgram != ""){
+    // Assigning entered value into this variable
+    let moduleTitleValue = evModuleTitle.target.value;
 
-     // Alert notice with relavant message
-     this.alertNotice("ALERT", "You have entered a Module Code, Title and selected a Degree Program. Module search will proceed with the Module Code");
+    // If field is not empty, search registered modules button will be enabled
+    if(moduleTitleValue != ""){
+      this.searchRegisteredModuleButtonDisabled = "false";
+    }// If field id empty, search registered modules button will be disabled
+    else if (moduleTitleValue == ""){
+      this.searchRegisteredModuleButtonDisabled = "true";
+    }
+  }
 
-     // Retrieving registered modules with the search value of moduleCode
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+  // Checking if user entered a value to degree program field (Search Registered Module section)
+  validateDegreeProgramSelect(evDegreeProgram: any){
 
-     // Assigning loading spinner to false upon the necessary content has loaded
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+    // Assigning entered value into this variable
+    let degreeProgramValue = evDegreeProgram.target.value;
 
-   }
-   else if(value.moduleCode != "" && value.moduleTitle){
+    // If field is not empty, search registered modules button will be enabled
+    if(degreeProgramValue != ""){
+      this.searchRegisteredModuleButtonDisabled = "false";
+    }// If field id empty, search registered modules button will be disabled
+    else if (degreeProgramValue == ""){
+      this.searchRegisteredModuleButtonDisabled = "true";
+    }
+  }
 
-     // Alert notice with relavant message
-     this.alertNotice("ALERT", "You have entered a Module Code and Title. Module search will proceed with the Module Code");
 
-     // Retrieving registered modules with the search value of moduleCode
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
-     
-     // Assigning loading spinner to false upon the necessary content has loaded
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
-   
-   }
-   else if(value.moduleTitle != "" && value.degreeProgram != ""){
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
 
-     // Alert notice with relavant message
-     this.alertNotice("ALERT", "You have entered a Module Title and selected a Degree Program. Module search will proceed with the Module Title");
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
 
-     // Retrieving registered modules with the search value of moduleTitle
-     this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
-     
-     // Assigning loading spinner to false upon the necessary content has loaded
-     this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+    await alert.present();
 
-   }
-   else if(value.moduleCode != "" && value.degreeProgram != ""){
+  }
 
-     // Alert notice with relavant message
-     this.alertNotice("ALERT", "You have entered a Module Code and selected a Degree Program. Module search will proceed with the Module Code");
 
-     // Retrieving registered modules with the search value of moduleCode
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
-     
-     // Assigning loading spinner to false upon the necessary content has loaded
-     this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+  registeredModules;
 
-   }
-   else if(value.moduleCode != "" || value.moduleTitle != "" || value.degreeProgram != ""){
-   
-     if(value.moduleCode != ""){
+  // Used to store the user selected awarding body university, which is identified by the selected degree
+  userDataAwardingBodyUniversity;
 
-       // Retrieving registered modules with the search value of moduleCode
-       this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
-       
-       // Assigning loading spinner to false upon the necessary content has loaded
-       this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+  doSearchRegisteredModule(value){
 
-     }
-     if(value.moduleTitle != ""){
+    // Setting page load search module text to false
+    this.pageLoadSearchModuleText = false;
 
-       // Retrieving registered modules with the search value of moduleTitle
-       this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
-       
-       // Assigning loading spinner to false upon the necessary content has loaded
-       this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+    // Setting loading spinner as true until necessary content is loaded
+    this.loadingSpinnerSearchRegisteredModule = true;
 
-     }
-     if(value.degreeProgram != ""){
+    // Depending on the user's input the necessary reponse and operation is taken
+    if(value.moduleCode != "" && value.moduleTitle != "" && value.degreeProgram != ""){
 
-       // Identifying the awardingBodyUniversity from the user selected degree
-       if(value.degreeProgram == this.publishedDegreeProgramDegree){
-         this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-       }
+      // Alert notice with relavant message
+      this.alertNotice("ALERT", "You have entered a Module Code, Title and selected a Degree Program. Module search will proceed with the Module Code");
 
-       // Retrieving registered modules with the search value of degreeProgram
-       this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(response => (this.registeredModules = response));
-       
-       // Assigning loading spinner to false upon the necessary content has loaded
-       this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+      // Retrieving registered modules with the search value of moduleCode
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
 
-     }
+      // Assigning loading spinner to false upon the necessary content has loaded
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
-   }
+    }
+    else if(value.moduleCode != "" && value.moduleTitle){
 
- }
+      // Alert notice with relavant message
+      this.alertNotice("ALERT", "You have entered a Module Code and Title. Module search will proceed with the Module Code");
 
- 
+      // Retrieving registered modules with the search value of moduleCode
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+      
+      // Assigning loading spinner to false upon the necessary content has loaded
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+    
+    }
+    else if(value.moduleTitle != "" && value.degreeProgram != ""){
+
+      // Alert notice with relavant message
+      this.alertNotice("ALERT", "You have entered a Module Title and selected a Degree Program. Module search will proceed with the Module Title");
+
+      // Retrieving registered modules with the search value of moduleTitle
+      this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
+      
+      // Assigning loading spinner to false upon the necessary content has loaded
+      this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+
+    }
+    else if(value.moduleCode != "" && value.degreeProgram != ""){
+
+      // Alert notice with relavant message
+      this.alertNotice("ALERT", "You have entered a Module Code and selected a Degree Program. Module search will proceed with the Module Code");
+
+      // Retrieving registered modules with the search value of moduleCode
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+      
+      // Assigning loading spinner to false upon the necessary content has loaded
+      this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+
+    }
+    else if(value.moduleCode != "" || value.moduleTitle != "" || value.degreeProgram != ""){
+    
+      if(value.moduleCode != ""){
+
+        // Retrieving registered modules with the search value of moduleCode
+        this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(response => (this.registeredModules = response));
+        
+        // Assigning loading spinner to false upon the necessary content has loaded
+        this.modulesService.retrieveRegisterdModulesModuleCode(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleCode).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+
+      }
+      if(value.moduleTitle != ""){
+
+        // Retrieving registered modules with the search value of moduleTitle
+        this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(response => (this.registeredModules = response));
+        
+        // Assigning loading spinner to false upon the necessary content has loaded
+        this.modulesService.retrieveRegisterdModulesModuleTitle(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.moduleTitle).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+
+      }
+      if(value.degreeProgram != ""){
+
+        // Identifying the awardingBodyUniversity from the user selected degree
+        if(value.degreeProgram == this.publishedDegreeProgramDegree){
+          this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
+        }
+
+        // Retrieving registered modules with the search value of degreeProgram
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(response => (this.registeredModules = response));
+        
+        // Assigning loading spinner to false upon the necessary content has loaded
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+
+      }
+
+    }
+
+  }
+
+
 
 
   // Opening more details module popover
   async moreDetailsRegisteredModule(ev: Event, value){
-   const moreDetailsModulePopover = await this.popoverController.create({
-     component: MoreDetailsModulePopoverPage,
-     componentProps: {
-       moduleDocId: value.payload.doc.id,
-       assignedLecturer: value.payload.doc.data().assignedLecturer,
-       assignedLectureHall: value.payload.doc.data().assignedLectureHall
-     },
-     event: ev
-   });
+    const moreDetailsModulePopover = await this.popoverController.create({
+      component: MoreDetailsModulePopoverPage,
+      componentProps: {
+        moduleDocId: value.payload.doc.id,
+        assignedLecturer: value.payload.doc.data().assignedLecturer,
+        assignedLectureHall: value.payload.doc.data().assignedLectureHall
+      },
+      event: ev
+    });
 
-   moreDetailsModulePopover.present();
- }
-
-
- // Opening edit module modal 
- async editRegisteredModule(value){
-   const editModuleModal = await this.modalController.create({
-     component: EditModuleModalPage,
-     // Passing values to the modal using 'componentProps'
-     componentProps: {
-       moduleDocId: value.payload.doc.id,
-       moduleCode: value.payload.doc.data().moduleCode,
-       moduleTitle: value.payload.doc.data().moduleTitle,
-       moduleCreditsWeighting: value.payload.doc.data().creditsWeighting,
-       moduleDegree: value.payload.doc.data().degree,
-       moduleAwardingBodyUniversity: value.payload.doc.data().awardingBodyUniversity,
-       moduleAcademicPeriodYear: value.payload.doc.data().academicPeriod.academicYear,
-       moduleAcademicPeriodSemester: value.payload.doc.data().academicPeriod.academicSemester,
-       moduleModuleLeader: value.payload.doc.data().moduleLeader,
-       moduleAssignedLecturer: value.payload.doc.data().assignedLecturer,
-       moduleAssignedLectureHall: value.payload.doc.data().assignedLectureHall,
-       userFaculty: this.sideMenuPageUserFaculty.passLoggedInUserFaculty()
-     },
-     // Disabling modal closing from any outside clicks
-     backdropDismiss: false
-   });
-   editModuleModal.present();
- }
+    moreDetailsModulePopover.present();
+  }
 
 
-
-
- // Confirm Box Implementation (Remove registered module process)
- async removeRegisteredModule ( title: string, content: string, DocId) {
-
-   const alert = await this.alertController.create({
-     header: title,
-     message: content,
-     buttons: [
-
-       {
-         text: 'Cancel',
-         role: 'cancel',
-         handler: () => {
-           console.log("Alert Box: Remove Registered Module Request Denied");
-         }
-       },
-       {
-         text: 'Continue',
-         handler: () => {
-           console.log("Alert Box: Remove Registered Module Request Accepted");
-
-           // Calling function to remove lecture session
-           this.modulesService.removeRegisteredModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), DocId);
-
-         }
-       }
-
-     ]
-   });
-
-   await alert.present();
-
- }
-
-
- 
+  // Opening edit module modal 
+  async editRegisteredModule(value){
+    const editModuleModal = await this.modalController.create({
+      component: EditModuleModalPage,
+      // Passing values to the modal using 'componentProps'
+      componentProps: {
+        moduleDocId: value.payload.doc.id,
+        moduleCode: value.payload.doc.data().moduleCode,
+        moduleTitle: value.payload.doc.data().moduleTitle,
+        moduleCreditsWeighting: value.payload.doc.data().creditsWeighting,
+        moduleDegree: value.payload.doc.data().degree,
+        moduleAwardingBodyUniversity: value.payload.doc.data().awardingBodyUniversity,
+        moduleAcademicPeriodYear: value.payload.doc.data().academicPeriod.academicYear,
+        moduleAcademicPeriodSemester: value.payload.doc.data().academicPeriod.academicSemester,
+        moduleModuleLeader: value.payload.doc.data().moduleLeader,
+        moduleAssignedLecturer: value.payload.doc.data().assignedLecturer,
+        moduleAssignedLectureHall: value.payload.doc.data().assignedLectureHall,
+        userFaculty: this.sideMenuPageUserFaculty.passLoggedInUserFaculty()
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editModuleModal.present();
+  }
 
 
 
- // Function for the process of searching modules
- doRegisterModule(value){
 
-   // Identifying the awardingBodyUniversity from the user selected degree
-   if(value.degreeProgram == this.publishedDegreeProgramDegree){
-     this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-   }
+  // Confirm Box Implementation (Remove registered module process)
+  async removeRegisteredModule ( title: string, content: string, DocId) {
 
-   // Calling the function to add the details into firestore database by passing the necessary value.
-   this.modulesService.registerModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.userDataAwardingBodyUniversity);
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
 
-   this.alertNotice("Module Registered", "Module has been registered.");
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Remove Registered Module Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Remove Registered Module Request Accepted");
 
- }
+            // Calling function to remove lecture session
+            this.modulesService.removeRegisteredModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), DocId);
+
+          }
+        }
+
+      ]
+    });
+
+    await alert.present();
+
+  }
+
+
+
+
+
+
+  // Function for the process of searching modules
+  doRegisterModule(value){
+
+    // Identifying the awardingBodyUniversity from the user selected degree
+    if(value.degreeProgram == this.publishedDegreeProgramDegree){
+      this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
+    }
+
+    // Calling the function to add the details into firestore database by passing the necessary value.
+    this.modulesService.registerModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.userDataAwardingBodyUniversity);
+
+    this.alertNotice("Module Registered", "Module has been registered.");
+
+  }
 
 
 

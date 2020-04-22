@@ -120,7 +120,6 @@ export class DashboardPage implements OnInit {
       },
       event: ev
     });
-
     moreDetailsLectureSessionPopover.present();
   }
 

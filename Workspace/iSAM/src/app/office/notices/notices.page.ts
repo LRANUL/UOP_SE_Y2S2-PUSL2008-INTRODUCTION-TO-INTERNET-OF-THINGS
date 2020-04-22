@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, PopoverController } from '@ionic/angular';
 import { SideMenuPage } from '../side-menu/side-menu.page';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-notices',
@@ -46,6 +47,7 @@ export class NoticesPage implements OnInit {
     private noticesService: FirebaseService,
     private alertController: AlertController,
     private sideMenuPageUserFaculty: SideMenuPage,
+    private popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -106,8 +108,22 @@ export class NoticesPage implements OnInit {
       ]))
     });
     
-
   }
+
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+
 
   // Retrieving registered modules from the firestore database
   registeredModules;

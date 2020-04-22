@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { SideMenuPage } from '../side-menu/side-menu.page';
+import { PopoverController } from '@ionic/angular';
+import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +15,8 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private profileService: FirebaseService,
-    private sideMenuPageUserFaculty: SideMenuPage
+    private sideMenuPageUserFaculty: SideMenuPage,
+    private popoverController: PopoverController
   ) { }
 
   ngOnInit() {
@@ -21,6 +24,21 @@ export class ProfilePage implements OnInit {
     this.retrieveLoggedInUserDetailsFirestore();
 
   }
+
+
+  // Opening notifications popover
+  async openNotificationPopover(ev: Event){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: NotificationsPopoverPage,
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
+  }
+
+
 
   programOfficeUserDetails;
   retrieveLoggedInUserDetailsFirestore = () =>

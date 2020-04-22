@@ -9,51 +9,39 @@
 
     
     <ion-title style="position: absolute;
-                      top: 40%;">Settings</ion-title>
+                      top: 40%;">Dashboard</ion-title>
 
     <!-- Header Contents Section -->
     <div style="position: absolute;
-                right: 25px;
+                right: 5px;
                 top: 8px;">
       <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
-      <div>
-        <button ion-button style="width: 100px;
-                                  height: 45px;
-                                  background-color: white;">
+
+      <ion-button fill="clear" color="dark" style="width: 100px;
+                                                  height: 45px;
+                                                  background-color: white;" (click)="openNotificationPopover($event)">
 
         <!-- Notification Bell Icon -->
         <div style="height: 42px;
-                    width: 42px;
-                    border-radius: 5px;
-                    position: absolute;
-                    top: 3px;
-                    left: 10px;"> 
+                  width: 42px;"> 
           <ion-icon name="notifications-outline" style="font-size: 35px;
                                                         position: absolute;
                                                         top: 5px;
                                                         left: 0px;"></ion-icon>
-      </div>
+        </div>
 
-      <!-- Unread Notifications Count -->
-      <div style="position: absolute;
-                top: 5px;
-                left: 40px;">
-        <ion-label style="color: red;">
-          10
-        </ion-label>
-      </div>
+          <!-- Arrow Icon -->
+        <div style="position: absolute;
+                    left: 50px;
+                    top: 10px;
+                    font-size: 26px;">
+          <ion-icon name="arrow-down-outline"></ion-icon>
+        </div>
+        
+      </ion-button>
 
-        <!-- Arrow Icon -->
-      <div style="position: absolute;
-                  top: 13px;
-                  left: 70px;
-                  font-size: 26px;">
-        <ion-icon name="arrow-down-outline"></ion-icon>
-      </div>
-
-      </button>
     </div>
-  </div>
+
 
 
   </ion-toolbar>
@@ -1285,17 +1273,132 @@
             <ion-grid>
               <ion-row>
                 <ion-col>
-                  <ion-button color="medium" expand="block" style="height: 50px;">
+                  <ion-button color="medium" expand="block" style="height: 50px;" (click)="openUpdateDetailsLoginForm()">
                     Update Details
                   </ion-button>
                 </ion-col>
                 <ion-col>
-                  <ion-button color="medium" expand="block" style="height: 50px;">
+                  <ion-button color="medium" expand="block" style="height: 50px;" (click)="openUpdatePasswordLoginForm()">
                     Update Password
                   </ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
+
+            <!-- Update Details Login Credentials Form -->
+            <ion-button color="danger" style="position: relative;
+                                              left: 5%;
+                                              top: 30px;
+                                              transform: translateX(-10%);" (click)="openUpdateDetailsLoginForm()" *ngIf="closeUpdateDetailsLoginFormButton">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+
+            <div style="border: #ccc solid 1px;
+                        border-radius: 5px;
+                        margin: 30px;
+                        padding: 20px;" *ngIf="updateDetailsLoginFormSection">
+              <ion-label style="font-size: 18px;">
+                Enter Login Credentials
+              </ion-label>
+
+              <form [formGroup]="updateDetailsLoginForm" (ngSubmit)="doUpdateDetails(updateDetailsLoginForm.value)">
+                <ion-grid style="margin-top: 10px;">
+                  <ion-row>
+                    <ion-col size="4">
+                      <ion-label class="settingsAddFormLabel">
+                        <b>Email Address</b>
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-item>
+                        <ion-input type="text" clearInput placeholder="Enter Email Address" formControlName="emailAddress"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="4">
+                      <ion-label class="settingsAddFormLabel">
+                        <b>Password</b>
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-item>
+                        <ion-input type="password" clearInput placeholder="Enter Password" formControlName="password"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row style="margin-top: 20px;">
+                    <ion-col>
+                      <ion-button expand="block" style="height: 50px;" type="submit" [disabled]="!updateDetailsLoginForm.valid"> 
+                        <ion-icon name="shield-checkmark-outline"></ion-icon>
+                        <ion-label style="color: white;
+                                          margin-left: 5px;">
+                          VERIFY
+                        </ion-label>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </form>
+            </div>
+
+
+            <!-- Update Password Login Credentials Form -->
+            <ion-button color="danger" style="position: relative;
+                                              left: 90%;
+                                              top: 30px;
+                                              transform: translateX(-10%);" (click)="openUpdatePasswordLoginForm()" *ngIf="closeUpdatePasswordLoginFormButton">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+
+            <div style="border: #ccc solid 1px;
+                        border-radius: 5px;
+                        margin: 30px;
+                        padding: 20px;" *ngIf="updatePasswordLoginFormSection">
+              <ion-label style="font-size: 18px;">
+                Enter Login Credentials
+              </ion-label>
+
+              <form [formGroup]="updatePasswordLoginForm" (ngSubmit)="doUpdatePassword(updatePasswordLoginForm.value)">
+                <ion-grid style="margin-top: 10px;">
+                  <ion-row>
+                    <ion-col size="4">
+                      <ion-label class="settingsAddFormLabel">
+                        <b>Email Address</b>
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-item>
+                        <ion-input type="text" clearInput placeholder="Enter Email Address" formControlName="emailAddress"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="4">
+                      <ion-label class="settingsAddFormLabel">
+                        <b>Password</b>
+                      </ion-label>
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-item>
+                        <ion-input type="password" clearInput placeholder="Enter Password" formControlName="password"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row style="margin-top: 20px;">
+                    <ion-col>
+                      <ion-button expand="block" style="height: 50px;" type="submit" [disabled]="!updatePasswordLoginForm.valid"> 
+                        <ion-icon name="shield-checkmark-outline"></ion-icon>
+                        <ion-label style="color: white;
+                                          margin-left: 5px;">
+                          VERIFY
+                        </ion-label>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </form>
+            </div>
 
           </ion-card-content>
         </ion-card>
