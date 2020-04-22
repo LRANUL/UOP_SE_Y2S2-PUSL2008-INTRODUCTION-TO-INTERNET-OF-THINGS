@@ -1,6 +1,5 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { MapsAPILoader } from '@agm/core';
-import { Geofence } from '@ionic-native/geofence/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -21,7 +20,6 @@ import { MoreDetailsModulePopoverPageModule } from './office/modules/more-detail
 import { EditModuleModalPageModule } from './office/modules/edit-module-modal/edit-module-modal.module';
 import { MoreDetailsLecturerPopoverPageModule } from './office/lecturers/more-details-lecturer-popover/more-details-lecturer-popover.module';
 import { AngularFireDatabase } from '@angular/fire/database/';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -57,14 +55,12 @@ import { EditLectureSeriesModalPageModule } from './office/semester-calendar/edi
     StatusBar,
     SplashScreen,
     AngularFirestore,
-    Geofence,
     HttpClient,
     AngularFireModule,
     AngularFireDatabase,
     AngularFireMessagingModule,
     FormsModule,
     ReactiveFormsModule,
-    FCM,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

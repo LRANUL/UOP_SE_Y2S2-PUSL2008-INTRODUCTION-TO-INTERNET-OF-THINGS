@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">iSAM</string>
+    <string name="title_activity_main">iSAM</string>
+    <string name="package_name">isam.rpls.com</string>
+    <string name="custom_url_scheme">isam.rpls.com</string>
+</resources>

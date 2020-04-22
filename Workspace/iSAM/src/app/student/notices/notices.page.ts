@@ -36,7 +36,7 @@ export class NoticesPage implements OnInit {
         var DegreeCode: string
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
             if (doc.exists) {
-                console.log(doc.data());
+                // console.log(doc.data());
                 Batch = doc.data().batch.toString()
                 Faculty = doc.data().faculty
                 DegreeCode = doc.data().DegreeCode
@@ -58,23 +58,23 @@ export class NoticesPage implements OnInit {
 
     goSettings() {
         this.router.navigate(['Student/Settings']);
-        console.log('settings');
+        // console.log('settings');
     }
     goeSign() {
         this.router.navigate(['Student/eSign']);
-        console.log('Home');
+        // console.log('Home');
     }
     goECForm() {
         this.router.navigate(['Student/EC-Form']);
-        console.log('EC-Form');
+        // console.log('EC-Form');
     }
     goAttendence() {
         this.router.navigate(['Student/Attendence']);
-        console.log('Attendence');
+        // console.log('Attendence');
     }
     goNotices() {
         this.router.navigate(['Student/Notices']);
-        console.log('settings');
+        // console.log('settings');
     }
 
 }

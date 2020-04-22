@@ -3,11 +3,12 @@ import {Component, OnInit} from '@angular/core';
 import {MenuController, NavController, LoadingController, AlertController, ToastController} from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore/';
 
 @Component({selector: 'app-settings', templateUrl: './settings.page.html', styleUrls: ['./settings.page.scss']})
 export class SettingsPage implements OnInit {
     userEmail: string;
-    constructor(
+    constructor(private firestore: AngularFirestore,
         private authService: FirebaseService,
         public loadingController: LoadingController,
         public alertController: AlertController,
@@ -40,7 +41,7 @@ export class SettingsPage implements OnInit {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        console.log('Confirm Cancel');
+                        // console.log('Confirm Cancel');
                     }
                 },
                 {
@@ -49,7 +50,7 @@ export class SettingsPage implements OnInit {
                         var user = firebase.auth().currentUser;
                         var newPassword = alertData.password;
                         user.updatePassword(newPassword).then(async function () {
-                            console.log('Password Updated')
+                            // console.log('Password Updated')
 
                         }
                         ).catch(function (error) {
@@ -69,11 +70,13 @@ export class SettingsPage implements OnInit {
     }
 
     async logout() {
-
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.authService.userDetails().uid).set({
+            Activity: 'Offline',
+        }, { merge: true });
         this.authService
             .logoutUser()
             .then(async res => {
-                console.log(res);
+                // console.log(res);
                 const loading = await this.loadingController.create({
                     message: 'Logging out...',
                     duration: 2000
@@ -81,33 +84,33 @@ export class SettingsPage implements OnInit {
                 await loading.present();
 
                 const { role, data } = await loading.onDidDismiss();
-                console.log('Loading dismissed!');
+                // console.log('Loading dismissed!');
 
                 this.navCtrl.navigateBack("");
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
     goSettings() {
         this.router.navigate(['Student/Settings']);
-        console.log('settings');
+        // console.log('settings');
     }
     goeSign() {
         this.router.navigate(['Student/eSign']);
-        console.log('Home');
+        // console.log('Home');
     }
     goECForm() {
         this.router.navigate(['Student/EC-Form']);
-        console.log('EC-Form');
+        // console.log('EC-Form');
     }
     goAttendence() {
         this.router.navigate(['Student/Attendence']);
-        console.log('Attendence');
+        // console.log('Attendence');
     }
     goNotices() {
         this.router.navigate(['Student/Notices']);
-        console.log('settings');
+        // console.log('settings');
     }
 
 }

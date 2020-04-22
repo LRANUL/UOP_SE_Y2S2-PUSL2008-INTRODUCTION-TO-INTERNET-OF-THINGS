@@ -1,7 +1,6 @@
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { NavController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { Geofence } from '@ionic-native/geofence/ngx';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore/';
@@ -23,11 +22,19 @@ export class EsignPage implements OnInit {
     Today: any;
     check: void[];
 
-    constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private geofence: Geofence, private toastController: ToastController) {
+    constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
 
     }
 
     async ngOnInit() {
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+            Activity: 'Online',
+        }, { merge: true });
+        this.firestore.collection('userActivityMonitoring').doc(this.firebase.userDetails().uid).set({
+            loginDateTime: Date(),
+            userId: this.firebase.userDetails().uid,
+            userEmail: this.firebase.userDetails().email,
+        }, { merge: true });
         var Batch: string
         var Faculty: string
         var LectureDate: string
@@ -51,26 +58,26 @@ export class EsignPage implements OnInit {
         // Load Module Data from Database  
         LectureDate = checkdate('-');
         LectureDate = '2020-4-21';
-        console.log(LectureDate)
+        // console.log(LectureDate)
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
             if (doc.exists) {
-                console.log(doc.data());
+                // console.log(doc.data());
                 Batch = doc.data().batch.toString()
                 Faculty = doc.data().faculty
                 DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity
-                console.log(DegreeCode)
+                // console.log(DegreeCode)
                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
-                    console.log(data)
+                    // console.log(data)
                     this.check = data.map(e => {
                         Module = e.payload.doc.data()['Module']
                         this.firestore.collection('Attendance/History/' + Module).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
                             if (doc.exists) {
-                                console.log(doc.data())
+                                // console.log(doc.data())
                                 console.log('ALREADY SIGNED')
                             }
                             else {
                                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
-                                    console.log(Batch + '' + Faculty + '' + LectureDate)
+                                    // console.log(Batch + '' + Faculty + '' + LectureDate)
                                     this.session = data.map(e => {
                                         ModuleCode = e.payload.doc.data()['moduleCode'] +"-"+ e.payload.doc.data()['moduleTitle']
                                         return {
@@ -81,23 +88,23 @@ export class EsignPage implements OnInit {
                                             Session: e.payload.doc.data()['Session'],
                                             Date: e.payload.doc.data()['startDateTime'].toDate(),
                                             Hall: e.payload.doc.data()['lectureHall'],
-                                            Lecturer: e.payload.doc.data()['lecture'],
+                                            Lecturer: e.payload.doc.data()['lecturer'],
                                         };
                                     })
-                                    console.log(this.session);
+                                    // console.log(this.session);
 
-                                    console.log(ModuleCode)
+                                    // console.log(ModuleCode)
                                     this.firestore.collection('/faculties/' + Faculty + '/lectureSessions/undergraduate/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
                                         if (doc.exists) {
-                                            console.log(doc.data());
+                                            // console.log(doc.data());
                                             this.CloudCode = doc.data().SessionCode
-                                            console.log(this.CloudCode)
+                                            // console.log(this.CloudCode)
                                         } else {
-                                            console.log("There is no document!");
+                                            // console.log("There is no document!");
 
                                         }
                                     }).catch(function (error) {
-                                        console.log("There was an error getting your document:", error);
+                                        // console.log("There was an error getting your document:", error);
                                     });
 
                                 }
@@ -108,11 +115,11 @@ export class EsignPage implements OnInit {
                     this.location = true;
                 })
             } else {
-                console.log("There is no document!");
+                // console.log("There is no document!");
 
             }
         }).catch(function (error) {
-            console.log("There was an error getting your document:", error);
+            // console.log("There was an error getting your document:", error);
         });
     }
 
@@ -140,14 +147,14 @@ export class EsignPage implements OnInit {
             LectureDate = checkdate('-');
             this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
                 if (doc.exists) {
-                    console.log(doc.data());
+                    // console.log(doc.data());
                     Batch = doc.data().batch.toString()
                     Faculty = doc.data().faculty
-                    DegreeCode = doc.data().DegreeCode
+                    DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity
                     this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
-                        console.log(Batch + '' + Faculty + '' + LectureDate)
+                        // console.log(Batch + '' + Faculty + '' + LectureDate)
                         this.session = data.map(e => {
-                            Module = e.payload.doc.data()['Module']
+                            Module = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
                             return {
                                 id: e.payload.doc.id,
                                 SessionCode: e.payload.doc.data()['SessionCode'],
@@ -172,7 +179,7 @@ export class EsignPage implements OnInit {
                             toast.present();
                         })
                             .catch(async error => {
-                                console.log(error);
+                                // console.log(error);
                                 const toast = await this.toastController.create({
                                     message: 'Error in Network, check back later.',
                                     duration: 2000
@@ -198,22 +205,22 @@ export class EsignPage implements OnInit {
 
     goSettings() {
         this.router.navigate(['Student/Settings']);
-        console.log('settings');
+        // console.log('settings');
     }
     goeSign() {
         this.router.navigate(['Student/eSign']);
-        console.log('Home');
+        // console.log('Home');
     }
     goECForm() {
         this.router.navigate(['Student/EC-Form']);
-        console.log('EC-Form');
+        // console.log('EC-Form');
     }
     goAttendence() {
         this.router.navigate(['Student/Attendence']);
-        console.log('Attendence');
+        // console.log('Attendence');
     }
     goNotices() {
         this.router.navigate(['Student/Notices']);
-        console.log('settings');
+        // console.log('settings');
     }
 }
