@@ -21,9 +21,9 @@ export class LecturerPage implements OnInit {
   };
   selectedDate = new Date();
   Module: string;
-  constructor(private toastController: ToastController,private firestore: AngularFirestore, private firebase: FirebaseService, public loadingController: LoadingController, public navCtrl: NavController) { }
+  constructor(private toastController: ToastController, private firestore: AngularFirestore, private firebase: FirebaseService, public loadingController: LoadingController, public navCtrl: NavController) { }
   ngOnInit() {
-    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+    this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).set({
       Activity: 'Online',
     }, { merge: true });
     this.firestore.collection('userActivityMonitoring').add({
@@ -55,82 +55,80 @@ export class LecturerPage implements OnInit {
     })
   }
 
-generateKey()
-{
-	var seconds = new Date().getTime();	
-	var uniquekey = 'xyxyxy'.replace(/[xy]/g, function(c)
-	{
-		var randomkey = (seconds + Math.random()*25)%25 | 0;
-		seconds = Math.floor(seconds/25);
-		return (c=='x' ? randomkey : (randomkey&0x3|0x8)).toString(25);
-	});
-this.Key = uniquekey.toUpperCase()
-  var name;
-  var faculty;
-  var PrepKey = this.Key = uniquekey.toUpperCase()
-  this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
-    if (doc.exists) {
-      // console.log(doc.data());
-      this.Name = doc.data().name.prefix + " " + doc.data().name.firstName + " " + doc.data().name.lastName;
-      faculty = doc.data().createdDetails.createdFaculty;
-      // console.log(faculty)
-      this.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').snapshotChanges().subscribe(keys => {
-        this.eventSource = [];
-        keys.forEach(key => {
-          let event: any = key.payload.doc.data();
-          event.id = key.payload.doc.id;
-          event.title = event.moduleTitle + " | At Hall: " + event.lectureHall;
-          event.startTime = event.startDateTime.toDate();
-          event.endTime = event.endDateTime.toDate();
-          this.Module = event.moduleTitle
-          if (name = event.lecturer) {
-            var selectedDoc = key.payload.doc.id
-            // console.log(PrepKey + " " + selectedDoc)
-            this.firebase.sendKey(faculty, PrepKey, selectedDoc).then(async resp => {
-              const toast = await this.toastController.create({
-                message: 'Code Added to Module',
-                duration: 2000
-              });
-              toast.present();
-            })
-              .catch(async error => {
-                // console.log(error);
+  generateKey() {
+    var seconds = new Date().getTime();
+    var uniquekey = 'xyxyxy'.replace(/[xy]/g, function (c) {
+      var randomkey = (seconds + Math.random() * 25) % 25 | 0;
+      seconds = Math.floor(seconds / 25);
+      return (c == 'x' ? randomkey : (randomkey & 0x3 | 0x8)).toString(25);
+    });
+    this.Key = uniquekey.toUpperCase()
+    var name;
+    var faculty;
+    var PrepKey = this.Key = uniquekey.toUpperCase()
+    this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
+      if (doc.exists) {
+        // console.log(doc.data());
+        this.Name = doc.data().name.prefix + " " + doc.data().name.firstName + " " + doc.data().name.lastName;
+        faculty = doc.data().createdDetails.createdFaculty;
+        // console.log(faculty)
+        this.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').snapshotChanges().subscribe(keys => {
+          this.eventSource = [];
+          keys.forEach(key => {
+            let event: any = key.payload.doc.data();
+            event.id = key.payload.doc.id;
+            event.title = event.moduleTitle + " | At Hall: " + event.lectureHall;
+            event.startTime = event.startDateTime.toDate();
+            event.endTime = event.endDateTime.toDate();
+            this.Module = event.moduleTitle
+            if (name = event.lecturer) {
+              var selectedDoc = key.payload.doc.id
+              // console.log(PrepKey + " " + selectedDoc)
+              this.firebase.sendKey(faculty, PrepKey, selectedDoc).then(async resp => {
                 const toast = await this.toastController.create({
-                  message: 'Error in Network, check back later. Or contact Programs Office',
+                  message: 'Code Added to Module',
                   duration: 2000
                 });
                 toast.present();
-              });
-          }
+              })
+                .catch(async error => {
+                  // console.log(error);
+                  const toast = await this.toastController.create({
+                    message: 'Error in Network, check back later. Or contact Programs Office',
+                    duration: 2000
+                  });
+                  toast.present();
+                });
+            }
+          });
         });
-      });
 
-    }
-  })
-}
+      }
+    })
+  }
 
   async logout() {
-    this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+    this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).set({
       Activity: 'Offline',
     }, { merge: true });
-      this.firebase
-        .logoutUser()
-        .then(async res => {
-          // console.log(res);
-          const loading = await this.loadingController.create({
-            message: 'Logging out...',
-            duration: 2000
-          });
-          await loading.present();
-
-          const { role, data } = await loading.onDidDismiss();
-          // console.log('Loading dismissed!');
-
-          this.navCtrl.navigateBack("");
-        })
-        .catch(error => {
-          // console.log(error);
+    this.firebase
+      .logoutUser()
+      .then(async res => {
+        // console.log(res);
+        const loading = await this.loadingController.create({
+          message: 'Logging out...',
+          duration: 2000
         });
-    }
+        await loading.present();
+
+        const { role, data } = await loading.onDidDismiss();
+        // console.log('Loading dismissed!');
+
+        this.navCtrl.navigateBack("");
+      })
+      .catch(error => {
+        // console.log(error);
+      });
+  }
 
 }

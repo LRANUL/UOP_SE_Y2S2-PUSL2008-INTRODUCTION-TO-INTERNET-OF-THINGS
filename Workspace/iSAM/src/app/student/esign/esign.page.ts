@@ -21,8 +21,8 @@ export class EsignPage implements OnInit {
     Faculty: any;
     Today: any;
     check: void[];
-nosession:any;
-signed:any;
+    nosession: any;
+    signed: any;
     constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
 
     }
@@ -60,7 +60,7 @@ signed:any;
 
         // Load Module Data from Database  
         LectureDate = checkdate('-');
-        LectureDate = '2020-4-21';
+        // LectureDate = '2020-3-21';
         // console.log(LectureDate)
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
             if (doc.exists) {
@@ -68,9 +68,9 @@ signed:any;
                 Batch = doc.data().batch.toString()
                 Faculty = doc.data().faculty
                 DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity
-                // console.log(DegreeCode)
+                // console.log(DegreeCode + Faculty + Batch)
                 this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
-                    // console.log(data)
+                    // console.log(doc.data())
                     if (!doc.exists) {
                         // console.log('NO SESSION FOR TODAY ')
                         this.nosession = true;
@@ -79,6 +79,7 @@ signed:any;
                         this.nosession = false;
                         this.check = data.map(e => {
                             ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
+                            // console.log(ModuleCode)
                             this.firestore.collection('Attendance/History/' + ModuleCode).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
                                 if (doc.exists) {
                                     // console.log(doc.data())
@@ -123,8 +124,9 @@ signed:any;
                             })
 
                         });
-                        this.location = true;}
-                    })
+                        this.location = true;
+                    }
+                })
             } else {
                 // console.log("There is no document!");
 
