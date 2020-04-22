@@ -11,8 +11,9 @@ export class LoginPage implements OnInit {
     validations_form: FormGroup;
     errorMessage: string = '';
     userEmail: string;
-
+    login:Boolean = false;
     loginLoadingSpinner: Boolean = false;
+    loading: boolean;
 
     constructor(
         private router: Router,
@@ -24,7 +25,11 @@ export class LoginPage implements OnInit {
     ) { }
 
     ngOnInit() {
-
+        this.loading = true;
+        setTimeout(() => {
+            this.loading = false;
+            this.login = true;
+        }, 3000);
 
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) { // User is signed in.

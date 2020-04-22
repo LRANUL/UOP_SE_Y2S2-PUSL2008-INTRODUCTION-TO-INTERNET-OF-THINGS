@@ -121,10 +121,10 @@ export class FirebaseService {
         return this.firestore.collection('EC-Forms/' + faculty + '/' + lecturer).add(record);
     }
 
-    sendAttendance(record, uid, module, email) {
-        return this.firestore.firestore.collection('Attendance/History/' + module).doc(email).set({
+    sendAttendance(ModuleCode, email) {
+        return this.firestore.firestore.collection('Attendance/History/' + ModuleCode).doc(email).set({
             data: {
-                Module: module,
+                moduleTitle: ModuleCode,
                 Attendace: firebase.firestore.FieldValue.increment(1),
             },
 

@@ -1,4 +1,9 @@
-<ion-content>
+<div name="loading" *ngIf="loading" style="height: 100%;">
+  <ion-img src="assets/icon/splash.png" style="height: 80%;"></ion-img>
+  <br>
+  <ion-img src="assets/icon/loading.png" style="height: 50px;"></ion-img>
+</div>
+<ion-content [hidden]="!login">
   <div class="login">
     <ion-card class="card">
       <ion-card-header>
@@ -25,7 +30,8 @@
           <ion-item>
 
             <ion-label position="floating" color="primary">Password</ion-label>
-            <ion-input class="textinput" type="password" clearInput formControlName="password" class="form-controll" required>
+            <ion-input class="textinput" type="password" clearInput formControlName="password" class="form-controll"
+              required>
             </ion-input>
           </ion-item>
 
@@ -56,8 +62,9 @@
                                                           width: 100px;" *ngIf="loginLoadingSpinner"></ion-spinner>
   </div>
   <div style="position: absolute; bottom: 0px; width: 100%;font-size: small;color:grey">
-    <div style="text-align: center"><i>THIS IS AN EDUCATIONAL PROJECT, CREDITS TO AUTHORS ARE ADDED WERE POSSIBLE, DEVELOPED UNDER FAIR USE LICENSE FOR EDUCATIONAL
-      PURPOSES ONLY.</i>
+    <div style="text-align: center"><i>THIS IS AN EDUCATIONAL PROJECT, CREDITS TO AUTHORS ARE ADDED WERE POSSIBLE,
+        DEVELOPED UNDER FAIR USE LICENSE FOR EDUCATIONAL
+        PURPOSES ONLY.</i>
     </div>
   </div>
 </ion-content>
