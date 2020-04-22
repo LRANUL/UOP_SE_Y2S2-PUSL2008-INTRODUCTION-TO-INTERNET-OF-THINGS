@@ -348,6 +348,7 @@ export class FirebaseService {
             academicYear: parseInt(value.academicPeriodYear),
             degree: value.degreeProgram,
             awardingBodyUniversity: awardingBodyUniversity,
+            degreeCode: degreeCode,
             batch: value.batch,
             startDateTime: new Date(sessionStartDateTime),
             endDateTime: new Date(sessionEndDateTime),

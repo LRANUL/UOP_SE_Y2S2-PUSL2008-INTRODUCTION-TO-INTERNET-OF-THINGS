@@ -27,6 +27,8 @@ export class DashboardPage implements OnInit {
 
   showLoadingDotsLatestLecturerPONotices: Boolean = true;
 
+  noLectureSessionsTodayText: Boolean = false;
+
   constructor(
     private sideMenuPageUserFaculty: SideMenuPage,
     private dashboardService: FirebaseService,
@@ -134,12 +136,12 @@ export class DashboardPage implements OnInit {
     this.bars = new Chart(this.barChart.nativeElement, {
       type: 'line',
       data: {
-        labels: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
+        labels: ['16-4-2020', '17-4-2020', '18-4-2020', '19-4-2020', '20-4-2020', '21-4-2020', '22-4-2020', '23-4-2020'],
         datasets: [{
           label: 'User Activity',
-          data: [2.5, 3.8, 5, 6.9, 6.9, 7.5, 10, 17],
-          backgroundColor: 'rgb(109, 156, 235)', // array should have same number of elements as number of dataset
-          borderColor: 'rgb(109, 219, 235)',// array should have same number of elements as number of dataset
+          data: [10, 12, 12, 8, 10, 20, 22, 30],
+          backgroundColor: 'rgb(109, 156, 235)', 
+          borderColor: 'rgb(109, 219, 235)',
           borderWidth: 1
         }]
       },
@@ -173,13 +175,19 @@ export class DashboardPage implements OnInit {
   }
 
 
+  
 
   // Retrieving published lecture sessions for the current date from the firestore datbase
   publishedLectureSessionsCurrentDate;
   retrievePublishedLectureSessionsCurrentDate = () => 
     this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
-      this.showLoadingDotsTodaysLectureSession = false;
-      this.publishedLectureSessionsCurrentDate = response;
+      if (response.length > 0) {
+        this.showLoadingDotsTodaysLectureSession = false;
+        this.publishedLectureSessionsCurrentDate = response;
+      }
+      else {
+        this.noLectureSessionText = true;
+      }
   });
 
 

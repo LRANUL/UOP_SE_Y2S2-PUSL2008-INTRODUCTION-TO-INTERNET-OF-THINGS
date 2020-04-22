@@ -192,7 +192,27 @@
                                                 margin-top: 20px;
                                                 height: 100px;
                                                 width: 100px;" *ngIf="showLoadingDotsTodaysLectureSession"></ion-spinner>
-              
+
+                 <!-- Page loading search module text -->
+                <div *ngIf="noLectureSessionsTodayText" style="position: absolute;
+                                                            top: 150px;
+                                                            left: 50%;
+                                                            transform: translateX(-50%);
+                                                            font-size: 18px;
+                                                            border: #ccc solid 2px;
+                                                            border-radius: 5px;
+                                                            padding: 15px;
+                                                            min-width: 200px;">
+                  <ion-icon name="close-circle-outline" style="color: rgb(8, 177, 219);
+                                                              font-size: 30px;
+                                                              margin-top: 2px;
+                                                              margin-right: 10px;"></ion-icon>
+                  <ion-label style="position: relative;
+                                    top: -8px;
+                                    text-align: center;">
+                    No Lecture Sessions assigned for today.
+                  </ion-label>
+                </div>
 
               </ion-card-content>
             </ion-card>
@@ -428,7 +448,7 @@
                       <ion-row>
                         <ion-col>
                           <ion-label>
-                            Mr. Sam Anderson
+                            Mr. David Simon
                           </ion-label>
                         </ion-col>
                       </ion-row>
@@ -454,7 +474,7 @@
                       <ion-row>
                         <ion-col>
                           <ion-label>
-                            Mr. Sam Anderson
+                            Dr. Chloe Morgan
                           </ion-label>
                         </ion-col>
                       </ion-row>
@@ -480,7 +500,7 @@
                       <ion-row>
                         <ion-col>
                           <ion-label>
-                            Mr. Sam Anderson
+                            Mr. Jay Anderson
                           </ion-label>
                         </ion-col>
                       </ion-row>

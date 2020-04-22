@@ -9,7 +9,7 @@
 
     
     <ion-title style="position: absolute;
-                      top: 40%;">Dashboard</ion-title>
+                      top: 40%;">Settings</ion-title>
 
     <!-- Header Contents Section -->
     <div style="position: absolute;
@@ -97,7 +97,7 @@
                               <td>{{ item.payload.doc.data().degreeCode }}</td>
                               <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
                               <td>{{ item.payload.doc.data().deliveryNoOfYears }}</td>
-                              <td>{{ item.payload.doc.data().deliveryNoOfSemesterAnnually }}</td>
+                              <td>{{ item.payload.doc.data().deliveryNoOfSemestersAnnually }}</td>
                               <td>{{ item.payload.doc.data().programDelivery }}</td>
                               <td>{{ item.payload.doc.data().programCoordinator }}</td>
                               <td>
@@ -194,14 +194,14 @@
                                   <ion-row>
                                     <ion-col>
                                       <ion-item>
-                                        <ion-input type="text" style="min-width: 100%;" placeholder="Enter Degree" formControlName="degree"></ion-input>
-                                      </ion-item>
+                                        <ion-textarea rows="3" style="min-width: 100%;" placeholder="Enter Degree" formControlName="degree"></ion-textarea>
+                                      </ion-item> 
                                     </ion-col>
                                   </ion-row>
                                   <ion-row>
                                     <ion-col>
                                       <ion-item>
-                                        <ion-input type="text" style="min-width: 100%;" placeholder="Enter Awarding Body University" formControlName="awardingBodyUniversity"></ion-input>
+                                        <ion-textarea rows="3" style="min-width: 100%;" placeholder="Enter Awarding Body University" formControlName="awardingBodyUniversity"></ion-textarea>
                                       </ion-item>
                                     </ion-col>
                                   </ion-row>

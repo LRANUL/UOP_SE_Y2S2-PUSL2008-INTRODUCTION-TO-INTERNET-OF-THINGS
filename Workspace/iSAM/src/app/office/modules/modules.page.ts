@@ -27,7 +27,6 @@ export class ModulesPage implements OnInit {
   pageLoadSearchModuleText: Boolean = true;
 
 
-
   constructor(
     private modulesService: FirebaseService,
     private formBuilder: FormBuilder,
@@ -97,21 +96,8 @@ export class ModulesPage implements OnInit {
   // Retrieving the published degree programs and their details from the firestore database
   publishedDegreePrograms;
 
-  publishedDegreeProgramDegree;
-  publishedDegreeProgramAwardingBodyUniversity;
-  publishedDegreeProgramNoOfYears;
-  publishedDegreeProgramNoOfSemestersAnnaully;
-
   retrievePublishedDegreeProgram = () => {
-    this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreePrograms = 
-      response.forEach(document => {
-        let firestoreDoc: any = document.payload.doc.data();
-        this.publishedDegreeProgramDegree = firestoreDoc.degree;
-        this.publishedDegreeProgramAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-        this.publishedDegreeProgramNoOfYears = firestoreDoc.deliveryNoOfYears;
-        this.publishedDegreeProgramNoOfSemestersAnnaully = firestoreDoc.deliveryNoOfSemestersAnnually;
-      })
-    ));
+    this.modulesService.retrievePublishedDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreePrograms = response));
   }
 
   // Implementation of generating an array for the count of, no of years and no of semesters
@@ -135,6 +121,24 @@ export class ModulesPage implements OnInit {
     this.modulesService.retrievePublishedLectureHalls(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedLectureHalls = response))
   }
 
+  
+  publishedDegreeProgram;
+  awardingBodyUniversity;
+
+  async retrieveAwardingBodyUniversity(event){
+
+    let selectedDegree = event.detail.value;
+
+    // Retrieving the awardingBody University of the selected degree
+    this.modulesService.retrievingAwardingBodyUniversityOfDegree(selectedDegree, this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => (this.publishedDegreeProgram =
+      response.forEach(document => {
+        let firestoreDoc: any = document.payload.doc.data();
+        this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        console.log(this.awardingBodyUniversity);
+      })
+    ));
+
+  }
 
 
   // Declaring variable to store the string value of true or false for the search registered modules button
@@ -284,16 +288,11 @@ export class ModulesPage implements OnInit {
       }
       if(value.degreeProgram != ""){
 
-        // Identifying the awardingBodyUniversity from the user selected degree
-        if(value.degreeProgram == this.publishedDegreeProgramDegree){
-          this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-        }
-
         // Retrieving registered modules with the search value of degreeProgram
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(response => (this.registeredModules = response));
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(response => (this.registeredModules = response));
         
         // Assigning loading spinner to false upon the necessary content has loaded
-        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.userDataAwardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
+        this.modulesService.retrieveRegisterdModulesDegreeProgram(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value.degreeProgram, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerSearchRegisteredModule = false);
 
       }
 
@@ -389,13 +388,10 @@ export class ModulesPage implements OnInit {
   // Function for the process of searching modules
   doRegisterModule(value){
 
-    // Identifying the awardingBodyUniversity from the user selected degree
-    if(value.degreeProgram == this.publishedDegreeProgramDegree){
-      this.userDataAwardingBodyUniversity = this.publishedDegreeProgramAwardingBodyUniversity;
-    }
+    console.log(value);
 
     // Calling the function to add the details into firestore database by passing the necessary value.
-    this.modulesService.registerModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.userDataAwardingBodyUniversity);
+    this.modulesService.registerModule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity);
 
     this.alertNotice("Module Registered", "Module has been registered.");
 
