@@ -12,6 +12,7 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
   passedBatch = null;
   passedLecturer = null;
   passedLectureHall = null;
+  passedDegreeCode = null;
   passedDegree = null;
   passedAwardingBodyUniversity = null;
   passedAcademicPeriodYear = null;
@@ -30,6 +31,7 @@ export class MoreDetailsSessionPopoverPage implements OnInit {
     this.passedBatch = this.navParams.get('batch');
     this.passedLecturer = this.navParams.get('lecturer');
     this.passedLectureHall = this.navParams.get('lectureHall');
+    this.passedDegreeCode = this.navParams.get('degreeCode');
     this.passedDegree = this.navParams.get('degree');
     this.passedAwardingBodyUniversity = this.navParams.get('awardingBodyUniversity');
     this.passedAcademicPeriodYear = this.navParams.get('academicPeriodYear');

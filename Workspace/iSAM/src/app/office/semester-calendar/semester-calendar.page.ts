@@ -5,6 +5,7 @@ import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { EditLectureSessionModalPage } from './edit-lecture-session-modal/edit-lecture-session-modal.page';
 import { MoreDetailsSessionPopoverPage } from './more-details-session-popover/more-details-session-popover.page';
+import { EditLectureSeriesModalPage } from './edit-lecture-series-modal/edit-lecture-series-modal.page';
 
 @Component({
   selector: 'app-semester-calendar',
@@ -76,11 +77,12 @@ export class SemesterCalendarPage implements OnInit {
       sessionStartTimeMultiple: new FormControl(''),
       sessionEndTimeMultiple: new FormControl('')
     });
-
+    
     this.createNewLectureSeriesForm = this.formBuilder.group({
       degreeProgram: new FormControl('', Validators.required),
       batch: new FormControl('', Validators.required),
       module: new FormControl('', Validators.required),
+      noOfLectures: new FormControl('', Validators.required),
       enrollmentKey: new FormControl('', Validators.required)
     });
 
@@ -174,6 +176,7 @@ export class SemesterCalendarPage implements OnInit {
 
   publishedAwardingBodyUniversityOfDegree;
   awardingBodyUniversity;
+  degreeCode;
 
   async retrieveAwardingBodyUniversity(event){
 
@@ -182,7 +185,9 @@ export class SemesterCalendarPage implements OnInit {
       response.forEach(document => {
         let firestoreDoc: any = document.payload.doc.data();
         this.awardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
+        this.degreeCode = firestoreDoc.degreeCode;
         console.log(this.awardingBodyUniversity);
+        console.log(this.degreeCode);
       })
     ));
 
@@ -254,6 +259,7 @@ export class SemesterCalendarPage implements OnInit {
         batch: value.batch,
         lecturer: value.lecturer,
         lectureHall: value.lectureHall,
+        degreeCode: value.degreeCode,
         degree: value.degree,
         awardingBodyUniversity: value.awardingBodyUniversity,
         academicPeriodYear: value.academicYear,
@@ -262,6 +268,7 @@ export class SemesterCalendarPage implements OnInit {
       event: ev
     });
     moreDetailsLectureSessionPopover.present();
+    
   }
 
 
@@ -384,7 +391,7 @@ export class SemesterCalendarPage implements OnInit {
       // If user selects 'lectureAssignIndividaully' option
 
       // Adding the lecture session details into the firestore database
-      this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity, this.moduleTitle, selectedSessionDate, selectedSessionStartDateTime, selectedSessionEndDateTime);
+      this.semesterCalendarService.addNewLectureSession(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.degreeCode, this.awardingBodyUniversity, this.moduleTitle, selectedSessionDate, selectedSessionStartDateTime, selectedSessionEndDateTime);
       
       this.alertNotice("Lecture Session Added", "New Lecture Session has been added.");
 
@@ -490,6 +497,57 @@ export class SemesterCalendarPage implements OnInit {
 
     this.showPublishedLectureSeries = false;
 
+  }
+
+
+  // Editing lecture series modal calling, opening modal
+  async editLectureSeries(value){
+    const editLectureSeriesModal = await this.modalController.create({
+      component: EditLectureSeriesModalPage,
+      // Passing value to the modal using 'componentProps'
+      componentProps: {
+        lectureSeriesDocId: value.payload.doc.id,
+        lectureSeriesNoOfLecturers: value.payload.doc.data().noOfLectures,
+        lectureSeriesEnrollmentKey: value.payload.doc.data().enrollmentKey,
+        loggedInUserFaculty: this.sideMenuPageUserFaculty.passLoggedInUserFaculty()
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editLectureSeriesModal.present();
+  }
+
+
+  // Confirm Box Implementation (Remove existing lecture series)
+  async removeLectureSeries ( title: string, content: string, value) {
+
+    let lectureSeriesDocId = value.payload.doc.id;
+
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log("Alert Box: Remove Lecture Series Request Denied");
+          }
+        },
+        {
+          text: 'Continue',
+          handler: () => {
+            console.log("Alert Box: Remove Lecture Series Request Accepted");
+
+            // Calling function to remove lecture series
+            this.semesterCalendarService.removeLectureSeries(lectureSeriesDocId, this.sideMenuPageUserFaculty.passLoggedInUserFaculty());
+
+            this.showPublishedLectureSeries = false;
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AddLectureSessionStatusModalPage } from './add-lecture-session-status-modal.page';
+import { EditLectureSeriesModalPage } from './edit-lecture-series-modal.page';
 
-describe('AddLectureSessionStatusModalPage', () => {
-  let component: AddLectureSessionStatusModalPage;
-  let fixture: ComponentFixture<AddLectureSessionStatusModalPage>;
+describe('EditLectureSeriesModalPage', () => {
+  let component: EditLectureSeriesModalPage;
+  let fixture: ComponentFixture<EditLectureSeriesModalPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddLectureSessionStatusModalPage ],
+      declarations: [ EditLectureSeriesModalPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddLectureSessionStatusModalPage);
+    fixture = TestBed.createComponent(EditLectureSeriesModalPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

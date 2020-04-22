@@ -66,7 +66,7 @@ export class EditModuleModalPage implements OnInit {
     this.passedUserFaculty = this.navParams.get('userFaculty');
 
 
-    this.retrievePublishedModuleCreditsWeighting();
+    this.retrievePublishedModuleCreditsWeightingActive();
 
     this.retrievePublishedDegreeProgram();
 
@@ -79,8 +79,8 @@ export class EditModuleModalPage implements OnInit {
   // Retrieving the published credits weighting from the firestore database
   publishedCreditsWeighting;
 
-  retrievePublishedModuleCreditsWeighting = () => {
-    this.editModuleService.retrievePublishedModuleCreditsWeighting().subscribe(response => (this.publishedCreditsWeighting = response));
+  retrievePublishedModuleCreditsWeightingActive = () => {
+    this.editModuleService.retrievePublishedModuleCreditsWeightingActive().subscribe(response => (this.publishedCreditsWeighting = response));
   }
 
   // Retrieving the published degree programs and details from the firestore database

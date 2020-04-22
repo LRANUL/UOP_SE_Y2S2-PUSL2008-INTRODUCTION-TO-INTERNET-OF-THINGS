@@ -92,9 +92,10 @@
                                   height: 460px;
                                   overflow: scroll;">
 
-                        <table class="table" style="width: 800px;">
+                        <table class="table" style="width: 850px;">
                           <thead>
                             <tr>
+                              <th>Degree Code</th>
                               <th>Degree Program</th>
                               <th>No Of Years</th>
                               <th>No Of Semesters Annually</th>
@@ -105,6 +106,7 @@
                           </thead>
                           <tbody>
                             <tr *ngFor="let item of publishedDegreePrograms">
+                              <td>{{ item.payload.doc.data().degreeCode }}</td>
                               <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
                               <td>{{ item.payload.doc.data().deliveryNoOfYears }}</td>
                               <td>{{ item.payload.doc.data().deliveryNoOfSemesterAnnually }}</td>
@@ -141,6 +143,16 @@
                         
                       </div>
 
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      margin-top: 20px;
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerDegreeProgram"></ion-spinner>
+
+
                       <ion-button color="medium" style="position: relative;
                                                         left: 87%;
                                                         transform: translateX(-13%);
@@ -166,15 +178,27 @@
                                   border: #ccc solid 1px;
                                   border-radius: 5px;
                                   min-width: 100%;
-                                  height: 400px;
-                                  overflow-y: scroll;">
+                                  padding-top: 10px;
+                                  padding: 25px;">
 
                           <form [formGroup]="addDegreeProgramForm" (ngSubmit)="doAddDegreeProgram(addDegreeProgramForm.value)">
 
                             <ion-grid>
                               <ion-row>
                                 <ion-col size="5">
-                                  <ion-label>
+                                  <ion-label class="settingsAddFormLabel">
+                                    Degree Code
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" placeholder="Enter Code" formControlName="degreeCode"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
                                     Degree Program
                                   </ion-label>
                                 </ion-col>
@@ -197,7 +221,7 @@
                               </ion-row>
                               <ion-row>
                                 <ion-col size="5">
-                                  <ion-label>
+                                  <ion-label class="settingsAddFormLabel">
                                     Academic Period
                                   </ion-label>
                                 </ion-col>
@@ -230,7 +254,7 @@
                               </ion-row>
                               <ion-row>
                                 <ion-col size="5">
-                                  <ion-label>
+                                  <ion-label class="settingsAddFormLabel">
                                     Program Delivery 
                                   </ion-label>
                                 </ion-col>
@@ -245,7 +269,7 @@
                               </ion-row>
                               <ion-row>
                                 <ion-col size="5">
-                                  <ion-label>
+                                  <ion-label class="settingsAddFormLabel">
                                     Program Coordinattor 
                                   </ion-label>
                                 </ion-col>
@@ -332,7 +356,8 @@
                                       </ion-button>
                                     </ion-col>
                                     <ion-col>
-                                      <ion-button color="danger" style="width: 120px;">
+                                      <ion-button color="danger" style="width: 120px;"
+                                        (click)="removeBatch('Confirmation Required', 'This batch will be removed, do you want to continue?', item)">
                                         <ion-icon name="trash-outline"></ion-icon>
                                         <ion-label style="color: white;
                                                           margin-left: 5px;">
@@ -348,15 +373,110 @@
                         </table>
                       </div>
 
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerBatch"></ion-spinner>
+
                       <ion-button color="medium" style="position: relative;
                                                         left: 87%;
                                                         transform: translateX(-13%);
-                                                        width: 100px;">
+                                                        width: 100px;" (click)="openAddBatchForm()" *ngIf="addBatchButton">
                         <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                         <ion-label style="color: white;">
                           ADD
                         </ion-label>
                       </ion-button>
+
+                      <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddBatchForm()" *ngIf="closeBatchFormButton">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+
+                      <div *ngIf="addBatchFormSection">
+                        <ion-label style="font-size: 20px;">
+                          Add Batch
+                        </ion-label>
+                        <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  padding-top: 10px;
+                                  padding: 25px;">
+
+                          <form [formGroup]="addBatchForm" (ngSubmit)="doAddBatch(addBatchForm.value)">
+
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Batch
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" placeholder="Enter Batch" formControlName="batch"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Degree Program
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-row>
+                                    <ion-col>
+                                      <ion-item>
+                                        <ion-select style="min-width: 100%;" placeholder="Select Degree Program" (ionChange)="getAwardingBodyUniversity($event)" formControlName="degreeProgram">
+                                          <ion-select-option *ngFor="let item of publishedDegreePrograms" 
+                                            value="{{ item.payload.doc.data().degree }}">
+                                            {{ item.payload.doc.data().degree }}, {{ item.payload.doc.data().awardingBodyUniversity }}
+                                          </ion-select-option>
+                                        </ion-select>
+                                      </ion-item>
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Status 
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-select style="min-width: 100%;" placeholder="Select Status" formControlName="status">
+                                      <ion-select-option value="Pending">Pending</ion-select-option>
+                                      <ion-select-option value="Active">Active</ion-select-option>
+                                      <ion-select-option value="Graduated">Graduated</ion-select-option>
+                                    </ion-select>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button type="submit" expand="block" [disabled]="!addBatchForm.valid">
+                                    <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                                    <ion-label style="color: white;">
+                                      ADD
+                                    </ion-label>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+
+                          </form>
+
+                        </div>
+                      </div>
 
                     </ion-card-content>
                   </ion-card>
@@ -384,6 +504,7 @@
                           <thead>
                             <tr>
                               <th>Credit Weightings</th>
+                              <th>Description</th>
                               <th>Status</th>
                               <th></th>
                             </tr>
@@ -391,6 +512,7 @@
                           <tbody>
                             <tr *ngFor="let item of publishedNoOfCreditWeightings">
                               <td>{{ item.payload.doc.data().creditsWeighting }}</td>
+                              <td>{{ item.payload.doc.data().description }}</td>
                               <td>{{ item.payload.doc.data().status }}</td>
                               <td>
                                 <ion-grid>
@@ -405,7 +527,8 @@
                                       </ion-button>
                                     </ion-col>
                                     <ion-col>
-                                      <ion-button color="danger" style="width: 120px;">
+                                      <ion-button color="danger" style="width: 120px;"
+                                        (click)="removeCreditWeighting('Confirmation Required', 'This credit weighting will be removed, do you want to continue?', item)">
                                         <ion-icon name="trash-outline"></ion-icon>
                                         <ion-label style="color: white;
                                                           margin-left: 5px;">
@@ -421,15 +544,101 @@
                         </table>
                       </div>
 
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      margin-top: 20px;
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerCreditWeighting"></ion-spinner>
+
                       <ion-button color="medium" style="position: relative;
                                                         left: 87%;
                                                         transform: translateX(-13%);
-                                                        width: 100px;">
+                                                        width: 100px;" (click)="openAddCreditWeightingForm()" *ngIf="addCreditWeightingButton">
                         <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                         <ion-label style="color: white;">
                           ADD
                         </ion-label>
                       </ion-button>
+
+                      <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddCreditWeightingForm()" *ngIf="closeCreditWeightingFormButton">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+
+                      <div *ngIf="addCreditWeightingFormSection">
+                        <ion-label style="font-size: 20px;">
+                          Add Credit Weighting
+                        </ion-label>
+                        <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  padding-top: 10px;
+                                  padding: 25px;">
+
+                          <form [formGroup]="addCreditWeightingForm" (ngSubmit)="doAddCreditWeighting(addCreditWeightingForm.value)">
+
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Credit Weighting
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="number" style="min-width: 100%;" clearInput placeholder="Enter No of Credits" formControlName="creditWeighting"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Description
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Description" formControlName="description"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Status 
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-select style="min-width: 100%;" placeholder="Select Status" formControlName="status">
+                                      <ion-select-option value="Pending">Pending</ion-select-option>
+                                      <ion-select-option value="Active">Active</ion-select-option>
+                                    </ion-select>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button type="submit" expand="block" [disabled]="!addCreditWeightingForm.valid">
+                                    <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                                    <ion-label style="color: white;">
+                                      ADD
+                                    </ion-label>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+
+                          </form>
+
+                        </div>
+                      </div>
 
                     </ion-card-content>
                   </ion-card>
@@ -455,6 +664,7 @@
                           <thead>
                             <tr>
                               <th>Lecture Hall</th>
+                              <th>Level</th>
                               <th>Approximate No Of Seats Available</th>
                               <th></th>
                             </tr>
@@ -462,6 +672,7 @@
                           <tbody>
                             <tr *ngFor="let item of publishedLectureHalls">
                               <td>{{ item.payload.doc.data().lectureHall }}</td>
+                              <td>{{ item.payload.doc.data().level }}</td>
                               <td>{{ item.payload.doc.data().approximateNoOfSeatsAvailable }}</td>
                               <td>
                                 <ion-grid>
@@ -476,7 +687,8 @@
                                       </ion-button>
                                     </ion-col>
                                     <ion-col>
-                                      <ion-button color="danger" style="width: 120px;">
+                                      <ion-button color="danger" style="width: 120px;"
+                                        (click)="removeLectureHall('Confirmation Required', 'This lecture hall will be removed, do you want to continue?', item)">
                                         <ion-icon name="trash-outline"></ion-icon>
                                         <ion-label style="color: white;
                                                           margin-left: 5px;">
@@ -492,15 +704,98 @@
                         </table>
                       </div>
 
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      margin-top: 20px;
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerLectureHall"></ion-spinner>
+
                       <ion-button color="medium" style="position: relative;
                                                         left: 87%;
                                                         transform: translateX(-13%);
-                                                        width: 100px;">
+                                                        width: 100px;" (click)="openAddLectureHallForm()" *ngIf="addLectureHallButton">
                         <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                         <ion-label style="color: white;">
                           ADD
                         </ion-label>
                       </ion-button>
+
+                      <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddLectureHallForm()" *ngIf="closeLectureHallFormButton">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+
+                      <div *ngIf="addLectureHallFormSection">
+                        <ion-label style="font-size: 20px;">
+                          Add Lecture Hall
+                        </ion-label>
+                        <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  padding-top: 10px;
+                                  padding: 25px;">
+
+                          <form [formGroup]="addLectureHallForm" (ngSubmit)="doAddLectureHall(addLectureHallForm.value)">
+
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Lecture Hall
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Lecture Hall" formControlName="lectureHall"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Level
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Level" formControlName="level"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Approximate No Of Seats Available 
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="number" style="min-width: 100%;" clearInput placeholder="Enter No of Seats" formControlName="approximateNoOfSeatsAvailable"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button type="submit" expand="block" [disabled]="!addLectureHallForm.valid">
+                                    <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                                    <ion-label style="color: white;">
+                                      ADD
+                                    </ion-label>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+
+                          </form>
+
+                        </div>
+                      </div>
 
                     </ion-card-content>
                   </ion-card>
@@ -568,7 +863,8 @@
                                       </ion-button>
                                     </ion-col>
                                     <ion-col>
-                                      <ion-button color="danger" style="width: 120px;">
+                                      <ion-button color="danger" style="width: 120px;"
+                                        (click)="removeLectureSessionStatus('Confirmation Required', 'This lecture session status will be removed, do you want to continue?', item)">
                                         <ion-icon name="trash-outline"></ion-icon>
                                         <ion-label style="color: white;
                                                           margin-left: 5px;">
@@ -582,18 +878,88 @@
                             </tr>
                           </tbody>
                         </table>
-
                       </div>
+
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      margin-top: 20px;
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerLectureSessionStatus"></ion-spinner>
 
                       <ion-button color="medium" style="position: relative;
                                                         left: 87%;
                                                         transform: translateX(-13%);
-                                                        width: 100px;">
+                                                        width: 100px;" (click)="openAddLectureSessionStatusForm()" *ngIf="addLectureSessionStatusButton">
                         <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                         <ion-label style="color: white;">
                           ADD
                         </ion-label>
                       </ion-button>
+
+                      <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddLectureSessionStatusForm()" *ngIf="closeLectureSessionStatusFormButton">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+
+                      <div *ngIf="addLectureSessionStatusFormSection">
+                        <ion-label style="font-size: 20px;">
+                          Add Lecture Session Status
+                        </ion-label>
+                        <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  padding-top: 10px;
+                                  padding: 25px;">
+
+                          <form [formGroup]="addLectureSessionStatusForm" (ngSubmit)="doAddLectureSessionStatus(addLectureSessionStatusForm.value)">
+
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Status
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Status" formControlName="status"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Description
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Description" formControlName="description"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button type="submit" expand="block" [disabled]="!addLectureSessionStatusForm.valid">
+                                    <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                                    <ion-label style="color: white;">
+                                      ADD
+                                    </ion-label>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+
+                          </form>
+
+                        </div>
+                      </div>
 
                     </ion-card-content>
                   </ion-card>
@@ -640,7 +1006,8 @@
                                       </ion-button>
                                     </ion-col>
                                     <ion-col>
-                                      <ion-button color="danger" style="width: 120px;">
+                                      <ion-button color="danger" style="width: 120px;"
+                                        (click)="removeUserAccountStatus('Confirmation Required', 'This user account status will be removed, do you want to continue?', item)">
                                         <ion-icon name="trash-outline"></ion-icon>
                                         <ion-label style="color: white;
                                                           margin-left: 5px;">
@@ -654,18 +1021,88 @@
                             </tr>
                           </tbody>
                         </table>
-
                       </div>
+
+                      <!-- Loading Spinner -->
+                      <ion-spinner name="dots" style="position: absolute;
+                                                      left: 50%;
+                                                      top: 50%;
+                                                      transform: translate(-50%,-50%);
+                                                      margin-top: 20px;
+                                                      height: 100px;
+                                                      width: 100px;" *ngIf="loadingSpinnerUserAccountStatus"></ion-spinner>
 
                       <ion-button color="medium" style="position: relative;
                                                         left: 85%;
                                                         transform: translateX(-15%);
-                                                        width: 100px;">
+                                                        width: 100px;" (click)="openAddUserAccountStatusForm()" *ngIf="addUserAccountStatusButton">
                         <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                         <ion-label style="color: white;">
                           ADD
                         </ion-label>
                       </ion-button>
+
+                      <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddUserAccountStatusForm()" *ngIf="closeUserAccountStatusFormButton">
+                        <ion-icon name="close-outline"></ion-icon>
+                      </ion-button>
+
+                      <div *ngIf="addUserAccountStatusFormSection">
+                        <ion-label style="font-size: 20px;">
+                          Add User Account Status
+                        </ion-label>
+                        <div style="margin-top: 5px;
+                                  border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  min-width: 100%;
+                                  padding-top: 10px;
+                                  padding: 25px;">
+
+                          <form [formGroup]="addUserAccountStatusForm" (ngSubmit)="doAddUserAccountStatus(addUserAccountStatusForm.value)">
+
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Status
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Status" formControlName="status"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="5">
+                                  <ion-label class="settingsAddFormLabel">
+                                    Description
+                                  </ion-label>
+                                </ion-col>
+                                <ion-col size="7">
+                                  <ion-item>
+                                    <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Description" formControlName="description"></ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button type="submit" expand="block" [disabled]="!addUserAccountStatusForm.valid">
+                                    <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                                    <ion-label style="color: white;">
+                                      ADD
+                                    </ion-label>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+
+                          </form>
+
+                        </div>
+                      </div>
 
                     </ion-card-content>
                   </ion-card>
@@ -729,7 +1166,8 @@
                                 </ion-button>
                               </ion-col>
                               <ion-col>
-                                <ion-button color="danger" style="width: 120px;">
+                                <ion-button color="danger" style="width: 120px;"
+                                  (click)="removeNoticeCategory('Confirmation Required', 'This notice category will be removed, do you want to continue?', item)">
                                   <ion-icon name="trash-outline"></ion-icon>
                                   <ion-label style="color: white;
                                                     margin-left: 5px;">
@@ -743,23 +1181,93 @@
                       </tr>
                     </tbody>
                   </table>
-
                 </div>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 50%;
+                                                transform: translate(-50%,-50%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="loadingSpinnerNoticeCategory"></ion-spinner>
 
                 <ion-button color="medium" style="position: relative;
                                                   left: 85%;
                                                   transform: translateX(-15%);
-                                                  width: 100px;">
+                                                  width: 100px;" (click)="openAddNoticeCategoryForm()" *ngIf="addNoticeCategoryButton">
                   <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
                   <ion-label style="color: white;">
                     ADD
                   </ion-label>
                 </ion-button>
 
+                <ion-button color="danger" style="position: relative;
+                                                        left: 90%;
+                                                        top: 20px;
+                                                        transform: translateX(-10%);" (click)="openAddNoticeCategoryForm()" *ngIf="closeNoticeCategoryFormButton">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+
+                
+                <div *ngIf="addNoticeCategoryFormSection">
+                  <ion-label style="font-size: 20px;">
+                    Add Notice Category
+                  </ion-label>
+                  <div style="margin-top: 5px;
+                            border: #ccc solid 1px;
+                            border-radius: 5px;
+                            min-width: 100%;
+                            padding-top: 10px;
+                            padding: 25px;">
+
+                    <form [formGroup]="addNoticeCategoryForm" (ngSubmit)="doAddNoticeCategory(addNoticeCategoryForm.value)">
+
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="5">
+                            <ion-label class="settingsAddFormLabel">
+                              Category
+                            </ion-label>
+                          </ion-col>
+                          <ion-col size="7">
+                            <ion-item>
+                              <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Category" formControlName="category"></ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="5">
+                            <ion-label class="settingsAddFormLabel">
+                              Description
+                            </ion-label>
+                          </ion-col>
+                          <ion-col size="7">
+                            <ion-item>
+                              <ion-input type="text" style="min-width: 100%;" clearInput placeholder="Enter Description" formControlName="description"></ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="12">
+                            <ion-button type="submit" expand="block" [disabled]="!addNoticeCategoryForm.valid">
+                              <ion-icon name="add-circle-outline" style="margin-right: 5px;"></ion-icon>
+                              <ion-label style="color: white;">
+                                ADD
+                              </ion-label>
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+
+                    </form>
+
+                  </div>
+                </div>
+
               </ion-card-content>
             </ion-card>
            
-
           </ion-card-content>
         </ion-card>
 

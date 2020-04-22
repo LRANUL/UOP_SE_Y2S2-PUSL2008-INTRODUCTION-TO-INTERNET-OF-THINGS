@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AddDegreeProgramModalPage } from './add-degree-program-modal.page';
+import { NotificationsPopoverPage } from './notifications-popover.page';
 
-describe('AddDegreeProgramModalPage', () => {
-  let component: AddDegreeProgramModalPage;
-  let fixture: ComponentFixture<AddDegreeProgramModalPage>;
+describe('NotificationsPopoverPage', () => {
+  let component: NotificationsPopoverPage;
+  let fixture: ComponentFixture<NotificationsPopoverPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddDegreeProgramModalPage ],
+      declarations: [ NotificationsPopoverPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddDegreeProgramModalPage);
+    fixture = TestBed.createComponent(NotificationsPopoverPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

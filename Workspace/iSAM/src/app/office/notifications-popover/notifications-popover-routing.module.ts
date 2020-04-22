@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AddDegreeProgramModalPage } from './add-degree-program-modal.page';
+import { NotificationsPopoverPage } from './notifications-popover.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: AddDegreeProgramModalPage
+    component: NotificationsPopoverPage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AddDegreeProgramModalPageRoutingModule {}
+export class NotificationsPopoverPageRoutingModule {}

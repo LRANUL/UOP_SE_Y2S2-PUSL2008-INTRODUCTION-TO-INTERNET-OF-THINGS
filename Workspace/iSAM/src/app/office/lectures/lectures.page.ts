@@ -19,6 +19,10 @@ export class LecturesPage implements OnInit {
 
   showLoadingDotsAllLectureSession: Boolean = true;
 
+  noLectureSessionTodayText: Boolean = false;
+
+  noLectureSessionAllText: Boolean = false;
+
   constructor(
     private lecturesService: FirebaseService,
     private sideMenuPageUserFaculty: SideMenuPage,
@@ -49,14 +53,13 @@ export class LecturesPage implements OnInit {
     // Sample: Sun Apr 20 2020 00:00:00 GMT+0530 (India Standard Time)
     this.nextDate.setDate(this.nextDate.getDate()+1);
 
-    this.retrievePublishedLectureSessionsLectureSchedule();
+    this.retrievePublishedLectureSessionsCurrentDate();
 
 
     // Calling function to retrieving the all lecture sessions from the firestore database
     this.lecturesService.retrieveAllPublishedLectureSessions(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(allLectureSessionSlots => {
-
-      // Setting loading spinner in todays lecture session to stop spinning
-      this.showLoadingDotsCurrentDateLectureSession = false;
+      // Setting loading spinner in all lecture sessions to stop spinning
+      this.showLoadingDotsAllLectureSession = false;
 
       this.eventSourceLectureSession = []; // Clearing the existing lecture sessions on the calendar before syncing 
       allLectureSessionSlots.forEach(snap => {
@@ -70,20 +73,46 @@ export class LecturesPage implements OnInit {
 
         this.eventSourceLectureSession.push(eventLectureSession);
       });
+    }, error => {
+      // Setting loading spinner in all lecture sessions to stop spinning
+      this.showLoadingDotsAllLectureSession = false;
+
+      console.log("Error: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
     });
 
-
   }
+
+
 
   // Retreving the lecture sessions of the current date and their details from the firestore database
   publishedLectureSessionCurrentDate;
-  retrievePublishedLectureSessionsLectureSchedule = () => {
+  retrievePublishedLectureSessionsCurrentDate = () => {
+    this.lecturesService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
+      if (response.length > 0) {
+        
+        // Setting loading spinner in todays lecture session to stop spinning
+        this.showLoadingDotsCurrentDateLectureSession = false;
 
-    // Setting loading spinner in all lecture sessions to stop spinning
-    this.showLoadingDotsAllLectureSession = false;
+        this.publishedLectureSessionCurrentDate = response;
 
-    this.lecturesService.retrievePublishedLectureSessionsLectureSchedule(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), this.currentDate, this.nextDate).subscribe(response => (this.publishedLectureSessionCurrentDate = response));
+      }
+      else {
+        // Setting loading spinner in todays lecture session to stop spinning
+        this.showLoadingDotsCurrentDateLectureSession = false;
+
+        this.noLectureSessionTodayText = true;
+      }
+    }, error => {
+      // Setting loading spinner in todays lecture session to stop spinning
+      this.showLoadingDotsCurrentDateLectureSession = false;
+
+      console.log("Error: " + error);
+      this.alertNotice("Error", "An error has occurred: " + error);
+    });
   }
+
+
 
   // Editing lecture sessions modal calling (lecture schedule), opening modal
   async editLectureSessionSchedule(value){
@@ -112,8 +141,18 @@ export class LecturesPage implements OnInit {
   }
 
 
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
 
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
 
+    await alert.present();
+
+  }
 
 
 
@@ -156,9 +195,11 @@ export class LecturesPage implements OnInit {
 
       if((event.events !== undefined && event.events.length !== 0) == false){
         this.lectureSessionsDocuments = [];
+        this.noLectureSessionAllText = true;
       }
       else if ((event.events !== undefined && event.events.length !== 0) == true){
         this.lectureSessionsDocuments = event.events;
+        this.noLectureSessionAllText = false;
       }
       console.log(this.lectureSessionsDocuments);
   }
@@ -185,6 +226,7 @@ export class LecturesPage implements OnInit {
         lecturer: value.lecturer,
         lectureHall: value.lectureHall,
         degree: value.degree,
+        degreeCode: value.degreeCode,
         awardingBodyUniversity: value.awardingBodyUniversity,
         academicPeriodYear: value.academicYear,
         academicPeriodSemester: value.academicSemester

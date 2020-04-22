@@ -41,7 +41,7 @@ export class ModulesPage implements OnInit {
     // Disabling the button to search for registered modules upon load
     this.searchRegisteredModuleButtonDisabled = "true";
    
-    this.retrievePublishedModuleCreditsWeighting();
+    this.retrievePublishedModuleCreditsWeightingActive();
 
     this.retrievePublishedDegreeProgram();
 
@@ -72,8 +72,8 @@ export class ModulesPage implements OnInit {
  // Retrieving the published module credits weighting and their details from the firestore database
  publishedModuleCreditsWeighting;
 
- retrievePublishedModuleCreditsWeighting = () => {
-   this.modulesService.retrievePublishedModuleCreditsWeighting().subscribe(response => (this.publishedModuleCreditsWeighting = response));
+ retrievePublishedModuleCreditsWeightingActive = () => {
+   this.modulesService.retrievePublishedModuleCreditsWeightingActive().subscribe(response => (this.publishedModuleCreditsWeighting = response));
  }
 
 

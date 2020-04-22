@@ -13,47 +13,36 @@
 
     <!-- Header Contents Section -->
     <div style="position: absolute;
-                right: 25px;
+                right: 5px;
                 top: 8px;">
       <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
-      <div>
-        <button ion-button style="width: 100px;
-                  height: 45px;
-                  background-color: white;">
+
+      <ion-button fill="clear" color="dark" style="width: 100px;
+                                                  height: 45px;
+                                                  background-color: white;" (click)="openNotificationPopover()">
 
         <!-- Notification Bell Icon -->
         <div style="height: 42px;
-                  width: 42px;
-                  border-radius: 5px;
-                  position: absolute;
-                  top: 3px;
-                  left: 10px;"> 
+                  width: 42px;"> 
           <ion-icon name="notifications-outline" style="font-size: 35px;
                                                         position: absolute;
                                                         top: 5px;
                                                         left: 0px;"></ion-icon>
-      </div>
+        </div>
 
-      <!-- Unread Notifications Count -->
-      <div style="position: absolute;
-                top: 5px;
-                left: 40px;">
-        <ion-label style="color: red;">
-          10
-        </ion-label>
-      </div>
+          <!-- Arrow Icon -->
+        <div style="position: absolute;
+                    left: 50px;
+                    top: 10px;
+                    font-size: 26px;">
+          <ion-icon name="arrow-down-outline"></ion-icon>
+        </div>
+        
+      </ion-button>
 
-        <!-- Arrow Icon -->
-      <div style="position: absolute;
-                  top: 13px;
-                  left: 70px;
-                  font-size: 26px;">
-        <ion-icon name="arrow-down-outline"></ion-icon>
-      </div>
 
-      </button>
     </div>
-  </div>
+
 
 
   </ion-toolbar>
@@ -68,27 +57,142 @@
         <ion-row>
           <ion-col>
 
-            <ion-card style="height: 300px;">
+            <ion-card style="height: 580px;">
               <ion-card-header>
-                <h4>Today's Lectures</h4>
+                <ion-card-title>
+                  Today's Lecturers
+                </ion-card-title>
               </ion-card-header>
               <ion-card-content>
 
-                <ion-card style="height: 180px;
-                                width: 250px;
-                                margin-top: -5px;">
-                  <ion-card-header>
-                    SOFT255SL
-                  </ion-card-header>
-                  <ion-card-content>
-                    Software Engineering In Java <br>
-                    <b>Lecture Hall: </b> C2 - 009 <br>
-                    <b>Start Time: </b> 9:00am <br>
-                    <b>End Time: </b> 12:00pm <br>
-                    <b>Lecturer:  </b> Sample
-                  </ion-card-content>
-                </ion-card>
+                <ion-grid style="height: 510px;
+                                overflow-y: scroll;">
+                  <ion-row>
+                    <ion-col size="3" size-sm="12" size-lg="3" size-xl="3" *ngFor="let item of publishedLectureSessionsCurrentDate">
 
+                      <ion-card style="margin-top: -5px;">
+                        <ion-card-header>
+                          <ion-button shape="round" color="primary" size="small" style="position: absolute;
+                                                                                      top: 0px;
+                                                                                      left: 75%;
+                                                                                      width: 40px;
+                                                                                      height: 40px;" (click)="moreDetailsTodaysLectureSession($event, item)">
+                            <ion-icon name="document-text-outline"></ion-icon>
+                          </ion-button>
+                          <ion-card-title>
+                            <ion-label>
+                              {{ item.payload.doc.data().moduleCode }}
+                            </ion-label>
+                          </ion-card-title>
+                          <ion-card-subtitle>
+                            <ion-label>
+                              {{ item.payload.doc.data().moduleTitle }}
+                            </ion-label>
+                          </ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="6">
+                                <ion-label>
+                                  <b>Lecture Hall: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col size="6">
+                                <ion-label>
+                                  {{ item.payload.doc.data().lectureHall }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Batch: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().batch }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Degree Code: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().degreeCode }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Lecturer: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().lecturer }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Start Time: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().startDateTime.toDate() | date: 'h:mm a' }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>End Time: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().endDateTime.toDate() | date: 'h:mm a' }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <ion-label>
+                                  <b>Status: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col>
+                                <ion-label>
+                                  {{ item.payload.doc.data().status }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-card-content>
+                      </ion-card>
+
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 40%;
+                                                transform: translate(-50%,-60%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="showLoadingDotsTodaysLectureSession"></ion-spinner>
+              
 
               </ion-card-content>
             </ion-card>
@@ -96,31 +200,178 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col>
+          <ion-col size="6">
 
-            <ion-card style="height: 400px;
-                            margin-top: -5px;
-                            width: 99%;">
+            <ion-card style="margin-top: -5px;">
               <ion-card-header>
-                <h4>Weeks Lectures</h4>
-              </ion-card-header>
-            </ion-card>
-
-          </ion-col>
-          <ion-col>
-
-            <ion-card style="height: 400px;
-                            margin-top: -5px;">
-              <ion-card-header style="height: 400px;">
-                <h4>Notices from Lecturers</h4>
+                <ion-card-title>
+                  Weeks Upcoming Lectures
+                </ion-card-title>
               </ion-card-header>
               <ion-card-content>
 
-                <ion-card>
-                  <ion-card-header>
-                    
-                  </ion-card-header>
-                </ion-card>
+                <div style="position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            top: -40px;">
+                
+                  <ion-button fill="clear" (click)="previousMonthLecture()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-back"></ion-icon>
+                  </ion-button>
+
+                  <ion-label style="font-size: 20px;">
+                    {{ viewingUpcomingLecture }}
+                  </ion-label>
+
+                  <ion-button fill="clear" (click)="nextMonthLecture()" style="margin-top: -12px;">
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </ion-button>
+
+                </div>
+                
+
+                <div style="overflow-y: scroll;
+                            margin-top: 30px;">
+                  <div style="height: 700px;">
+                    <calendar [eventSource]="eventSourceUpcomingLecture"
+                    [calendarMode]="calendarUpcomingLecture.mode"
+                    [currentDate]="calendarUpcomingLecture.currentDate"
+                    (onCurrentDateChanged)="onCurrentDateChangedUpcomingLecture($event)"
+                    (onRangeChanged)="onRangeChangedUpcomingLecture($event)"
+                    (onEventSelected)="onEventSelectedUpcomingLecture($event)"
+                    (onTitleChanged)="onViewTitleChangedUpcomingLecture($event)"
+                    (onTimeSelected)="onTimeSelectedUpcomingLecture($event)"
+                    startHour="9"
+                    endHour="17"
+                    step="30"
+                    startingDayWeek="1" id="weeksUpcomingLectureCalendar">
+                  
+                    </calendar>
+                  </div>
+                </div>
+
+                <div style="position: absolute;
+                            top: 282px;
+                            right: 3.4%;" *ngFor="let item of lectureSessionDocuments">
+                  <ion-button size="small" title="Lecture Session Read More" color="secondary" (click)="moreDetailsUpcomingLectureSession($event, item)" style="width: 40px;
+                                                                                                                                                                  height: 40px;
+                                                                                                                                                                  border-radius: 5px;
+                                                                                                                                                                  margin-bottom: -5px;
+                                                                                                                                                                  margin-left: -10px;">
+                    <ion-icon name="document-text" style="font-size: 30px;"></ion-icon>
+                  </ion-button>
+                </div>
+
+                <div style="position: absolute;
+                            left: 50%;
+                            top: 60%;
+                            transform: translate(-50%,-40%);" *ngIf="noLectureSessionText">
+                  <ion-item style="border: #ccc solid 1px;
+                                  border-radius: 5px;
+                                  padding: 5px;">
+                    <ion-label style="font-size: 17px;">
+                      No Lecture Sessions on the selected date
+                    </ion-label>
+                  </ion-item>
+                </div>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 50%;
+                                                transform: translate(-50%,-50%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="showLoadingDotsUpcomingLectureSession"></ion-spinner>
+
+
+              </ion-card-content>
+            </ion-card>
+
+          </ion-col>
+          <ion-col size="6">
+
+            <ion-card style="margin-top: -5px;
+                            height: 800px;">
+              <ion-card-header>
+                <ion-card-title>
+                  Latest Notices from Lecturers
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+
+                <ion-grid style="height: 725px;
+                                overflow-y: scroll;">
+                  <ion-row *ngFor="let item of publishedLecturerToPONotices">
+                    <ion-col size="12">
+
+                      <ion-card>
+                        <ion-card-header>
+                          <ion-card-title>
+                            <ion-label>
+                              {{ item.payload.doc.data().noticeTitle }}
+                            </ion-label>
+                          </ion-card-title>
+                          <ion-card-subtitle>
+                            <ion-label>
+                              {{ item.payload.doc.data().noticeDescription }}
+                            </ion-label>
+                          </ion-card-subtitle>
+                        </ion-card-header>
+                        <ion-card-content>
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="5">
+                                <ion-label>
+                                  <b>Notice Category: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col size="7">
+                                <ion-label>
+                                  {{ item.payload.doc.data().noticeCategory }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="5">
+                                <ion-label>
+                                  <b>Sent By: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col size="7">
+                                <ion-label>
+                                  {{ item.payload.doc.data().noticeCreatedInfo.createdByLecturerUserId }}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="5">
+                                <ion-label>
+                                  <b>Sent At: </b>
+                                </ion-label>
+                              </ion-col>
+                              <ion-col size="7">
+                                <ion-label>
+                                  {{ item.payload.doc.data().noticeCreatedInfo.createdDateTime.toDate() | date: 'dd-MM-yyyy | h:mm a'}}
+                                </ion-label>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-card-content>
+                      </ion-card>
+
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+
+                <!-- Loading Spinner -->
+                <ion-spinner name="dots" style="position: absolute;
+                                                left: 50%;
+                                                top: 50%;
+                                                transform: translate(-50%,-50%);
+                                                margin-top: 20px;
+                                                height: 100px;
+                                                width: 100px;" *ngIf="showLoadingDotsLatestLecturerPONotices"></ion-spinner>
 
               </ion-card-content>
             </ion-card>
@@ -128,46 +379,119 @@
           </ion-col>
   
         </ion-row>
-        <ion-row>
-          <ion-col>
-
-            <ion-card style="height: 300px;
-                            margin-top: -5px;
-                            width: 99%;">
-              <ion-card-header>
-                <h4>NEWS</h4>
-              </ion-card-header>
-            </ion-card>
-
-          </ion-col>
-          <ion-col>
-
-            <ion-card style="height: 300px;
-                            margin-top: -5px;">
-              <ion-card-header>
-                <h4>Events</h4>
-              </ion-card-header>
-            </ion-card>
-
-          </ion-col>
-        </ion-row>
       </ion-col>
       <ion-col size="3">
 
         <ion-card style="margin-top: 15px;
                         margin-left: -10px;
                         width: 103%;
-                        height: 830px;">
+                        min-height: 60%;">
           <ion-card-header>
-            <h4>User Activity</h4>
+            <ion-card-title>
+              User Activity
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
 
-            <h3 style="font-size: 20px;">Active Users</h3>
             <div style="border: #ccc solid 1px;
                         border-radius: 5px;
                         width: 100%;
-                        height: 100px;">
+                        height: 150px;
+                        padding-right: 5px;">
+                <canvas #userActivityAreaChart></canvas>  
+            </div>
+
+            <ion-label style="position: relative;
+                              top: 20px;
+                              font-size: 17px;">
+              Active Users
+            </ion-label>
+
+            <div style="border: #ccc solid 1px;
+                        border-radius: 5px;
+                        width: 100%;
+                        min-height: 590px;
+                        position: relative;
+                        top: 20px;">
+              
+              <ion-grid style="min-height: 580px;">
+                <ion-row>
+                  <ion-col>
+                    <b>Students:</b>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+
+                    <ion-grid style="height: 144px;
+                                    overflow-y: scroll;">
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            Mr. Sam Anderson
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <div style="border-top: #ccc solid 2px;"></div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <b>Lecturers:</b>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+
+                    <ion-grid style="height: 144px;
+                                    overflow-y: scroll;">
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            Mr. Sam Anderson
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+
+                  </ion-col>  
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <div style="border-top: #ccc solid 2px;"></div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <b>Program Office Staff:</b>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+
+                    <ion-grid style="height: 144px;
+                                    overflow-y: scroll;">
+                      <ion-row>
+                        <ion-col>
+                          <ion-label>
+                            Mr. Sam Anderson
+                          </ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              
+
 
             </div>
 

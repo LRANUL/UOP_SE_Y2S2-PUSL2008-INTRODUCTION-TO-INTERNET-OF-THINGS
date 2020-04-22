@@ -80,7 +80,7 @@
                   <tr>
                     <th>Batch</th>
                     <th>Module Code</th>
-                    <th>Mod5le Title</th>
+                    <th>Module Title</th>
                     <th>Session Start Time</th>
                     <th>Session End Time</th>
                     <th>Lecture Hall</th>
@@ -117,6 +117,17 @@
                                             height: 100px;
                                             width: 100px;" *ngIf="showLoadingDotsCurrentDateLectureSession"></ion-spinner>
 
+            <div *ngIf="noLectureSessionTodayText" style="position: absolute;
+                                                    left: 50%;
+                                                    top: 50%;
+                                                    transform: translate(-50%,-50%);
+                                                    padding: 5px;">
+              <ion-item>
+                <ion-label style="font-size: 17px;">
+                  No Lecture Session Assigned for Today
+                </ion-label>
+              </ion-item>
+            </div>
 
           </ion-card-content>
         </ion-card>
@@ -171,6 +182,18 @@
               
                 </calendar>
               </div>
+            </div>
+
+            <div *ngIf="noLectureSessionAllText" style="position: absolute;
+                                                    left: 50%;
+                                                    top: 70%;
+                                                    transform: translate(-50%,-30%);
+                                                    padding: 5px;">
+              <ion-item>
+                <ion-label style="font-size: 17px;">
+                  No Lecture Session Assigned for this date
+                </ion-label>
+              </ion-item>
             </div>
 
 
