@@ -29,6 +29,15 @@ import { MoreDetailsSessionPopoverPageModule } from './office/semester-calendar/
 import { EditLectureHallModalPageModule } from './office/settings/editModals/edit-lecture-hall-modal/edit-lecture-hall-modal.module';
 import { NotificationsPopoverPageModule } from './office/notifications-popover/notifications-popover.module';
 import { EditLectureSeriesModalPageModule } from './office/semester-calendar/edit-lecture-series-modal/edit-lecture-series-modal.module';
+import { UpdateAccountPasswordModalPageModule } from './office/settings/update-account-password-modal/update-account-password-modal.module';
+import { UpdateAccountDetailsModalPageModule } from './office/settings/update-account-details-modal/update-account-details-modal.module';
+import { MoreInformationPopoverPageModule } from './office/settings/more-information-popover/more-information-popover.module';
+import { EditUserAccountStatusModalPageModule } from './office/settings/editModals/edit-user-account-status-modal/edit-user-account-status-modal.module';
+import { EditBatchModalPageModule } from './office/settings/editModals/edit-batch-modal/edit-batch-modal.module';
+import { EditCreditWeightingModalPageModule } from './office/settings/editModals/edit-credit-weighting-modal/edit-credit-weighting-modal.module';
+import { EditDegreeProgramModalPageModule } from './office/settings/editModals/edit-degree-program-modal/edit-degree-program-modal.module';
+import { EditLectureSessionStatusModalPageModule } from './office/settings/editModals/edit-lecture-session-status-modal/edit-lecture-session-status-modal.module';
+import { EditNoticeCategoryModalPageModule } from './office/settings/editModals/edit-notice-category-modal/edit-notice-category-modal.module';
 
 
 @NgModule({
@@ -49,7 +58,16 @@ import { EditLectureSeriesModalPageModule } from './office/semester-calendar/edi
     MoreDetailsSessionPopoverPageModule,
     EditLectureHallModalPageModule,
     NotificationsPopoverPageModule,
-    EditLectureSeriesModalPageModule
+    EditLectureSeriesModalPageModule,
+    EditUserAccountStatusModalPageModule,
+    UpdateAccountPasswordModalPageModule,
+    UpdateAccountDetailsModalPageModule,
+    MoreInformationPopoverPageModule,
+    EditBatchModalPageModule,
+    EditCreditWeightingModalPageModule,
+    EditDegreeProgramModalPageModule,
+    EditLectureSessionStatusModalPageModule,
+    EditNoticeCategoryModalPageModule
   ],
   providers: [
     StatusBar,

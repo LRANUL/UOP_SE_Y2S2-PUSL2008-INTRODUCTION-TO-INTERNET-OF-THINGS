@@ -96,7 +96,7 @@ export class FirebaseService {
             firebase.auth().signInWithEmailAndPassword(value.email, value.password).then(res => resolve(res), err => reject(err))
         })
     }
-    
+
 
     // Verifying entered login credentials after the user has already logged in
     verifyLoginCredentials(value) {
@@ -113,6 +113,30 @@ export class FirebaseService {
         });
     }
 
+    // Updating account activity field in the logged in program office user document in the firestore database
+    updateProgramOfficeUserActivity(accountActivity, docId){
+        return new Promise<any>((resolve, reject) => {
+            this.firestore.doc("/users/userTypes/programOfficeUsers/"+ docId).update({
+                accountActivity: accountActivity
+            })
+            .then(response => resolve(response),
+                error => reject(error))
+        });
+    }
+    
+    /*
+    checkUserActivity(){
+        return new Promise<any>((resolve, reject) => {
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+                .then(function() {
+                    resolve("User Active");
+                })
+                .catch(function(error) {
+                    reject(error);
+                });
+        });
+    }
+    */
 
     logoutUser() {
         return new Promise((resolve, reject) => {
@@ -686,6 +710,22 @@ export class FirebaseService {
         });
     }
 
+    // Updating account details of logged in program office user by updating the document in the firestore database
+    updateProgramOfficeUser(value, docId){
+        return new Promise<any>((resolve, reject) => {
+            this.firestore.doc("/users/userTypes/programOfficeUsers/"+ docId).update({
+                name: {
+                    prefix: value.prefixName,
+                    firstName: value.firstName,
+                    middleName: value.middleName,
+                    lastName: value.lastName
+                },
+                faculty: value.faculty
+            })
+            .then(response => resolve(response),
+                error => reject(error))
+        });  
+    }
 
     // Removing registered modules from the firestore database
     removeRegisteredModule(userFaculty, DocId) {
@@ -738,7 +778,7 @@ export class FirebaseService {
     }
 
 
-
+    
 
 
 

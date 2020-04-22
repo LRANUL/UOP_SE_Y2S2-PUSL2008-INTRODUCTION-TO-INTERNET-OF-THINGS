@@ -32,6 +32,7 @@ const routes: Routes = [
     loadChildren: () => import('./lecturer/lecturer.module').then( m => m.LecturerPageModule)
   }
 
+
 ];
 @NgModule({
   imports: [

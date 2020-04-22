@@ -48,7 +48,6 @@ export class LoginPage implements OnInit {
                 this.userEmail = this.authService.userDetails().email;
 
 
-
                 /*-- Lecturer User Registration Process Phase --*/
                 // console.log('Current router url: ', this.router.url);
 
@@ -185,10 +184,12 @@ export class LoginPage implements OnInit {
                         
                         // Checking if the program office user account is active
                         if(programOfficeUserAccountStatus == "Active"){
+
                             this.router.navigate(['/office/dashboard']);
                             // console.log("Logged In User Type: Program Office User");
                             // console.log("Record found in program office users collection");
                             // console.log("Program Office User Account is ACTIVE");
+
                         }
                         else{
                             this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact Web Administrator.");
@@ -386,10 +387,12 @@ export class LoginPage implements OnInit {
                     
                     // Checking if the program office user account is active
                     if(programOfficeUserAccountStatus == "Active"){
+
                         this.router.navigate(['/office/dashboard']);
                         // console.log("Logged In User Type: Program Office User");
                         // console.log("Record found in program office users collection");
                         // console.log("Program Office User Account is ACTIVE");
+
                     }
                     else{
                         this.alertNotice("Account Deactivated", "Account has been deactivated. Please contact Web Administrator.");

@@ -88,6 +88,36 @@ export class SideMenuPage implements OnInit {
 
     this.retrieveLoggedInUserDetailsFirestore();
 
+
+    // Updating the program office user account activity to ONLINE
+    this.sideMenuService.updateProgramOfficeUserActivity("Online", this.passLoggedInUserId())
+    .then(
+        async response => {
+            console.log("Program Office Account Activity Updated - ONLINE");
+        }, 
+        error => {
+            this.alertNotice("Error", "An error has occurred: " + error);
+        }
+    );
+
+    
+    /*
+    // If the user leaving the application the user will be logged out and account activity will be set to OFFLINE
+    this.sideMenuService.checkUserActivity().then(
+      async response => {
+        if(response == "User Active"){
+         
+          console.log("User is active");
+         
+        }
+      }, 
+      error => {
+        this.alertNotice("Error", "An error has occurred: " + error);
+      }
+    )
+    */
+    
+
   }
 
 
@@ -114,6 +144,18 @@ export class SideMenuPage implements OnInit {
   // Passing user id
   passLoggedInUserId() {
     return this.userDetailsAuth.uid;
+  }
+
+
+
+  // Alert Box Implementation
+  async alertNotice ( title: string, content: string ) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: content,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
 
@@ -145,14 +187,24 @@ export class SideMenuPage implements OnInit {
             this.sideMenuService.logoutUser();
             this.router.navigate(["/login"]);
             console.log("User Logged Out");
+
+            // Updating the program office user account activity to OFFLINE
+            this.sideMenuService.updateProgramOfficeUserActivity("Offline", this.passLoggedInUserId())
+            .then(
+                async response => {
+                    console.log("Program Office Account Activity Updated - OFFLINE");
+                }, 
+                error => {
+                    this.alertNotice("Error", "An error has occurred: " + error);
+                }
+            );
+
           }
         }
 
       ]
     });
-
     await alert.present();
-
   }
 
   

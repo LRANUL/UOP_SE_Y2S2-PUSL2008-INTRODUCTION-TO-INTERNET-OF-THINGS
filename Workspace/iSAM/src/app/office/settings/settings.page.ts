@@ -2,8 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { AlertController, PopoverController } from '@ionic/angular';
+import { AlertController, PopoverController, ModalController } from '@ionic/angular';
 import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
+import { UpdateAccountDetailsModalPage } from './update-account-details-modal/update-account-details-modal.page';
+import { UpdateAccountPasswordModalPage } from './update-account-password-modal/update-account-password-modal.page';
+import { EditLectureSessionModalPage } from '../semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.page';
+import { EditDegreeProgramModalPage } from './editModals/edit-degree-program-modal/edit-degree-program-modal.page';
+import { EditBatchModalPage } from './editModals/edit-batch-modal/edit-batch-modal.page';
+import { EditCreditWeightingModalPage } from './editModals/edit-credit-weighting-modal/edit-credit-weighting-modal.page';
+import { EditLectureHallModalPage } from './editModals/edit-lecture-hall-modal/edit-lecture-hall-modal.page';
+import { EditLectureSessionStatusModalPage } from './editModals/edit-lecture-session-status-modal/edit-lecture-session-status-modal.page';
+import { EditNoticeCategoryModalPage } from './editModals/edit-notice-category-modal/edit-notice-category-modal.page';
+import { EditUserAccountStatusModalPage } from './editModals/edit-user-account-status-modal/edit-user-account-status-modal.page';
 
 @Component({
   selector: 'app-settings',
@@ -70,7 +80,8 @@ export class SettingsPage implements OnInit {
     private settingsService: FirebaseService,
     private alertController: AlertController,
     private formBuilder: FormBuilder,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -138,15 +149,28 @@ export class SettingsPage implements OnInit {
     });
 
     this.updateDetailsLoginForm = this.formBuilder.group({
-      emailAddress: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
+      emailAddress: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('[a-zA-Z0-9]+[!@#$%^&*]?'),
+        Validators.minLength(10)
+      ]))
     });
 
     this.updatePasswordLoginForm = this.formBuilder.group({
-      emailAddress: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
+      emailAddress: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ])),
+      password: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('[a-zA-Z0-9]+[!@#$%^&*]?'),
+        Validators.minLength(10)
+      ]))
     });
-
   }
 
   // Opening notifications popover
@@ -374,6 +398,20 @@ export class SettingsPage implements OnInit {
     }
   }
 
+  // Update account details modal calling, opening modal
+  async updateAccountDetailsModal(){
+    const updateAccountDetailsModal = await this.modalController.create({
+      component: UpdateAccountDetailsModalPage,
+      // Passing value to the modal using 'componentProps'
+      componentProps: {
+        loggedInUserId: this.sideMenuPageUserFaculty.passLoggedInUserId()
+      },
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    updateAccountDetailsModal.present();
+  }
+
 
   // Process of updating user account details
   doUpdateDetails(value){
@@ -381,6 +419,8 @@ export class SettingsPage implements OnInit {
     // Verifying entered login credentials
     this.settingsService.verifyLoginCredentials(value).then(async response => {
       
+      // Opening update account details modal
+      this.updateAccountDetailsModal();
 
 
     }, error => {
@@ -388,8 +428,19 @@ export class SettingsPage implements OnInit {
       this.alertNotice("Error", "An error has occurred: " + error);
     });
 
-
   }
+
+
+  // Update account password modal calling, opening modal
+  async updateAccountPasswordModal(){
+    const updateAccountPasswordModal = await this.modalController.create({
+      component: UpdateAccountPasswordModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    updateAccountPasswordModal.present();
+  }
+
 
   // Process of update user account password
   doUpdatePassword(value){
@@ -397,7 +448,8 @@ export class SettingsPage implements OnInit {
     // Verifying entered login credentials
     this.settingsService.verifyLoginCredentials(value).then(async response => {
       
-      
+      // Opening update account password modal
+      this.updateAccountPasswordModal();
 
     }, error => {
       console.log("Error during login credential verification: " + error);
@@ -785,6 +837,93 @@ export class SettingsPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+
+
+  /* Opening Edit Modals */
+  // Edit degree program modal calling, opening modal
+  async openEditDegreProgramModal(value){
+    console.log(value);
+
+    const editDegreeProgramModal = await this.modalController.create({
+      component: EditDegreeProgramModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editDegreeProgramModal.present();
+  }
+
+  // Edit batch modal calling, opening modal
+  async openEditBatchModal(value){
+    console.log(value);
+
+    const editBatchModal = await this.modalController.create({
+      component: EditBatchModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editBatchModal.present();
+  }
+
+  // Edit credit weighting modal calling, opening modal
+  async openEditCreditWeightingModal(value){
+    console.log(value);
+
+    const editCreditWeightingModal = await this.modalController.create({
+      component: EditCreditWeightingModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editCreditWeightingModal.present();
+  }
+
+  // Edit lecture hall modal calling, opening modal
+  async openEditLectureHallModal(value){
+    console.log(value);
+
+    const editLectureHallModal = await this.modalController.create({
+      component: EditLectureHallModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editLectureHallModal.present();
+  }
+
+  // Edit lecture session status modal calling, opening modal
+  async openEditLectureSessionStatusModal(value){
+    console.log(value);
+
+    const editLectureSessionStatusModal = await this.modalController.create({
+      component: EditLectureSessionStatusModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editLectureSessionStatusModal.present();
+  }
+
+  // Edit user account status modal calling, opening modal
+  async openEditUserAccountStatusModal(value){
+    console.log(value);
+
+    const editUserAccountStatusModal = await this.modalController.create({
+      component: EditUserAccountStatusModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editUserAccountStatusModal.present();
+  }
+
+  // Edit notice category modal calling, opening modal
+  async openEditNoticeCategoryModal(value){
+    console.log(value);
+
+    const editNoticeCategoryModal = await this.modalController.create({
+      component: EditNoticeCategoryModalPage,
+      // Disabling modal closing from any outside clicks
+      backdropDismiss: false
+    });
+    editNoticeCategoryModal.present();
   }
 
   
