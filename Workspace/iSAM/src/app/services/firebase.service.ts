@@ -63,7 +63,7 @@ export class FirebaseService {
                         middleName: value.mName,
                         lastName: value.lName
                     },
-                    Email: value.email,
+                    email: value.email,
                     nsbmStudentID: value.sid,
                     degree: value.degree,
                     batch: value.batch,
@@ -77,10 +77,11 @@ export class FirebaseService {
                     },
                     sessionDateTime: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()]
+                        logoutDateTime: [new Date()],
+                        accountActivity: "Offline"
                     },
                     faculty: value.faculty,
-                    status: "active"
+                    accountStatus: "Active"
 
                 })
                 resolve(success);
@@ -209,7 +210,8 @@ export class FirebaseService {
                     },
                     sessionDetails: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()]
+                        logoutDateTime: [new Date()],
+                        accountActivity: "Offline"
                     },
                     status: value.lecturerStatus
                 });
