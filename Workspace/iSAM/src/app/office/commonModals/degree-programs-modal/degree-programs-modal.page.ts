@@ -76,6 +76,10 @@ export class DegreeProgramsModalPage implements OnInit {
 
   }
 
+  loadFormContent(event){
+
+  }
+
   // Implementation for closing the modal and passing the relevant data back to the parent page
   closeDegreeProgram(){
     this.modalController.dismiss({

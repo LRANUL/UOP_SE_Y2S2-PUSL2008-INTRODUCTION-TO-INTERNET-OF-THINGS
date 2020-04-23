@@ -15,42 +15,42 @@ export class SideMenuPage implements OnInit {
     {
       title: 'Dashboard',
       url: '/office/dashboard',
-      icon: '../../../assets/images/office/main-screen/dashboard.png'
+      icon: 'assets/images/office/main-screen/dashboard.png'
     },
     {
       title: 'Notices',
       url: '/office/notices',
-      icon: '../../../assets/images/office/main-screen/notices.png'
+      icon: 'assets/images/office/main-screen/notices.png'
     },
     {
       title: 'Student Attendance',
       url: '/office/student-attendance',
-      icon: '../../../assets/images/office/main-screen/student-attendance.png'
+      icon: 'assets/images/office/main-screen/student-attendance.png'
     },
     {
       title: 'Lectures',
       url: '/office/lectures',
-      icon: '../../../assets/images/office/main-screen/lectures.png'
+      icon: 'assets/images/office/main-screen/lectures.png'
     },
     {
       title: 'Semester Calendar',
       url: '/office/semester-calendar',
-      icon: '../../../assets/images/office/main-screen/semester-calendar.png'
+      icon: 'assets/images/office/main-screen/semester-calendar.png'
     },
     {
       title: 'Modules',
       url: '/office/modules',
-      icon: '../../../assets/images/office/main-screen/modules.png'
+      icon: 'assets/images/office/main-screen/modules.png'
     },
     {
       title: 'Students',
       url: '/office/students',
-      icon: '../../../assets/images/office/main-screen/students.png'
+      icon: 'assets/images/office/main-screen/students.png'
     },
     {
       title: 'Lecturers',
       url: '/office/lecturers',
-      icon: '../../../assets/images/office/main-screen/lecturers.png'
+      icon: 'assets/images/office/main-screen/lecturers.png'
     }
   ];
 

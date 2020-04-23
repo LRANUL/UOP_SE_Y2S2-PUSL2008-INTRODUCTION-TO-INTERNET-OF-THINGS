@@ -843,7 +843,7 @@ export class SettingsPage implements OnInit {
 
   /* Opening Edit Modals */
   // Edit degree program modal calling, opening modal
-  async openEditDegreProgramModal(value){
+  async openEditDegreeProgramModal(value){
     console.log(value);
 
     const editDegreeProgramModal = await this.modalController.create({
