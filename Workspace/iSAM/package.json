@@ -11,7 +11,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron-serve": "ng build --prod && electron ."
+    "electron-serve": "ng build --prod && electron .",
+    "windows-release": "electron-packager . iSAM-App --overwrite --asar=true --platform=win32 --arch=ia32 --icon=src/assets/icon/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='iSAM App'",
+    "windows-build": "node src/windows-build.js"
   },
   "private": true,
   "dependencies": {
@@ -34,6 +36,7 @@
     "chart.js": "^2.9.3",
     "cordova-android": "8.1.0",
     "core-js": "^2.5.4",
+    "electron-winstaller": "^4.0.0",
     "firebase": "^7.14.0",
     "ionic2-calendar": "^0.5.9",
     "ng2-charts": "^2.3.0",
