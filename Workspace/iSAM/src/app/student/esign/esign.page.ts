@@ -3,27 +3,21 @@ import { NavController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
+import { MapsAPILoader } from '@agm/core';
+
 import { AngularFirestore } from '@angular/fire/firestore/';
 @Component({ selector: 'app-esign', templateUrl: './esign.page.html', styleUrls: ['./esign.page.scss'] })
 
 export class EsignPage implements OnInit {
-    session: { SessionCode: any; Module: any; Session: any; Date: any; Hall: any; }[];
-    location: boolean;
-    SessionCode: { SessionCode: any; Module: any; Session: any; Date: any; Time: any; Hall: any; }[];
-    Module: any;
-    Session: any;
-    Date: any;
-    Time: any;
-    Hall: any;
-    Alert: string;
-    CloudCode: any;
-    Batch: any;
-    Faculty: any;
-    Today: any;
+    nosession: boolean;
     check: void[];
-    nosession: any;
-    signed: any;
-    constructor(private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
+    signed: boolean;
+    session: { id: string; SessionCode: any; Module: string; Session: any; Date: any; Hall: any; Lecturer: any; }[];
+    CloudCode: any;
+    SessionCode: any;
+    Alert: string;
+    location;
+    constructor(private loader: MapsAPILoader, private firestore: AngularFirestore, private router: Router, private firebase: FirebaseService, public navCtrl: NavController, private toastController: ToastController) {
 
     }
 
@@ -44,8 +38,10 @@ export class EsignPage implements OnInit {
         var LectureDate: string
         var DegreeCode: string
         var ModuleCode: string
+        var LocationCheck: boolean
 
         // Fetch Date to Query
+
         var checkdate = function (sp) {
             const today = new Date();
             var dd = today.getDate();
@@ -92,6 +88,7 @@ export class EsignPage implements OnInit {
                                         // console.log(Batch + '' + Faculty + '' + LectureDate)
                                         this.session = data.map(e => {
                                             ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle']
+                                            LocationCheck = e.payload.doc.data()['LocationCheck']
                                             return {
 
                                                 id: e.payload.doc.id,
@@ -124,7 +121,25 @@ export class EsignPage implements OnInit {
                             })
 
                         });
-                        this.location = true;
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            }
+                            var NSBMPOS = 'lat: 6.8211, lng: 80.0409'
+                            if (LocationCheck = true) {
+                                if (pos.toString() == NSBMPOS) {
+                                    this.location = true;
+                                }
+                                else {
+                                    // this.location = false;
+                                }
+                            }
+                            if (LocationCheck = false) {
+                                this.location = true;
+                            }
+                        });
+
                     }
                 })
             } else {

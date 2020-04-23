@@ -21,6 +21,8 @@ export class LecturerPage implements OnInit {
   };
   selectedDate = new Date();
   Module: string;
+  check: boolean;
+  value: any;
   constructor(private toastController: ToastController, private firestore: AngularFirestore, private firebase: FirebaseService, public loadingController: LoadingController, public navCtrl: NavController) { }
   ngOnInit() {
     this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).set({
@@ -54,8 +56,16 @@ export class LecturerPage implements OnInit {
       }
     })
   }
-
+  checkevt($event) {
+    this.check = !this.value;
+  }
   generateKey() {
+    if(this.check=true){
+      var LocationCheck = true;
+    }
+    else{
+      var LocationCheck = false;
+    }
     var seconds = new Date().getTime();
     var uniquekey = 'xyxyxy'.replace(/[xy]/g, function (c) {
       var randomkey = (seconds + Math.random() * 25) % 25 | 0;
@@ -84,7 +94,7 @@ export class LecturerPage implements OnInit {
             if (name = event.lecturer) {
               var selectedDoc = key.payload.doc.id
               // console.log(PrepKey + " " + selectedDoc)
-              this.firebase.sendKey(faculty, PrepKey, selectedDoc).then(async resp => {
+              this.firebase.sendKey(faculty, PrepKey, selectedDoc, LocationCheck).then(async resp => {
                 const toast = await this.toastController.create({
                   message: 'Code Added to Module',
                   duration: 2000

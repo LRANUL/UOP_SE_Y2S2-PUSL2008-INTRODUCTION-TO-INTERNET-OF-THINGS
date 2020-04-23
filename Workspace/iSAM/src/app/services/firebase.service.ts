@@ -187,9 +187,10 @@ export class FirebaseService {
         this.firestore.collection('EC-Forms/Done' + value.email + '').add(value);
     }
 
-    sendKey(faculty, PrepKey, DocID) {
+    sendKey(faculty, PrepKey, DocID, LocationCheck) {
         return this.firestore.firestore.collection('faculties').doc(faculty).collection('allLectureSessions').doc(DocID).set({
             SessionCode: PrepKey,
+            LocationCheck: LocationCheck,
         }, { merge: true });
     }
 

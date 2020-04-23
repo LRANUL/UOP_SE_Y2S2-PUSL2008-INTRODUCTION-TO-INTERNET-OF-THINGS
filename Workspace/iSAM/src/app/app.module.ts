@@ -38,6 +38,7 @@ import { EditCreditWeightingModalPageModule } from './office/settings/editModals
 import { EditDegreeProgramModalPageModule } from './office/settings/editModals/edit-degree-program-modal/edit-degree-program-modal.module';
 import { EditLectureSessionStatusModalPageModule } from './office/settings/editModals/edit-lecture-session-status-modal/edit-lecture-session-status-modal.module';
 import { EditNoticeCategoryModalPageModule } from './office/settings/editModals/edit-notice-category-modal/edit-notice-category-modal.module';
+import { AgmCoreModule } from '@agm/core';
 
 
 @NgModule({
@@ -67,7 +68,12 @@ import { EditNoticeCategoryModalPageModule } from './office/settings/editModals/
     EditCreditWeightingModalPageModule,
     EditDegreeProgramModalPageModule,
     EditLectureSessionStatusModalPageModule,
-    EditNoticeCategoryModalPageModule
+    EditNoticeCategoryModalPageModule,
+    AgmCoreModule.forRoot({
+      // please get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
+      apiKey: 'AIzaSyBUPEFtsVw5kgunMcW62ROdNSxV_zLkxg4',
+      libraries: ['geometry']
+    }),
   ],
   providers: [
     StatusBar,

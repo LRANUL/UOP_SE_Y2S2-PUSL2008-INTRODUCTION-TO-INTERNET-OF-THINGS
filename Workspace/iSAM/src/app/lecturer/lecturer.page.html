@@ -1,14 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Hello, {{Name}} <div class="col text-right">
-        <ion-button color="primary" (click)="logout()" align="right" size="small">
-          <ion-icon name="log-out-outline">Logout</ion-icon>
-        </ion-button>
-      </div>
+    <ion-title>Hello, {{Name}} 
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div class="col text-right">
+    <ion-button color="primary" (click)="logout()" align="right" size="small">
+      <ion-icon name="log-out-outline"></ion-icon>Logout
+    </ion-button>
+  </div>
   <ion-item>
     <ion-card>
       <ion-card-title>Schedule</ion-card-title>
@@ -20,7 +21,10 @@
     <h4>Selected Module: {{Module}}</h4>
 </ion-item>
 <ion-item>
+  Allow Location<ion-toggle checked={{check}} (ionChange)="checkevt($event)"></ion-toggle>
+  </ion-item>
+  <ion-item>
     <ion-button color="warning" (click)="generateKey()">Generate and Add Key</ion-button>
-    <ion-label aria-placeholder="Press the Button to Generate and Add a Key">:-  {{Key}}  </ion-label>
+    <ion-label aria-placeholder="Press the Button to Generate and Add a Key">:- {{Key}} </ion-label>
   </ion-item>
 </ion-content>
