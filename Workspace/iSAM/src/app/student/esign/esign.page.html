@@ -30,7 +30,7 @@
             </ion-label>
             <p *ngIf="location">we have detected you are inside the hall</p>
             <p *ngIf="!location">we cannot detect your inside the hall enable location services and try again.</p>
-            <ion-button [disabled]="!item.SessionCode == SessionCode" (click)="addAttendaceToFirebase()" shape="round"
+            <ion-button [disabled]="item.SessionCode != SessionCode" (click)="addAttendaceToFirebase()" shape="round"
               color="light" slot="end">Mark Attendance<ion-icon slot="icon-only" name="checkmark-done-circle">
               </ion-icon>
             </ion-button>

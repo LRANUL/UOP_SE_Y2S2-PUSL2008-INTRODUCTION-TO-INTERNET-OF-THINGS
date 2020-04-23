@@ -114,7 +114,7 @@ export class DashboardPage implements OnInit {
 
 
   // Opening notifications popover
-  async openNotificationPopover(ev: Event, value){
+  async openNotificationPopover(ev: Event){
     const moreDetailsLectureSessionPopover = await this.popoverController.create({
       component: NotificationsPopoverPage,
       componentProps: {
@@ -175,8 +175,14 @@ export class DashboardPage implements OnInit {
   }
 
 
-  
+  moreDetailsTodaysLectureSession(event, value){
 
+  }
+
+  moreDetailsUpcomingLectureSession(event, value){
+
+  }
+  
   // Retrieving published lecture sessions for the current date from the firestore datbase
   publishedLectureSessionsCurrentDate;
   retrievePublishedLectureSessionsCurrentDate = () => 

@@ -123,7 +123,9 @@ export class NoticesPage implements OnInit {
     moreDetailsLectureSessionPopover.present();
   }
 
-
+  moreDetailsNotice(event, value){
+    
+  }
 
   // Retrieving registered modules from the firestore database
   registeredModules;
