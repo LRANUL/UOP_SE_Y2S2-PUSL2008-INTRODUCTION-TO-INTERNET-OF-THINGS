@@ -413,8 +413,8 @@ export class SettingsPage implements OnInit {
   }
 
 
-  // Process of updating user account details
-  doUpdateDetails(value){
+  // Process of verifying entered credentials and opening update user account details modal
+  openUpdateDetailsModal(value){
 
     // Verifying entered login credentials
     this.settingsService.verifyLoginCredentials(value).then(async response => {
@@ -442,8 +442,8 @@ export class SettingsPage implements OnInit {
   }
 
 
-  // Process of update user account password
-  doUpdatePassword(value){
+  // Process of verifying entered credentials and opening update user account password modal
+  openUpdatePasswordModal(value){
 
     // Verifying entered login credentials
     this.settingsService.verifyLoginCredentials(value).then(async response => {

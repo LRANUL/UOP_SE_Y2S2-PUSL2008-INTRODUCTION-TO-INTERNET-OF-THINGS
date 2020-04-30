@@ -24,6 +24,7 @@ import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgCalendarModule  } from 'ionic2-calendar';
+
 import { EditLectureSessionModalPageModule } from './office/semester-calendar/edit-lecture-session-modal/edit-lecture-session-modal.module';
 import { MoreDetailsSessionPopoverPageModule } from './office/semester-calendar/more-details-session-popover/more-details-session-popover.module';
 import { EditLectureHallModalPageModule } from './office/settings/editModals/edit-lecture-hall-modal/edit-lecture-hall-modal.module';
@@ -40,6 +41,10 @@ import { EditLectureSessionStatusModalPageModule } from './office/settings/editM
 import { EditNoticeCategoryModalPageModule } from './office/settings/editModals/edit-notice-category-modal/edit-notice-category-modal.module';
 import { AgmCoreModule } from '@agm/core';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MaterialModule } from './material.module';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -51,6 +56,7 @@ import { AgmCoreModule } from '@agm/core';
     AngularFireModule.initializeApp(environment.firebase), 
     AngularFireAuthModule,
     NgCalendarModule,
+    MaterialModule,
     DegreeProgramsModalPageModule,
     EditModuleModalPageModule,
     MoreDetailsModulePopoverPageModule,
@@ -74,6 +80,7 @@ import { AgmCoreModule } from '@agm/core';
       apiKey: 'AIzaSyBUPEFtsVw5kgunMcW62ROdNSxV_zLkxg4',
       libraries: ['geometry']
     }),
+    BrowserAnimationsModule,
   ],
   providers: [
     StatusBar,

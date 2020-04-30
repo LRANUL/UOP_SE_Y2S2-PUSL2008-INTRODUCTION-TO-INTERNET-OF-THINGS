@@ -250,7 +250,7 @@
                                   <ion-item>
                                     <ion-select style="min-width: 100%;" placeholder="Select Delivery" formControlName="programDelivery">
                                       <ion-select-option value="Part-Time">Part-Time Delivery</ion-select-option>
-                                      <ion-select-option value="Ful-Time">Full-Time Delivery</ion-select-option>
+                                      <ion-select-option value="Full-Time">Full-Time Delivery</ion-select-option>
                                     </ion-select>
                                   </ion-item>
                                 </ion-col>
@@ -330,7 +330,7 @@
                             <tr *ngFor="let item of publishedBatches">
                               <td>{{ item.payload.doc.data().batch }}</td>
                               <td>{{ item.payload.doc.data().degree }},<br> {{ item.payload.doc.data().awardingBodyUniversity }}</td>
-                              <td>{{ item.payload.doc.data().batchStatus }}</td>
+                              <td>{{ item.payload.doc.data().status }}</td>
                               <td>
                                 <ion-grid>
                                   <ion-row>
@@ -1301,7 +1301,7 @@
                 Enter Login Credentials
               </ion-label>
 
-              <form [formGroup]="updateDetailsLoginForm" (ngSubmit)="doUpdateDetails(updateDetailsLoginForm.value)">
+              <form [formGroup]="updateDetailsLoginForm" (ngSubmit)="openUpdateDetailsModal(updateDetailsLoginForm.value)">
                 <ion-grid style="margin-top: 10px;">
                   <ion-row>
                     <ion-col size="4">
@@ -1359,7 +1359,7 @@
                 Enter Login Credentials
               </ion-label>
 
-              <form [formGroup]="updatePasswordLoginForm" (ngSubmit)="doUpdatePassword(updatePasswordLoginForm.value)">
+              <form [formGroup]="updatePasswordLoginForm" (ngSubmit)="openUpdatePasswordModal(updatePasswordLoginForm.value)">
                 <ion-grid style="margin-top: 10px;">
                   <ion-row>
                     <ion-col size="4">

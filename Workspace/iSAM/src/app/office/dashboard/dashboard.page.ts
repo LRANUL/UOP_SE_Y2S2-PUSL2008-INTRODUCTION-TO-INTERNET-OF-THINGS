@@ -34,9 +34,7 @@ export class DashboardPage implements OnInit {
     private dashboardService: FirebaseService,
     private alertController: AlertController,
     private popoverController: PopoverController
-  ) { 
-    console.log("con");
-  }
+  ) { }
 
   // Calling the ngOnInit() function when page is rendered on the user's screen
   ionViewWillEnter(){
@@ -44,8 +42,6 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
-
-    console.log("ng");
 
     this.userActivityAreaChart();
 
@@ -192,6 +188,7 @@ export class DashboardPage implements OnInit {
         this.publishedLectureSessionsCurrentDate = response;
       }
       else {
+        this.showLoadingDotsTodaysLectureSession = false;
         this.noLectureSessionText = true;
       }
   });
@@ -211,15 +208,12 @@ export class DashboardPage implements OnInit {
   
   // Alert Box Implementation
   async alertNotice ( title: string, content: string ) {
-
     const alert = await this.alertController.create({
       header: title,
       message: content,
       buttons: ['OK']
     });
-
     await alert.present();
-
   }
 
 

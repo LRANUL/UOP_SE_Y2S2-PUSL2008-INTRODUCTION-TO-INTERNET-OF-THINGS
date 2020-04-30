@@ -252,10 +252,10 @@ export class FirebaseService {
                     },
                     sessionDetails: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()],
-                        accountActivity: "Offline"
+                        logoutDateTime: [new Date()]
                     },
-                    status: value.lecturerStatus
+                    status: value.lecturerStatus,
+                    accountActivity: "Offline"
                 });
                 resolve(success);
             }, error => reject(error))
@@ -359,7 +359,6 @@ export class FirebaseService {
             moduleTitle: moduleTitle,
             status: value.status
         });
-
 
     }
 
@@ -739,7 +738,7 @@ export class FirebaseService {
         return this.firestore.doc("faculties/" + userFaculty + "/lectureSessions/" + id).delete();
     }
 
-    // Removing published lecture seires from the firestore database
+    // Removing published lecture series from the firestore database
     removeLectureSeries(docId, userFaculty){
         return this.firestore.doc("faculties/"+ userFaculty +"/lectureSeries/"+ docId).delete();
     }
