@@ -45,6 +45,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MaterialModule } from './material.module';
 
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -57,6 +58,7 @@ import { MaterialModule } from './material.module';
     AngularFireAuthModule,
     NgCalendarModule,
     MaterialModule,
+    NgxMaterialTimepickerModule,
     DegreeProgramsModalPageModule,
     EditModuleModalPageModule,
     MoreDetailsModulePopoverPageModule,

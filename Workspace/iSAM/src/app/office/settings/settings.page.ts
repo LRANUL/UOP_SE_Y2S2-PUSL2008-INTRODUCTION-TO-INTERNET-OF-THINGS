@@ -367,6 +367,9 @@ export class SettingsPage implements OnInit {
       this.updatePasswordLoginFormSection = false;
       this.closeUpdatePasswordLoginFormButton = false;
 
+      // Resetting update account password form
+      this.updatePasswordLoginForm.reset();
+
       this.updateDetailsLoginFormSection = true;
       this.closeUpdateDetailsLoginFormButton = true;
     }
@@ -377,6 +380,9 @@ export class SettingsPage implements OnInit {
     else if(this.updateDetailsLoginFormSection == true){
       this.updateDetailsLoginFormSection = false;
       this.closeUpdateDetailsLoginFormButton = false;
+
+      // Resetting update account details form
+      this.updateDetailsLoginForm.reset();
     }
   }
 
@@ -384,6 +390,9 @@ export class SettingsPage implements OnInit {
     if(this.updateDetailsLoginFormSection == true){
       this.updateDetailsLoginFormSection = false;
       this.closeUpdateDetailsLoginFormButton = false;
+
+      // Resetting update account details form
+      this.updateDetailsLoginForm.reset();
 
       this.updatePasswordLoginFormSection = true;
       this.closeUpdatePasswordLoginFormButton = true;
@@ -395,8 +404,12 @@ export class SettingsPage implements OnInit {
     else if (this.updatePasswordLoginFormSection == true){
       this.updatePasswordLoginFormSection = false;
       this.closeUpdatePasswordLoginFormButton = false;
+
+      // Resetting update account password form
+      this.updatePasswordLoginForm.reset();
     }
   }
+
 
   // Update account details modal calling, opening modal
   async updateAccountDetailsModal(){

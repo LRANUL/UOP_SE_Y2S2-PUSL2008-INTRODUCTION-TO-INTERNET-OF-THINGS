@@ -1,9 +1,17 @@
 .active-item-top {
     --ion-background-color: #F8FEFF;
-    border-left: 8px solid #0083CD; // Samll bar in the left side in the side menu to show the active page.
+    border-left: 8px solid #0083CD; // Small bar in the left side in the side menu to show the active page.
 }
 
 .active-item-bottom {
     --ion-background-color: #F7FFFD;
-    border-left: 8px solid #00BDBD; // Samll bar in the left side in the side menu to show the active page.
+    border-left: 8px solid #00BDBD; // Small bar in the left side in the side menu to show the active page.
 }
+
+.sideMenuHeading{
+    position: absolute;
+    top: 1px;
+    left: 40px;
+    letter-spacing: 1px;
+}
+

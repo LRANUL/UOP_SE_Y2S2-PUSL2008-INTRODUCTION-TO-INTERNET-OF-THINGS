@@ -51,7 +51,7 @@ export class LoginPage implements OnInit {
                 /*-- Lecturer User Registration Process Phase --*/
                 // console.log('Current router url: ', this.router.url);
 
-                // After new lecturer account is created, that user will be automatically logged in usder the program office user interface
+                // After new lecturer account is created, that user will be automatically logged in to the program office user interface, to resolve this
                 // If the router url is the program office user interface and if the user type is 'lecturerUser', the currently logged in user will be logged out
                 if (this.router.url == '/office/lecturers') {
 
@@ -87,11 +87,11 @@ export class LoginPage implements OnInit {
                     if (response.length > 0) {
 
                         /* Process of checking account status is ACTIVE or not */
-                        let resgisteredStudentUser = response;
+                        let registeredStudentUser = response;
                         let studentUserAccountStatus;
 
                         // Retrieving the account status of this student user account
-                        resgisteredStudentUser.forEach(document => {
+                        registeredStudentUser.forEach(document => {
                             let firestoreDoc: any = document.payload.doc.data();
                             studentUserAccountStatus = firestoreDoc.accountStatus;
                         });
@@ -300,11 +300,11 @@ export class LoginPage implements OnInit {
                 if (response.length > 0) {
 
                     /* Process of checking account status is ACTIVE or not */
-                    let resgisteredStudentUser = response;
+                    let registeredStudentUser = response;
                     let studentUserAccountStatus;
 
                     // Retrieving the account status of this student user account
-                    resgisteredStudentUser.forEach(document => {
+                    registeredStudentUser.forEach(document => {
                         let firestoreDoc: any = document.payload.doc.data();
                         studentUserAccountStatus = firestoreDoc.accountStatus;
                     });

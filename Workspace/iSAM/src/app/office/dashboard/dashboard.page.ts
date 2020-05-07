@@ -29,6 +29,30 @@ export class DashboardPage implements OnInit {
 
   noLectureSessionsTodayText: Boolean = false;
 
+  noLecturerPONoticeText: Boolean = false;
+
+
+  activeStudentUsersLoadingSpinner: Boolean = true;
+
+  activeLecturerUsersLoadingSpinner: Boolean = true;
+
+  activeProgramOfficeUsersLoadingSpinner: Boolean = true;
+
+  activeStudentUserDetailsLoadingSpinner: Boolean = true;
+
+  activeLecturerUserDetailsLoadingSpinner: Boolean = true;
+
+  activeProgramOfficeUserDetailsLoadingSpinner: Boolean = true;
+
+  onlineUsersCount: number = 0;
+  onlineStudentUsersCount: number = 0;
+  onlineLecturerUsersCount: number = 0;
+  onlineProgramOfficeUsersCount: number = 0;
+  onlineStudentUserDetails;
+  onlineLecturerUserDetails;
+  onlineProgramOfficeUserDetails;
+
+
   constructor(
     private sideMenuPageUserFaculty: SideMenuPage,
     private dashboardService: FirebaseService,
@@ -78,6 +102,8 @@ export class DashboardPage implements OnInit {
 
     this.retrievePublishedLecturerToPONotice();
 
+    this.retrieveOnlineUserDetails();
+
 
     // Retrieving upcoming published lecture sessions from the firestore database and assigning them to the calendar
     this.dashboardService.retrievePublishedLectureSessionsUpcoming(this.sideMenuPageUserFaculty.passLoggedInUserFaculty()).subscribe(response => {
@@ -109,6 +135,60 @@ export class DashboardPage implements OnInit {
   }
 
 
+
+  retrieveOnlineUserDetails = () => {
+    // Retrieving user details of student users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("studentUsers").subscribe(response => {
+      this.activeStudentUsersLoadingSpinner = false;
+      this.onlineStudentUsersCount = response.length;
+      this.activeStudentUserDetailsLoadingSpinner = false;
+      this.onlineStudentUserDetails = response;
+    });
+
+    // Retrieving user details of lecturer users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("lecturerUsers").subscribe(response => {
+      this.activeLecturerUsersLoadingSpinner = false;
+      this.onlineLecturerUsersCount = response.length;
+      this.activeLecturerUserDetailsLoadingSpinner = false;
+      this.onlineLecturerUserDetails = response;
+    });
+
+    // Retrieving user details of program office users that have an account status "Online" from the firestore database
+    this.dashboardService.retrieveOnlineUserDetails("programOfficeUsers").subscribe(response => {
+      this.activeProgramOfficeUsersLoadingSpinner = false;
+      this.onlineProgramOfficeUsersCount = response.length;
+      this.activeProgramOfficeUserDetailsLoadingSpinner = false;
+      this.onlineProgramOfficeUserDetails = response;
+    });
+  }
+
+  // Process of returning two digits if there is only one digit in a number
+  // Sample: Passing - 5, Returning - 05
+  convertToTwoDigit(numericValue: number){
+    if(numericValue < 10){
+      return "0" + numericValue;
+    }
+    else{
+      return numericValue;
+    }
+  }
+
+  // Processing of adding all the active users
+  calculateTotalOnlineUsers(onlineStudentUsers: number, onlineLecturerUsers: number, onlineProgramOfficeUsers: number){
+    let totalActiveUsers = onlineStudentUsers + onlineLecturerUsers + onlineProgramOfficeUsers;
+
+    // Checking if number has one or two digits
+    // Adding one more digit if number only has one digit
+    // Sample: Passing - 5, Returning = 05
+    // Returning total number of active users 
+    return this.convertToTwoDigit(totalActiveUsers);
+  }
+
+
+
+
+
+
   // Opening notifications popover
   async openNotificationPopover(ev: Event){
     const moreDetailsLectureSessionPopover = await this.popoverController.create({
@@ -132,10 +212,10 @@ export class DashboardPage implements OnInit {
     this.bars = new Chart(this.barChart.nativeElement, {
       type: 'line',
       data: {
-        labels: ['16-4-2020', '17-4-2020', '18-4-2020', '19-4-2020', '20-4-2020', '21-4-2020', '22-4-2020', '23-4-2020'],
+        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         datasets: [{
           label: 'User Activity',
-          data: [10, 12, 12, 8, 10, 20, 22, 30],
+          data: [320,353,339,323,342,359,335],
           backgroundColor: 'rgb(109, 156, 235)', 
           borderColor: 'rgb(109, 219, 235)',
           borderWidth: 1
@@ -179,7 +259,7 @@ export class DashboardPage implements OnInit {
 
   }
   
-  // Retrieving published lecture sessions for the current date from the firestore datbase
+  // Retrieving published lecture sessions for the current date from the firestore database
   publishedLectureSessionsCurrentDate;
   retrievePublishedLectureSessionsCurrentDate = () => 
     this.dashboardService.retrievePublishedLectureSessionsCurrentDate(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), this.currentDate, this.nextDate).subscribe(response => {
@@ -189,17 +269,23 @@ export class DashboardPage implements OnInit {
       }
       else {
         this.showLoadingDotsTodaysLectureSession = false;
-        this.noLectureSessionText = true;
+        this.noLectureSessionsTodayText = true;
       }
   });
 
 
-  // Retriving published lecturer to PO notice from the current date to three days ago from the firestore database
+  // Retrieving published lecturer to PO notice from the current date to three days ago from the firestore database
   publishedLecturerToPONotices;
   retrievePublishedLecturerToPONotice = () => 
     this.dashboardService.retrievePublishedLecturerToPONotice(this.currentDateNotice, this.dateThreeDaysBeforeCurrentDate).subscribe(response => {
-      this.showLoadingDotsLatestLecturerPONotices = false;
-      this.publishedLecturerToPONotices = response;
+      if(response.length > 0){
+        this.showLoadingDotsLatestLecturerPONotices = false;
+        this.publishedLecturerToPONotices = response;
+      }
+      else{
+        this.showLoadingDotsLatestLecturerPONotices = false;
+        this.noLecturerPONoticeText = true;
+      }
     });
 
 

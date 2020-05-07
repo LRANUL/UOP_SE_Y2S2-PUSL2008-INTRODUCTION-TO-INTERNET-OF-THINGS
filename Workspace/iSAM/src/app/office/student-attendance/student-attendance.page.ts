@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, AlertController } from '@ionic/angular';
 import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
 import { SideMenuPage } from '../side-menu/side-menu.page';
 
@@ -12,11 +12,13 @@ export class StudentAttendancePage implements OnInit {
 
   constructor(
     private popoverController: PopoverController,
-    private sideMenuPageUserFaculty: SideMenuPage
+    private sideMenuPageUserFaculty: SideMenuPage,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
 
+    this.alertNotice('Area In Development - Will be Available Soon');
 
   }
 
@@ -33,6 +35,15 @@ export class StudentAttendancePage implements OnInit {
     moreDetailsLectureSessionPopover.present();
   }
 
+
+  // Alert Box Implementation
+  async alertNotice ( title: string ) {
+    const alert = await this.alertController.create({
+      header: title,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 
 
 

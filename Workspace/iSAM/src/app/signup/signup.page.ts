@@ -35,6 +35,10 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
     this.validations_form = this.formBuilder.group({
+      prefixName: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('')
+      ])),
       fName: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z]+$')

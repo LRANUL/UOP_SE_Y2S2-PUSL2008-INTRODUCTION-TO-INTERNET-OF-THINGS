@@ -23,7 +23,7 @@ export class EsignPage implements OnInit {
 
     async ngOnInit() {
         this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
-            Activity: 'Online',
+            accountActivity: 'Online',
         }, { merge: true });
         this.firestore.collection('userActivityMonitoring').add({
             loginDateTime: new Date(),

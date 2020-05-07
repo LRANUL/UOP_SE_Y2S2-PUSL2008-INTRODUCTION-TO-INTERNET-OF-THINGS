@@ -26,7 +26,7 @@ export class LecturerPage implements OnInit {
   constructor(private toastController: ToastController, private firestore: AngularFirestore, private firebase: FirebaseService, public loadingController: LoadingController, public navCtrl: NavController) { }
   ngOnInit() {
     this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).set({
-      Activity: 'Online',
+      accountActivity: 'Online',
     }, { merge: true });
     this.firestore.collection('userActivityMonitoring').add({
       loginDateTime: new Date(),
@@ -119,7 +119,7 @@ export class LecturerPage implements OnInit {
 
   async logout() {
     this.firestore.collection('/users/userTypes/lecturerUsers').doc(this.firebase.userDetails().uid).set({
-      Activity: 'Offline',
+      accountActivity: 'Offline',
     }, { merge: true });
     this.firebase
       .logoutUser()

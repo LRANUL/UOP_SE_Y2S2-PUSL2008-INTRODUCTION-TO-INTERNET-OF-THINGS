@@ -59,6 +59,7 @@ export class FirebaseService {
                 // console.log('Student Record Stored')
                 this.firestore.collection('users/userTypes/studentUsers/').doc(success.user.uid).set({
                     name: {
+                        prefix: value.prefixName,
                         firstName: value.fName,
                         middleName: value.mName,
                         lastName: value.lName
@@ -77,12 +78,11 @@ export class FirebaseService {
                     },
                     sessionDateTime: {
                         loginDateTime: [new Date()],
-                        logoutDateTime: [new Date()],
-                        accountActivity: "Offline"
+                        logoutDateTime: [new Date()]
                     },
                     faculty: value.faculty,
-                    accountStatus: "Active"
-
+                    accountStatus: "Active",
+                    accountActivity: "Offline"
                 })
                 resolve(success);
             }, error => reject(error))
@@ -215,11 +215,11 @@ export class FirebaseService {
     }
 
 
-
-
-    // Retriving the current date and time from the localhost
+    /*
+    // Retrieving the current date and time from the localhost
     currentDT = new Date();
     currentDateTime = this.currentDT.getDate() + "/" + this.currentDT.getMonth() + "/" + this.currentDT.getFullYear() + " " + this.currentDT.getHours() + ":" + this.currentDT.getMinutes() + ":" + this.currentDT.getSeconds();
+    */
 
     // Implementation of Registering a new lecturer into the system (firebase authentication)
     lecturerRegistrationDetails(value, loggedInUserId, loggedInUserFaculty) {
@@ -254,7 +254,7 @@ export class FirebaseService {
                         loginDateTime: [new Date()],
                         logoutDateTime: [new Date()]
                     },
-                    status: value.lecturerStatus,
+                    accountStatus: value.lecturerStatus,
                     accountActivity: "Offline"
                 });
                 resolve(success);
@@ -474,8 +474,13 @@ export class FirebaseService {
 
 
 
+    // Retrieving the user details of the users that have an account activity "Online" from the firestore database
+    retrieveOnlineUserDetails(userType){
+        return this.firestore.collection("users/userTypes/"+ userType, ref => ref
+                .where("accountActivity", "==", "Online")).snapshotChanges();
+    }
 
-    // Retrieving published Lectuers to PO notices from current date to three days before from the firestore database
+    // Retrieving published Lecturers to PO notices from current date to three days before from the firestore database
     retrievePublishedLecturerToPONotice(currentDate, dateThreeDaysBeforeCurrentDate) {
         return this.firestore.collection("notices/noticeTypes/notices-Lecturers-To-PO/", ref => ref
             .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))
@@ -785,19 +790,19 @@ export class FirebaseService {
 
 
 
-    // Disabling the user acount by updating user account status to 'disabled' in the firestore database
+    // Disabling the user account by updating user account status to 'disabled' in the firestore database
     disableUserAccount(userType, docId) {
         return this.firestore.doc("users/userTypes/" + userType + "/" + docId).update({
-            status: "Disabled"
+            accountStatus: "Disabled"
         }).then(function () {
             console.log("User Account has been disabled");
         });
     }
 
-    // Enabling the user acount by updating user account status to 'disabled' in the firestore database
+    // Enabling the user account by updating user account status to 'disabled' in the firestore database
     enableUserAccount(userType, docId) {
         return this.firestore.doc("users/userTypes/" + userType + "/" + docId).update({
-            status: "Active"
+            accountStatus: "Active"
         }).then(function () {
             console.log("User Account has been disabled");
         });

@@ -206,28 +206,55 @@ export class NoticesPage implements OnInit {
 
 
 
-  /* Javascript Functions */
-  showLecturerNoticeForm(){
-    var userClickOnLecturer = document.getElementById("newLecturerNoticeSubmit");
-    var userClickOnStudent = document.getElementById("newStudentNoticeSubmit");
+   /* Javascript Function */
+   showStudentForm(){
+    var userClickLecturer = document.getElementById("newLecturerNoticeSubmit");
+    var userClickStudent = document.getElementById("newStudentNoticeSubmit");
     var newNoticeSectionCard = document.getElementById("newNoticeFormSection");
-    if(userClickOnStudent.style.display === "inline"){
-      userClickOnStudent.style.display = "none";
-      userClickOnLecturer.style.display = "inline";
-      newNoticeSectionCard.style.background = "#CDE7F9";
-    }
-  }
-  showStudentNoticeForm(){
-    var userClickOnLecturer = document.getElementById("newLecturerNoticeSubmit");
-    var userClickOnStudent = document.getElementById("newStudentNoticeSubmit");
-    var newNoticeSectionCard = document.getElementById("newNoticeFormSection");
-    if(userClickOnLecturer.style.display === "inline"){
-      userClickOnLecturer.style.display = "none";
-      userClickOnStudent.style.display = "inline";
+    var studentFormButton = document.getElementById("newNoticeButtonStudent");
+    var lecturerFormButton = document.getElementById("newNoticeButtonLecturer");
+    if(userClickLecturer.style.display === "inline"){
+      userClickLecturer.style.display = "none";
+      userClickStudent.style.display = "inline";
+      studentFormButton.style.background = "#0B80D3";
+      lecturerFormButton.style.background = "#02A5D7";
       newNoticeSectionCard.style.background = "#F3FAFC";
     }
   }
 
+  showLecturerForm(){
+    var userClickLecturer = document.getElementById("newLecturerNoticeSubmit");
+    var userClickStudent = document.getElementById("newStudentNoticeSubmit");
+    var newNoticeSectionCard = document.getElementById("newNoticeFormSection");
+    var studentFormButton = document.getElementById("newNoticeButtonStudent");
+    var lecturerFormButton = document.getElementById("newNoticeButtonLecturer");
+    if(userClickStudent.style.display === "inline"){
+      userClickStudent.style.display = "none";
+      userClickLecturer.style.display = "inline";
+      lecturerFormButton.style.backgroundColor = "#0B80D3";
+      studentFormButton.style.backgroundColor = "#02A5D7";
+      newNoticeSectionCard.style.background = "#CDE7F9";
+    }
+  }
+
+
+  markAsRead(noticeDocumentValue){
+    let noticeReadButton = document.getElementById('noticeReadButton');
+    let noticeUnreadButton = document.getElementById('noticeUnreadButton');
+    if(noticeReadButton.style.display === "inline"){
+      noticeReadButton.style.display = "none";
+      noticeUnreadButton.style.display = "inline";
+    }
+  }
+
+  markAsUnread(noticeDocumentValue){
+    let noticeReadButton = document.getElementById('noticeReadButton');
+    let noticeUnreadButton = document.getElementById('noticeUnreadButton');
+    if(noticeUnreadButton.style.display === "inline"){
+      noticeUnreadButton.style.display = "none";
+      noticeReadButton.style.display = "inline";
+    }
+  }
 
 
 

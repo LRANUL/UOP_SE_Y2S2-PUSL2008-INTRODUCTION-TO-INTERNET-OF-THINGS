@@ -9,6 +9,17 @@
           <form class="form" [formGroup]="validations_form" (ngSubmit)="tryRegister(validations_form.value)"
             overflow-scroll="true">
             <ion-item>
+              <ion-label position="floating" color="primary">Prefix</ion-label>
+              <ion-select interface="action-sheet" formControlName="prefixName" value="">
+                <ion-select-option value="Mr.">Mr.</ion-select-option>
+                <ion-select-option value="Sir.">Sir.</ion-select-option>
+                <ion-select-option value="Dr.">Dr.</ion-select-option>
+                <ion-select-option value="Mrs.">Mrs.</ion-select-option>
+                <ion-select-option value="Miss.">Miss</ion-select-option>
+                <ion-select-option value="Ms.">Ms</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
               <ion-label position="floating" color="primary">First Name</ion-label>
               <ion-input type="text" formControlName="fName">
               </ion-input>
@@ -68,7 +79,7 @@
                 <ion-select-option value="SE-NSBM">Software Engineering NSBM</ion-select-option>
                 <ion-select-option value="CE-NSBM">Computer Systems Engineering NSBM
                 </ion-select-option>
-                <ion-select-option value="ME-NSBM">Mechatronic Engineering NSBM</ion-select-option>
+                <ion-select-option value="ME-NSBM">Mechanical Engineering NSBM</ion-select-option>
                 <ion-select-option value="IB-NSBM">International Business NSBM</ion-select-option>
                 <ion-select-option value="AF">Accounting and Finance Plymouth
                 </ion-select-option>
@@ -100,7 +111,7 @@
             </div>
             <ion-item>
               <ion-label position="floating" color="primary">Password</ion-label>
-              <ion-input type="password" formControlName="password" class="form-control" required>
+              <ion-input type="password" formControlName="password" required>
               </ion-input>
             </ion-item>
             <div class="validation-errors">

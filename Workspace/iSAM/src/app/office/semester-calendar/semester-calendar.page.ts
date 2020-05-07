@@ -207,21 +207,21 @@ export class SemesterCalendarPage implements OnInit {
 
   }
 
-  // Retriving published lecture sessions
+  // Retrieving published lecture sessions
   doSearchSemesterCalendar(value){
 
     this.loadingSpinnerPLS = true;
 
 
 
-    console.log(value);
+   // console.log(value);
 
-    console.log(value.batch);
+   // console.log(value.batch);
 
-    console.log(value.degreeProgram);
+   // console.log(value.degreeProgram);
 
-    console.log(value.academicYearYear);
-    console.log(value.academicYearSemester);
+   // console.log(value.academicYearYear);
+   // console.log(value.academicYearSemester);
 
     
     
@@ -256,7 +256,7 @@ export class SemesterCalendarPage implements OnInit {
       this.alertNotice("Error", "An error has occurred: " + error);
     });
   
-    // Calling function to retrive the lecture sessions and setting loading dots to false after the contents has loaded.
+    // Calling function to retrieve the lecture sessions and setting loading dots to false after the contents has loaded.
     this.semesterCalendarService.retrievePublishedLectureSessionsSemesterCalendar(this.sideMenuPageUserFaculty.passLoggedInUserFaculty(), value, this.awardingBodyUniversity).subscribe(() => this.loadingSpinnerPLS = false);
 
 
@@ -299,7 +299,7 @@ export class SemesterCalendarPage implements OnInit {
         lectureSessionDegreeProgram: value.degreeProgram,
         lectureSessionAcademicYear: value.academicYear,
         lectureSessionAcademicSemester: value.academicSemester,
-        lectureSesionModuleCode: value.moduleCode,
+        lectureSessionModuleCode: value.moduleCode,
         lectureSessionModuleTitle: value.moduleTitle,
         lectureSessionStartDateTime: value.startTime,
         lectureSessionEndDateTime: value.endTime,

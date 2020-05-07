@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-side-menu',
@@ -62,7 +63,8 @@ export class SideMenuPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private sideMenuService: FirebaseService,
-    public angularFireAuth: AngularFireAuth
+    public angularFireAuth: AngularFireAuth,
+    private loadingController: LoadingController
   ) { 
 
     this.router.events.subscribe((event: RouterEvent) => {
@@ -163,11 +165,11 @@ export class SideMenuPage implements OnInit {
 
   // Logout Process
   logout(){
-    this.alertnotice('Confirmation ', 'Are you sure you want to logout?');
+    this.logoutAlert('Confirmation ', 'This will log you out, are you sure you want to logout?');
   }
 
   // Alert Box Implementation (Logout)
-  async alertnotice ( title: string, content: string ) {
+  async logoutAlert ( title: string, content: string ) {
 
     const alert = await this.alertController.create({
       header: title,
@@ -184,10 +186,9 @@ export class SideMenuPage implements OnInit {
         {
           text: 'Continue',
           handler: () => {
-            this.sideMenuService.logoutUser();
-            this.router.navigate(["/login"]);
-            console.log("User Logged Out");
 
+            this.logoutProcessApproved();
+            
             // Updating the program office user account activity to OFFLINE
             this.sideMenuService.updateProgramOfficeUserActivity("Offline", this.passLoggedInUserId())
             .then(
@@ -199,6 +200,10 @@ export class SideMenuPage implements OnInit {
                 }
             );
 
+           // this.sideMenuService.logoutUser();
+           // this.router.navigate(["/login"]);
+           // console.log("User Logged Out");
+
           }
         }
 
@@ -207,7 +212,30 @@ export class SideMenuPage implements OnInit {
     await alert.present();
   }
 
-  
+  // Implementation after logout confirmation is approved
+  async logoutProcessApproved() {
+    const loading = await this.loadingController.create({
+      message: 'Logging Out..',
+      duration: 2000
+    });
+
+    await loading.present();
+
+    // Logout Process
+    if(firebase.auth().currentUser){
+      firebase.auth().signOut()
+        .then(() => {
+          console.log("Logout Successful");
+        }).catch((error) => {
+          console.log("Logout Process Failed, " + error);
+          this.alertNotice("Error", "Logout Process Failed, " + error);
+        });
+    }
+    // Redirecting user to login page
+    this.router.navigate(["/login"]);
+  }
+
+
 
 
 }
