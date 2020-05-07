@@ -1,0 +1,379 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["student-esign-esign-module"],{
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/student/esign/esign.page.html":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/student/esign/esign.page.html ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-app>\r\n  <div class=\"ion-page\" id=\"main-content\">\r\n    <ion-header>\r\n      <ion-toolbar>\r\n        <ion-buttons slot=\"start\">\r\n          <ion-menu-button></ion-menu-button>\r\n        </ion-buttons>\r\n        <ion-title>Home</ion-title>\r\n      </ion-toolbar>\r\n    </ion-header>\r\n    <ion-content class=\"ion-padding\">\r\n      <div name=Sessions>\r\n        <ion-card *ngFor=\"let item of session\">\r\n          <ion-card-title>\r\n            <ion-card-header>Sign Your Attendance Online</ion-card-header>\r\n          </ion-card-title>\r\n          <ion-card-content>\r\n            <ion-input [(ngModel)]=\"SessionCode\" placeholder=\"Enter your Session Code\">Session Code: </ion-input>\r\n            <br>\r\n            <ion-label>Module: {{ item.Module }}</ion-label><br>\r\n            <ion-label>Session: {{ item.Session }}</ion-label><br>\r\n            <ion-label>Date: {{ item.Date }}</ion-label><br>\r\n            <ion-label>Hall: {{ item.Hall }}</ion-label><br>\r\n            <br>\r\n            <ion-label *ngIf=\"location\">Student Location: {{ item.Hall }}<ion-icon name=\"checkmark-done-circle-outline\"\r\n                color=\"success\"></ion-icon>\r\n            </ion-label>\r\n            <ion-label *ngIf=\"!location\">Student Location: outside<ion-icon name=\"close-circle-outline\" color=\"danger\">\r\n              </ion-icon>\r\n            </ion-label>\r\n            <p *ngIf=\"location\">we have detected you are inside the hall</p>\r\n            <p *ngIf=\"!location\">we cannot detect your inside the hall enable location services and try again.</p>\r\n            <ion-button [disabled]=\"item.SessionCode != SessionCode\" (click)=\"addAttendaceToFirebase()\" shape=\"round\"\r\n              color=\"light\" slot=\"end\">Mark Attendance<ion-icon slot=\"icon-only\" name=\"checkmark-done-circle\">\r\n              </ion-icon>\r\n            </ion-button>\r\n          </ion-card-content>\r\n        </ion-card>\r\n      </div>\r\n      <div name=\"NoSessions\" *ngIf=\"nosession\" align='center'>\r\n        <ion-card>\r\n          <ion-card-content>\r\n            <h1>No sessions today, check your calendar.</h1>\r\n            <ion-img src=\"/assets/images/internals/nosession.svg\" style=\"height: 200px;\"></ion-img>\r\n          </ion-card-content>\r\n        </ion-card>\r\n      </div>\r\n      <div name=\"CompletedSessions\" *ngIf=\"!signed\" align='center'>\r\n        <ion-card>\r\n          <ion-card-content>\r\n            <h1>You have already signed for all your sessions today.</h1>\r\n            <ion-img src=\"/assets/images/internals/done.svg\" style=\"height: 200px;\"></ion-img>\r\n          </ion-card-content>\r\n        </ion-card>\r\n      </div>\r\n\r\n    </ion-content>\r\n  </div>\r\n</ion-app>");
+
+/***/ }),
+
+/***/ "./src/app/student/esign/esign-routing.module.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/student/esign/esign-routing.module.ts ***!
+  \*******************************************************/
+/*! exports provided: EsignPageRoutingModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EsignPageRoutingModule", function() { return EsignPageRoutingModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _esign_page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./esign.page */ "./src/app/student/esign/esign.page.ts");
+
+
+
+
+const routes = [
+    {
+        path: '',
+        component: _esign_page__WEBPACK_IMPORTED_MODULE_3__["EsignPage"]
+    }
+];
+let EsignPageRoutingModule = class EsignPageRoutingModule {
+};
+EsignPageRoutingModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+        imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forChild(routes)],
+        exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]],
+    })
+], EsignPageRoutingModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/student/esign/esign.module.ts":
+/*!***********************************************!*\
+  !*** ./src/app/student/esign/esign.module.ts ***!
+  \***********************************************/
+/*! exports provided: EsignPageModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EsignPageModule", function() { return EsignPageModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+/* harmony import */ var _esign_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./esign-routing.module */ "./src/app/student/esign/esign-routing.module.ts");
+/* harmony import */ var _esign_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./esign.page */ "./src/app/student/esign/esign.page.ts");
+
+
+
+
+
+
+
+let EsignPageModule = class EsignPageModule {
+};
+EsignPageModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
+        imports: [
+            _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
+            _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
+            _esign_routing_module__WEBPACK_IMPORTED_MODULE_5__["EsignPageRoutingModule"]
+        ],
+        declarations: [_esign_page__WEBPACK_IMPORTED_MODULE_6__["EsignPage"]]
+    })
+], EsignPageModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/student/esign/esign.page.scss":
+/*!***********************************************!*\
+  !*** ./src/app/student/esign/esign.page.scss ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3N0dWRlbnQvZXNpZ24vZXNpZ24ucGFnZS5zY3NzIn0= */");
+
+/***/ }),
+
+/***/ "./src/app/student/esign/esign.page.ts":
+/*!*********************************************!*\
+  !*** ./src/app/student/esign/esign.page.ts ***!
+  \*********************************************/
+/*! exports provided: EsignPage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EsignPage", function() { return EsignPage; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var src_app_services_firebase_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/services/firebase.service */ "./src/app/services/firebase.service.ts");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/fesm2015/ionic-angular.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _agm_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @agm/core */ "./node_modules/@agm/core/fesm2015/agm-core.js");
+/* harmony import */ var _angular_fire_firestore___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/fire/firestore/ */ "./node_modules/@angular/fire/fesm2015/angular-fire-firestore.js");
+
+
+
+
+
+
+
+let EsignPage = class EsignPage {
+    constructor(loader, firestore, router, firebase, navCtrl, toastController) {
+        this.loader = loader;
+        this.firestore = firestore;
+        this.router = router;
+        this.firebase = firebase;
+        this.navCtrl = navCtrl;
+        this.toastController = toastController;
+    }
+    ngOnInit() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).set({
+                accountActivity: 'Online',
+            }, { merge: true });
+            this.firestore.collection('userActivityMonitoring').add({
+                loginDateTime: new Date(),
+                userId: this.firebase.userDetails().uid,
+            });
+            this.fetchdata();
+        });
+    }
+    fetchdata() {
+        var Batch;
+        var Faculty;
+        var LectureDate;
+        var DegreeCode;
+        var ModuleCode;
+        var LocationCheck;
+        // Fetch Date to Query
+        var checkdate = function (sp) {
+            const today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10)
+                dd = 0 + dd;
+            if (mm < 10)
+                mm = 0 + mm;
+            return (yyyy + sp + mm + sp + dd);
+        };
+        // Fetch User Details For Query
+        // Load Module Data from Database  
+        LectureDate = checkdate('-');
+        // LectureDate = '2020-3-21';
+        // console.log(LectureDate)
+        this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
+            if (doc.exists) {
+                // console.log(doc.data());
+                Batch = doc.data().batch.toString();
+                Faculty = doc.data().faculty;
+                DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity;
+                // console.log(DegreeCode + Faculty + Batch)
+                this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
+                    // console.log(doc.data())
+                    if (!doc.exists) {
+                        // console.log('NO SESSION FOR TODAY ')
+                        this.nosession = true;
+                    }
+                    else {
+                        this.nosession = false;
+                        this.check = data.map(e => {
+                            ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle'];
+                            // console.log(ModuleCode)
+                            this.firestore.collection('Attendance/History/' + ModuleCode).doc(this.firebase.userDetails().email).ref.get().then((doc) => {
+                                if (doc.exists) {
+                                    // console.log(doc.data())
+                                    // console.log('ALREADY SIGNED')
+                                    this.signed = true;
+                                }
+                                else {
+                                    this.signed = false;
+                                    this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
+                                        // console.log(Batch + '' + Faculty + '' + LectureDate)
+                                        this.session = data.map(e => {
+                                            ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle'];
+                                            LocationCheck = e.payload.doc.data()['LocationCheck'];
+                                            return {
+                                                id: e.payload.doc.id,
+                                                SessionCode: e.payload.doc.data()['SessionCode'],
+                                                Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
+                                                Session: e.payload.doc.data()['Session'],
+                                                Date: e.payload.doc.data()['startDateTime'].toDate(),
+                                                Hall: e.payload.doc.data()['lectureHall'],
+                                                Lecturer: e.payload.doc.data()['lecturer'],
+                                            };
+                                        });
+                                        // console.log(this.session);
+                                        // console.log(ModuleCode)
+                                        this.firestore.collection('/faculties/' + Faculty + '/lectureSessions/undergraduate/' + Batch + '/' + DegreeCode + '/' + LectureDate).doc(ModuleCode).ref.get().then((doc) => {
+                                            if (doc.exists) {
+                                                // console.log(doc.data());
+                                                this.CloudCode = doc.data().SessionCode;
+                                                // console.log(this.CloudCode)
+                                            }
+                                            else {
+                                                // console.log("There is no document!");
+                                            }
+                                        }).catch(function (error) {
+                                            // console.log("There was an error getting your document:", error);
+                                        });
+                                    });
+                                }
+                            });
+                        });
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            var NSBMPOS = 'lat: 6.8211, lng: 80.0409';
+                            if (LocationCheck = true) {
+                                if (pos.toString() == NSBMPOS) {
+                                    this.location = true;
+                                }
+                                else {
+                                    // this.location = false;
+                                }
+                            }
+                            if (LocationCheck = false) {
+                                this.location = true;
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                // console.log("There is no document!");
+            }
+        }).catch(function (error) {
+            // console.log("There was an error getting your document:", error);
+        });
+    }
+    addAttendaceToFirebase() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            var Batch;
+            var Faculty;
+            var LectureDate;
+            var DegreeCode;
+            var ModuleCode;
+            if (this.CloudCode == this.SessionCode) {
+                // Fetch Date to Query
+                var checkdate = function (sp) {
+                    const today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth() + 1;
+                    var yyyy = today.getFullYear();
+                    if (dd < 10)
+                        dd = 0 + dd;
+                    if (mm < 10)
+                        mm = 0 + mm;
+                    return (dd + sp + mm + sp + yyyy);
+                };
+                // Fetch User Details For Query
+                // Load Module Data from Database  
+                LectureDate = checkdate('-');
+                LectureDate = '2020-4-21';
+                this.firestore.collection('/users/userTypes/studentUsers').doc(this.firebase.userDetails().uid).ref.get().then((doc) => {
+                    if (doc.exists) {
+                        // console.log(doc.data());
+                        Batch = doc.data().batch.toString();
+                        Faculty = doc.data().faculty;
+                        DegreeCode = doc.data().degree + ", " + doc.data().awardingBodyUniversity;
+                        this.firebase.fetchSession(Batch, Faculty, LectureDate, DegreeCode).subscribe(data => {
+                            // console.log(Batch + '' + Faculty + '' + LectureDate)
+                            this.session = data.map(e => {
+                                ModuleCode = e.payload.doc.data()['moduleCode'] + "-" + e.payload.doc.data()['moduleTitle'];
+                                return {
+                                    id: e.payload.doc.id,
+                                    SessionCode: e.payload.doc.data()['SessionCode'],
+                                    Module: e.payload.doc.data()['moduleCode'] + " " + e.payload.doc.data()['moduleTitle'],
+                                    Session: e.payload.doc.data()['Session'],
+                                    Date: e.payload.doc.data()['startDateTime'].toDate(),
+                                    Hall: e.payload.doc.data()['lectureHall'],
+                                    Lecturer: e.payload.doc.data()['lecturer'],
+                                };
+                            });
+                            // SENDING to FIRESTORE
+                            console.log(ModuleCode);
+                            this.firebase.sendAttendance(ModuleCode, this.firebase.userDetails().email).then((resp) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+                                const toast = yield this.toastController.create({
+                                    message: 'Your Attendance has been accepted',
+                                    duration: 2000
+                                });
+                                toast.present();
+                                this.fetchdata();
+                            }))
+                                .catch((error) => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+                                // console.log(error);
+                                const toast = yield this.toastController.create({
+                                    message: 'Error in Network, check back later.',
+                                    duration: 2000
+                                });
+                                toast.present();
+                            }));
+                        });
+                    }
+                });
+            }
+            else {
+                const toast = yield this.toastController.create({
+                    message: 'Session Code is Wrong ! | TRY AGAIN',
+                    duration: 2000
+                });
+                toast.present();
+                this.Alert = "Session Code is Wrong ! | TRY AGAIN";
+            }
+        });
+    }
+    goSettings() {
+        this.router.navigate(['Student/Settings']);
+        // console.log('settings');
+    }
+    goeSign() {
+        this.router.navigate(['Student/eSign']);
+        // console.log('Home');
+    }
+    goECForm() {
+        this.router.navigate(['Student/EC-Form']);
+        // console.log('EC-Form');
+    }
+    goAttendence() {
+        this.router.navigate(['Student/Attendence']);
+        // console.log('Attendence');
+    }
+    goNotices() {
+        this.router.navigate(['Student/Notices']);
+        // console.log('settings');
+    }
+};
+EsignPage.ctorParameters = () => [
+    { type: _agm_core__WEBPACK_IMPORTED_MODULE_5__["MapsAPILoader"] },
+    { type: _angular_fire_firestore___WEBPACK_IMPORTED_MODULE_6__["AngularFirestore"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: src_app_services_firebase_service__WEBPACK_IMPORTED_MODULE_1__["FirebaseService"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"] },
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"] }
+];
+EsignPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({ selector: 'app-esign', template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./esign.page.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/student/esign/esign.page.html")).default, styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./esign.page.scss */ "./src/app/student/esign/esign.page.scss")).default] }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_agm_core__WEBPACK_IMPORTED_MODULE_5__["MapsAPILoader"], _angular_fire_firestore___WEBPACK_IMPORTED_MODULE_6__["AngularFirestore"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"], src_app_services_firebase_service__WEBPACK_IMPORTED_MODULE_1__["FirebaseService"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
+], EsignPage);
+
+
+
+/***/ })
+
+}]);
+//# sourceMappingURL=student-esign-esign-module-es2015.js.map
