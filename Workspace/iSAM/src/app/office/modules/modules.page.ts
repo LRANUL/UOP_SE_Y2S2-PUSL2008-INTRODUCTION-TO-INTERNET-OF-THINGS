@@ -50,9 +50,9 @@ export class ModulesPage implements OnInit {
     this.retrievePublishedLectureHalls();
 
     this.searchRegisteredModuleForm = this.formBuilder.group({
-      moduleCode: new FormControl(''),
-      moduleTitle: new FormControl(''),
-      degreeProgram: new FormControl('')
+      moduleCode: new FormControl('', Validators.required),
+      moduleTitle: new FormControl('', Validators.required),
+      degreeProgram: new FormControl('', Validators.required)
     });
 
     this.registerModuleForm = this.formBuilder.group({

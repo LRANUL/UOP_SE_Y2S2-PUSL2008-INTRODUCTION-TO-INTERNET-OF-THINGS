@@ -454,7 +454,7 @@ export class FirebaseService {
     // Searching for registered student details with the user entered nsbm email address
     searchRegisteredStudentNSBMEmail(nsbmEmailAddress) {
         return this.firestore.collection("users/userTypes/studentUsers", ref => ref
-            .where("Email", "==", nsbmEmailAddress)).snapshotChanges();
+            .where("email", "==", nsbmEmailAddress)).snapshotChanges();
     }
 
 
@@ -498,7 +498,7 @@ export class FirebaseService {
         ).snapshotChanges();
     }
 
-    // Retrieving published PO to Lectuers notices from current date to three days before from the firestore database
+    // Retrieving published PO to Lecturers notices from current date to three days before from the firestore database
     retrievePublishedPOToLecturerNotice(currentDate, dateThreeDaysBeforeCurrentDate) {
         return this.firestore.collection("notices/noticeTypes/notices-PO-To-Lecturers", ref => ref
             .where("noticeCreatedInfo.createdDateTime", ">=", new Date(dateThreeDaysBeforeCurrentDate))

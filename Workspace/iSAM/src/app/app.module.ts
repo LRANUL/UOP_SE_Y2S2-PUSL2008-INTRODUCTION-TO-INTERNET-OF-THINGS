@@ -46,6 +46,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MoreDetailsTodaysLecturesPopoverPageModule } from './office/dashboard/more-details-todays-lectures-popover/more-details-todays-lectures-popover.module';
+import { MoreDetailsLecturesPopoverPageModule } from './office/dashboard/more-details-lectures-popover/more-details-lectures-popover.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -77,6 +79,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     EditDegreeProgramModalPageModule,
     EditLectureSessionStatusModalPageModule,
     EditNoticeCategoryModalPageModule,
+    MoreDetailsTodaysLecturesPopoverPageModule,
+    MoreDetailsLecturesPopoverPageModule,
     AgmCoreModule.forRoot({
       // please get your own API key here: https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
       apiKey: 'AIzaSyBUPEFtsVw5kgunMcW62ROdNSxV_zLkxg4',

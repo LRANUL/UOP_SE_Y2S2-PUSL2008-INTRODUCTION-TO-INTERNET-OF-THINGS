@@ -5,6 +5,8 @@ import { AlertController, PopoverController } from '@ionic/angular';
 
 import { Chart } from 'chart.js';
 import { NotificationsPopoverPage } from '../notifications-popover/notifications-popover.page';
+import { MoreDetailsTodaysLecturesPopoverPage } from './more-details-todays-lectures-popover/more-details-todays-lectures-popover.page';
+import { MoreDetailsLecturesPopoverPage } from './more-details-lectures-popover/more-details-lectures-popover.page';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,11 +64,7 @@ export class DashboardPage implements OnInit {
 
   // Calling the ngOnInit() function when page is rendered on the user's screen
   ionViewWillEnter(){
-    this.ngOnInit();
-  }
-
-  ngOnInit() {
-
+    
     this.userActivityAreaChart();
 
     // Retrieving current date and time
@@ -133,6 +131,9 @@ export class DashboardPage implements OnInit {
     });
 
   }
+
+
+  ngOnInit() { }
 
 
 
@@ -251,13 +252,44 @@ export class DashboardPage implements OnInit {
   }
 
 
-  moreDetailsTodaysLectureSession(event, value){
-
+  // More details of today's lecture sessions popover
+  async moreDetailsTodaysLectureSession(ev: Event, value){
+    const moreDetailsTodaysLectureSessionPopover = await this.popoverController.create({
+      component: MoreDetailsTodaysLecturesPopoverPage,
+      componentProps: {
+        lectureSessionDocId: value.payload.doc.id,
+        degreeCode: value.payload.doc.data().degreeCode,
+        degree: value.payload.doc.data().degree,
+        awardingBodyUniversity:  value.payload.doc.data().awardingBodyUniversity,
+        academicPeriodYear:  value.payload.doc.data().academicYear,
+        academicPeriodSemester: value.payload.doc.data().academicSemester
+      },
+      event: ev
+    });
+    moreDetailsTodaysLectureSessionPopover.present();
   }
 
-  moreDetailsUpcomingLectureSession(event, value){
 
+  // More details of Upcoming lecture sessions popover
+  async moreDetailsUpcomingLectureSession(ev: Event, value){
+    const moreDetailsLectureSessionPopover = await this.popoverController.create({
+      component: MoreDetailsLecturesPopoverPage,
+      componentProps: {
+        lectureSessionDocId: value.id,
+        batch: value.batch,
+        lecturer: value.lecturer,
+        lectureHall: value.lectureHall,
+        degreeCode: value.degreeCode,
+        degree: value.degree,
+        awardingBodyUniversity: value.awardingBodyUniversity,
+        academicPeriodYear: value.academicYear,
+        academicPeriodSemester: value.academicSemester
+      },
+      event: ev
+    });
+    moreDetailsLectureSessionPopover.present();
   }
+  
   
   // Retrieving published lecture sessions for the current date from the firestore database
   publishedLectureSessionsCurrentDate;
@@ -330,17 +362,17 @@ export class DashboardPage implements OnInit {
   }
 
   onViewTitleChangedUpcomingLecture(title){
-    console.log(title);
+  //  console.log(title);
     this.viewingUpcomingLecture = title; 
   }
 
   onEventSelectedUpcomingLecture(event) {
-    console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
+  //  console.log("Lecture Session Selected: " + event.startTime + " - " + event.endTime + ", " + event.title);
   }
 
   onTimeSelectedUpcomingLecture(evt){
-    console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
-      ", disabled: " + evt.disabled);
+  //  console.log("Lecture Session Selected Time: " + evt.selectedTime + ", has sessions: " + (evt.events !== undefined && evt.events.length !== 0) +
+  //    ", disabled: " + evt.disabled);
 
       if((evt.events !== undefined && evt.events.length !== 0) == false){
         this.noLectureSessionText = true;
@@ -350,17 +382,17 @@ export class DashboardPage implements OnInit {
         this.noLectureSessionText = false;
         this.lectureSessionDocuments = evt.events;
       }
-      console.log(this.lectureSessionDocuments);
+  ///    console.log(this.lectureSessionDocuments);
   }
 
   onCurrentDateChangedUpcomingLecture(event: Date){
-    console.log("Current Lecture Session Date Change: " + event);
+  //  console.log("Current Lecture Session Date Change: " + event);
 
     this.lectureSessionDocuments = [];
   }
 
   onRangeChangedUpcomingLecture(evt) {
-    console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
+  //  console.log("Lecture Session (Range) Changed: Start Time: " + evt.startTime + ", End Time: " + evt.endTime);
   }
 
 

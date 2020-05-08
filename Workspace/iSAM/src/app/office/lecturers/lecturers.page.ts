@@ -32,7 +32,7 @@ export class LecturersPage implements OnInit {
 
   disableButton: Boolean = false;
 
-  enableButton: Boolean = true;
+  enableButton: Boolean = false;
 
 
   constructor(
@@ -173,7 +173,7 @@ export class LecturersPage implements OnInit {
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
             this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
-            this.lecturerStatus = firestoreDoc.status;
+            this.lecturerStatus = firestoreDoc.accountStatus;
             this.lecturerSpecializedFaculty = firestoreDoc.specializedFaculty;
             this.lecturerSpecialization = firestoreDoc.specialization;
           });
@@ -220,7 +220,7 @@ export class LecturersPage implements OnInit {
             this.lecturerNameLastName = firestoreDoc.name.lastName;
             this.lecturerNsbmLecturerId = firestoreDoc.nsbmLecturerId;
             this.lecturerNsbmEmailAddress = firestoreDoc.nsbmEmailAddress;
-            this.lecturerStatus = firestoreDoc.status;
+            this.lecturerStatus = firestoreDoc.accountStatus;
             this.lecturerSpecializedFaculty = firestoreDoc.specializedFaculty;
             this.lecturerSpecialization = firestoreDoc.specialization;
           });
@@ -373,7 +373,7 @@ export class LecturersPage implements OnInit {
 
 
   // Process of opening show terms and conditions modal
-  showTermsAndCondtions() {
+  showTermsAndConditions() {
     console.log("Modal");
   }
 

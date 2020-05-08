@@ -112,11 +112,11 @@ export class StudentsPage implements OnInit {
             this.studentNameMiddleName = firestoreDoc.name.middleName;
             this.studentNameLastName = firestoreDoc.name.lastName;
             this.studentNsbmStudentId = firestoreDoc.nsbmStudentID;
-            this.studentNsbmEmailAddress = firestoreDoc.Email;
+            this.studentNsbmEmailAddress = firestoreDoc.email;
             this.studentBatch = firestoreDoc.batch;
             this.studentDegree = firestoreDoc.degree;
             this.studentAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-            this.studentStatus = firestoreDoc.status;
+            this.studentStatus = firestoreDoc.accountStatus;
           });
 
           if(this.studentStatus == "Disabled"){
@@ -139,7 +139,7 @@ export class StudentsPage implements OnInit {
         this.showLoadingDots = false;
       });
     }
-    else if(value.nsbmEmailAddress){
+    else if(value.nsbmEmailAddress != ""){
       this.studentsService.searchRegisteredStudentNSBMEmail(value.nsbmEmailAddress).subscribe(response => {
         // Checking if any document values where returned
         if (response.length > 0){
@@ -148,7 +148,7 @@ export class StudentsPage implements OnInit {
           // Setting loading dots to false
           this.showLoadingDots = false;
 
-          // Disabling loading text
+          // Disabling onload text
           this.pageLoadSearchStudentText = false;
 
           // Assigning retrieved values to this variables
@@ -160,11 +160,11 @@ export class StudentsPage implements OnInit {
             this.studentNameMiddleName = firestoreDoc.name.middleName;
             this.studentNameLastName = firestoreDoc.name.lastName;
             this.studentNsbmStudentId = firestoreDoc.nsbmStudentID;
-            this.studentNsbmEmailAddress = firestoreDoc.Email;
+            this.studentNsbmEmailAddress = firestoreDoc.email;
             this.studentBatch = firestoreDoc.batch;
             this.studentDegree = firestoreDoc.degree;
             this.studentAwardingBodyUniversity = firestoreDoc.awardingBodyUniversity;
-            this.studentStatus = firestoreDoc.status;
+            this.studentStatus = firestoreDoc.accountStatus;
           });
 
           if(this.studentStatus == "Disabled"){
@@ -179,6 +179,12 @@ export class StudentsPage implements OnInit {
         else{
           this.alertNotice("Not Found", "Registered Student Record with NSBM Email Address: " + value.nsbmEmailAddress + ", is not available");
           console.log("Registered Student Record Not Found");
+
+          // Setting loading dots to false
+          this.showLoadingDots = false;
+
+          // Disabling onload text
+          this.pageLoadSearchStudentText = true;
         }
       }, error => {
         console.log("Error: " + error);

@@ -639,17 +639,17 @@ export class SemesterCalendarPage implements OnInit {
   }
 
   nextMonthASCalendar(){
-    var frontSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
+    var frontSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
     frontSwipeASCalendar.slideNext();
   }
 
   previousMonthASCalendar(){
-    var backSwipeASCalendar = document.getElementById('EventCalendar').querySelector('.swiper-container')['swiper'];
+    var backSwipeASCalendar = document.getElementById('activeSemesterCalendar').querySelector('.swiper-container')['swiper'];
     backSwipeASCalendar.slidePrev();
   }
 
   onViewTitleChangedASCalendar(title){
-    console.log(title);
+  //  console.log(title);
     this.viewingMonthASCalendar = title; 
   }
 

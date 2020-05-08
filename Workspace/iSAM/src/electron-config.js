@@ -13,7 +13,7 @@ let mainWindow;
 
 function createWindow() {
 // Creating the browser window
-mainWindow = new BrowserWindow({width: 1200, height: 700});
+mainWindow = new BrowserWindow({width: 1366, height: 768});
 
 // After creating the browser window the index.html that in within the app will be executed
 const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -24,7 +24,7 @@ slashes: true
 mainWindow.loadURL(startUrl);
 
 // Opening the developer tools
-mainWindow.webContents.openDevTools();
+//mainWindow.webContents.openDevTools();
 
 // Executed when the window is closed.
 mainWindow.on('closed', function () {

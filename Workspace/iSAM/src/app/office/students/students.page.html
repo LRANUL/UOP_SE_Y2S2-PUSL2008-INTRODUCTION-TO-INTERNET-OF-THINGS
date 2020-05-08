@@ -16,7 +16,6 @@
                 right: 5px;
                 top: 8px;">
       <!-- Notification Bell, Unread Notifications Count, Drop Down -->          
-
       <ion-button fill="clear" color="dark" style="width: 100px;
                                                   height: 45px;
                                                   background-color: white;" (click)="openNotificationPopover($event)">
@@ -112,8 +111,7 @@
                                                         font-size: 18px;
                                                         border: rgb(100, 116, 121) solid 2px;
                                                         border-radius: 5px;
-                                                        padding: 15px;
-                                                        min-width: 53%;">
+                                                        padding: 15px;">
               <ion-icon name="chevron-up-circle-outline" style="color: rgb(8, 177, 219);
                                                                 font-size: 30px;
                                                                 margin-top: 2px;
@@ -146,14 +144,71 @@
                         <ion-card-title>{{ studentNamePrefix }} {{ studentNameFirstName }} {{ studentNameMiddleName }} {{ studentNameLastName }}</ion-card-title>
                       </ion-card-header>
                       <ion-card-content>
-                        <b>NSBM ID: </b> {{ studentNsbmStudentId }} <br>
-                        <b>NSBM Email Address: </b> {{ studentNsbmEmailAddress }} <br>
-                        <b>Batch: </b> {{ studentBatch }} <br>
-                        <b>Degree: </b> {{ studentDegree }}, {{ studentAwardingBodyUniversity }} <br>
-                        <b>Account Status: </b> {{ studentStatus }}
                         <ion-grid>
                           <ion-row>
-                            <ion-col>
+                            <ion-col size="5">
+                             <ion-label>
+                              <b>NSBM ID: </b>
+                             </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ studentNsbmStudentId }} 
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                             <ion-label>
+                              <b>NSBM Email Address: </b>
+                             </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label style="position: absolute;
+                                                top: 50%;
+                                                transform: translateY(-50%);">
+                                {{ studentNsbmEmailAddress }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                             <ion-label>
+                              <b>Batch: </b>
+                             </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ studentBatch }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                             <ion-label>
+                              <b>Degree: </b>
+                             </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ studentDegree }},<br>{{ studentAwardingBodyUniversity }} 
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="5">
+                             <ion-label>
+                              <b>Account Status: </b>
+                             </ion-label>
+                            </ion-col>
+                            <ion-col size="7">
+                              <ion-label>
+                                {{ studentStatus }}
+                              </ion-label>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row>
+                            <ion-col size="12">
                               <ion-button shape="round" color="secondary" style="min-width: 100%;">
                                 <ion-icon name="create-outline" style="margin-right: 5px;
                                                                       color: white;"></ion-icon>
@@ -164,7 +219,7 @@
                             </ion-col>
                           </ion-row>
                           <ion-row *ngIf="disableButton">
-                            <ion-col>
+                            <ion-col size="12">
                               <ion-button shape="round" color="danger" style="min-width: 100%;" (click)="disableStudentAccount('Confirmation Required','This student account will be DISABLED, do you want to continue?')">
                                 <ion-icon name="lock-closed" style="margin-right: 5px;"></ion-icon>
                                 <ion-label style="color: white">
@@ -174,7 +229,7 @@
                             </ion-col>
                           </ion-row>
                           <ion-row *ngIf="enableButton">
-                            <ion-col>
+                            <ion-col size="12">
                               <ion-button shape="round" color="medium" style="min-width: 100%;" (click)="enableStudentAccount('Confirmation Required','This student account will be ENABLED, do you want to continue?')">
                                 <ion-icon name="lock-open-outline" style="margin-right: 5px;"></ion-icon>
                                 <ion-label style="color: white">
